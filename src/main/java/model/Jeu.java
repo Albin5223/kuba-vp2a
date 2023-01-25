@@ -5,7 +5,6 @@ public class Jeu{
     Plateau plateau;
     Joueur joueurA;
     Joueur joueurB;
-    Joueur currentJoueur;
     int n;
 
     public Jeu(int n){
