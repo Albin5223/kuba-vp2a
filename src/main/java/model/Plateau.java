@@ -19,6 +19,9 @@ public class Plateau {
 		this.billesRouges = 8*(n*n)-12*n+5;
 	}
 
+	public int getLongueur(){
+		return longueur;
+	}
 	public void fillUpTo(int ligne, int debut, int fin) {
 		for (int i = debut;i<=fin;i++) {
 			board[ligne][i] = new Case(new Bille(Color.RED));
@@ -113,7 +116,15 @@ public class Plateau {
 	}*/
 
 	public void affiche() {
+		System.out.print("    |");
+		for (int m = 1;m<=longueur;m++){
+			System.out.print(m);
+		}
+		System.out.println();
 		for (int i = 0; i < longueur ;i++) {
+			int lettre = 65+longueur-i-1;
+			char c =  (char) lettre;
+			System.out.print(c+"   |");
 			for (int j = 0; j < longueur ;j++) {
 				if (!board[i][j].isEmpty()) {
 					System.out.print(board[i][j].toString());
@@ -124,5 +135,8 @@ public class Plateau {
 			}
 			System.out.println();
 		}
+		System.out.println();
+		System.out.println();
 	}
+
 }
