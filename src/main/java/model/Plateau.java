@@ -4,8 +4,26 @@ public class Plateau {
 	private Case[][] board;
 	private int lengthN;
 	private int billesRouges;
-	private ArrayList<Plateau> ancienPlateau = new ArrayList<Plateau>();
+	private ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+
+	private class Pair<A,B> {
+		public A arg1;
+		public B arg2;
+
+		public Pair (A arg1, B arg2) {
+			this.arg1 = arg1;
+			this.arg2 = arg2;
+		}
+
+		public A getArg1() {
+			return this.arg1;
+		}
+
+		public B getArg2() {
+			return this.arg2;
+		}
+	}
 
 	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -19,11 +37,29 @@ public class Plateau {
 		this.billesRouges = 8*(n*n)-12*n+5;
 	}
 
-
-
-	public int getLongueur(){
-		return longueur;
+	public int getLongueur() {
+		return this.longueur;
 	}
+
+	public Case[][] getBoard() {//attention aux effets de bords en utilisant cette fonction car la liste originale est retourne
+		return this.board;
+	}
+
+	public char inverse(char direction) {//renvoie la direction inverse a celle entre en argument
+		if (direction == 'n') {
+			return 's';
+		}
+		else if (direction == 's') {
+			return 'n';
+		}
+		else if (direction == 'w') {
+			return 'e';
+		}
+		else {
+			return 'e';
+		}
+	}
+
 	public void fillUpTo(int ligne, int debut, int fin) {
 		for (int i = debut;i<=fin;i++) {
 			board[ligne][i] = new Case(new Bille(Color.RED));
@@ -50,79 +86,95 @@ public class Plateau {
 				l++;
 			}
 		}
+
+		String s = this.toString();
+		ancienPlateau.add(s);
 	}
 
-	public void push2 (int x, int y, char direction, Case casePrec, Joueur j) throws IncorrectMoveException {
+	public Pair<Case,Pair<Number,Number>> push2 (int x, int y, char direction, Case casePrec, Joueur j) throws IncorrectMoveException {
 		if (x >= board.length || y >= board.length || x < 0 || y < 0) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			if (casePrec.getBille().isRed()) {
 				billesRouges--;
 			}
 			else {//si c'est une bille noire ou blanche
 				if (j.getColor() != casePrec.getBille().getColor()) {
-					throw new IncorrectMoveException("Vous avez essayé de pousser en dehors du plateau une bille qui est à vous (P.S. : vous êtes débile !)");//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
+					throw new IncorrectMoveException("Vous avez essayé de pousser en dehors du plateau une bille qui est à vous (P.S. : vous êtes débile) !");//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
 				j.loseMarble();//alors on enleve une bille au joueur
 			}
-			return;
+			return new Pair(casePrec, new Pair(x,y));
 		}
 		if (board[x][y].isEmpty()) {
 			board[x][y] = casePrec;
-			return;
+			return new Pair(new Case(null), new Pair(x,y));
 		}
 		if (direction == 'n') {
-			push2(x-1,y,direction,board[x][y],j);
+			Pair<Case,Pair<Number,Number>> tmp = push2(x-1,y,direction,board[x][y],j);
 			board[x][y] = casePrec;
+			return tmp;
 		}
 		else if (direction == 's') {
-			push2(x+1,y,direction,board[x][y],j);
+			Pair<Case,Pair<Number,Number>> tmp = push2(x+1,y,direction,board[x][y],j);
 			board[x][y] = casePrec;
+			return tmp;
 		}
 		else if (direction == 'w') {
-			push2(x,y-1,direction,board[x][y],j);
+			Pair<Case,Pair<Number,Number>> tmp = push2(x,y-1,direction,board[x][y],j);
 			board[x][y] = casePrec;
+			return tmp;
 		}
 		else {
-			push2(x,y+1,direction,board[x][y],j);
+			Pair<Case,Pair<Number,Number>> tmp = push2(x,y+1,direction,board[x][y],j);
 			board[x][y] = casePrec;
+			return tmp;
 		}
 	}
 
 	public void push (int x, int y, char direction, Joueur j1, Joueur j2) throws IncorrectMoveException {//le joueur 1 pousse la bille du joueur 2
 		if (board[x][y].isEmpty()) {
-			throw new IncorrectMoveException("Vous avez essayé de pousser une case vide");
+			throw new IncorrectMoveException("Vous avez essayé de pousser une case vide !");
 		}
 		if (j1.getColor() != board[x][y].getBille().getColor()) {
-			throw new IncorrectMoveException("Vous essayer de pousser une bille qui n'est pas à vous");
+			throw new IncorrectMoveException("Vous essayer de pousser une bille qui n'est pas à vous !");
 		}
-		push2(x,y,direction,new Case(null),j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+		Pair<Case,Pair<Number,Number>> tmp = push2(x,y,direction,new Case(null),j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+		if (configurationDejaExistante()) {
+			System.out.println("ok");
+			push2((int)tmp.getArg2().getArg1(),(int)tmp.getArg2().getArg2(),inverse(direction),tmp.getArg1(),j2);
+			throw new IncorrectMoveException("Le plateau résultant a deja été vu auparavant !");
+		}
+
 	}
 
 	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
-		if (j1.getBilles() == 0 || j2.getBillesRougesCapturees() == (8*(lengthN*lengthN)-12*lengthN+5)/2) {
+		if (j1.getBilles() == 0 || (lengthN != 1 && j2.getBillesRougesCapturees() == (8*(lengthN*lengthN)-12*lengthN+5)/2)) {
 			return j2;
 		}
-		if (j2.getBilles() == 0 || j1.getBillesRougesCapturees() == (8*(lengthN*lengthN)-12*lengthN+5)/2) {
+		if (j2.getBilles() == 0 || (lengthN != 1 && j1.getBillesRougesCapturees() == (8*(lengthN*lengthN)-12*lengthN+5)/2)) {
 			return j1;
 		}
 		return null;
 	}
 
-	/*public boolean configurationJamaisExistante() {
-		for (Plateau p : ancienPlateau) {
-			if(this.equals(p)) {
-				return false;
+	public boolean configurationDejaExistante() {
+		String s = this.toString();
+		System.out.println("Plateau courant : "+s);
+		for (String tmp : ancienPlateau) {
+			System.out.println("Plateau existant : "+tmp);
+			if (s.equals(tmp)) {
+				return true;
 			}
 		}
-		//ancienPlateau.add(this);
-		return true;
-	}*/
+		ancienPlateau.add(s);
+		return false;
+	}
 
 	public void affiche() {
-		System.out.print((char)27+"[4m    |");
+		System.out.print((char) 27+"[4m    |");
 		for (int m = 1;m<=longueur;m++){
 			System.out.print(m);
 		}
-		System.out.println((char)27+"[0m");
+		System.out.println((char) 27+"[0m");
 		for (int i = 0; i < longueur ;i++) {
 			int lettre = 65+longueur-i-1;
 			char c =  (char) lettre;
@@ -141,4 +193,13 @@ public class Plateau {
 		System.out.println();
 	}
 
+	public String toString() {
+		String ret = "";
+		for (int i = 0; i < longueur; i++) {
+			for (int j = 0; j < longueur; j++) {
+				ret += board[i][j].toString();
+			}
+		}
+		return ret;
+	}
 }

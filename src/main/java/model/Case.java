@@ -9,7 +9,7 @@ public class Case {
 
 	public String toString() {
 		if (empty) {
-			return "";
+			return "-";
 		}
 		return bille.toString();
 	}
