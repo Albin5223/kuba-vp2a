@@ -19,6 +19,7 @@ public class Jeu{
 
     }
 
+    @SuppressWarnings("resource")
     public void initialiseJoueur(){
         System.out.println("- Quel est le nom du joueur A ? : -");
         Scanner sc = new Scanner(System.in);
@@ -74,6 +75,7 @@ public class Jeu{
 
     }
 
+    @SuppressWarnings("resource")
     public int demanderLigne(){
         boolean boucle = true;
         int x = 0;
@@ -84,6 +86,7 @@ public class Jeu{
                 String s = sc.next();
                 if (s.length()==1){
                     boucle = false;
+                    s = s.toUpperCase();
                     char c = s.charAt(0);
                     x = 65 + plateau.getLongueur()-1-c;
                     System.out.println("X = "+x);
@@ -102,6 +105,7 @@ public class Jeu{
         return x;
     }
 
+    @SuppressWarnings("resource")
     public int demanderColonne(){
         boolean boucle = true;
         int x = 0;
@@ -121,10 +125,15 @@ public class Jeu{
         return x;
     }
 
+    @SuppressWarnings("resource")
     public char demanderDirection(){
         boolean boucle = true;
         String d = "";
         while (boucle) {
+            System.out.println("'s' -> pousser en bas");
+            System.out.println("'e' -> pousser à droite");
+            System.out.println("'n' -> pousser en haut");
+            System.out.println("'w' -> pousser à gauche");
            
             Scanner sc = new Scanner(System.in);
             
@@ -142,7 +151,8 @@ public class Jeu{
     }
 
     public static void main(String[] args) {
-        Jeu jeu = new Jeu(2);
+                
+        Jeu jeu = new Jeu(4);
         jeu.lancerPartie();
         
     }

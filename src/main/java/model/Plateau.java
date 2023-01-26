@@ -19,6 +19,8 @@ public class Plateau {
 		this.billesRouges = 8*(n*n)-12*n+5;
 	}
 
+
+
 	public int getLongueur(){
 		return longueur;
 	}
@@ -116,11 +118,11 @@ public class Plateau {
 	}*/
 
 	public void affiche() {
-		System.out.print("    |");
+		System.out.print((char)27+"[4m    |");
 		for (int m = 1;m<=longueur;m++){
 			System.out.print(m);
 		}
-		System.out.println();
+		System.out.println((char)27+"[0m");
 		for (int i = 0; i < longueur ;i++) {
 			int lettre = 65+longueur-i-1;
 			char c =  (char) lettre;
