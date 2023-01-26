@@ -102,11 +102,11 @@ public class Plateau {
 				}
 				j.loseMarble();//alors on enleve une bille au joueur
 			}
-			return new Pair(casePrec, new Pair(x,y));
+			return new Pair<Case,Pair<Number,Number>>(casePrec, new Pair<Number,Number>(x,y));
 		}
 		if (board[x][y].isEmpty()) {
 			board[x][y] = casePrec;
-			return new Pair(new Case(null), new Pair(x,y));
+			return new Pair<Case,Pair<Number,Number>>(new Case(null), new Pair<Number,Number>(x,y));
 		}
 		if (direction == 'n') {
 			Pair<Case,Pair<Number,Number>> tmp = push2(x-1,y,direction,board[x][y],j);
@@ -139,7 +139,6 @@ public class Plateau {
 		}
 		Pair<Case,Pair<Number,Number>> tmp = push2(x,y,direction,new Case(null),j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
 		if (configurationDejaExistante()) {
-			System.out.println("ok");
 			push2((int)tmp.getArg2().getArg1(),(int)tmp.getArg2().getArg2(),inverse(direction),tmp.getArg1(),j2);
 			throw new IncorrectMoveException("Le plateau résultant a deja été vu auparavant !");
 		}
@@ -158,9 +157,7 @@ public class Plateau {
 
 	public boolean configurationDejaExistante() {
 		String s = this.toString();
-		System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
-			System.out.println("Plateau existant : "+tmp);
 			if (s.equals(tmp)) {
 				return true;
 			}

@@ -152,7 +152,7 @@ public class Jeu{
 
     public static void main(String[] args) {
                 
-        Jeu jeu = new Jeu(4);
+        Jeu jeu = new Jeu(1);
         jeu.lancerPartie();
         
     }
