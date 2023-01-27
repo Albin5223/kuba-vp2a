@@ -149,10 +149,19 @@ public class Jeu{
 		return d.charAt(0);
 	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) {
 				
 		Jeu jeu = new Jeu(4);
 		jeu.lancerPartie();
 		
 	}
+=======
+    public static void main(String[] args) {
+                
+        Jeu jeu = new Jeu(1);
+        jeu.lancerPartie();
+        
+    }
+>>>>>>> 865db4807435e978497828385c23b6ed0c1c18a5
 }
