@@ -5,7 +5,7 @@ public class Joueur {
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
 
-	public Joueur(Color c, int n,String name) {
+	public Joueur(Color c, int n, String name) {
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.name = name;
