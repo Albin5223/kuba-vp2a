@@ -7,5 +7,6 @@ public class Test {
 		p.push(new Position(2,1),Direction.RIGHT);
 		p.push(new Position(3,0),Direction.LEFT);
 		p.affiche();
+		IA ia = new IA(Color.BLACK,3);
 	}
 }
