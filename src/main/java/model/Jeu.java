@@ -7,38 +7,36 @@ public class Jeu{
 	Joueur joueurB;
 	int n;
 
-	public Jeu(int n){
-		plateau = new Plateau(n);
+	public Jeu(int n,String nameA, String nameB){
+		this.joueurA = new Joueur(Color.WHITE,n,nameA);
+		this.joueurB = new Joueur(Color.BLACK,n,nameB);
+		this.plateau = new Plateau(n,this.joueurA,this.joueurB);
 		this.n = n;
 	}
 
 	public void lancerPartie(){
-		initialiseJoueur();
 		plateau.initialiseBille();
 		jouerPartie();
 	}
 
 	@SuppressWarnings("resource")
-	public void initialiseJoueur(){
+	public static String[] initialiseJoueur(){
 		System.out.println("- Quel est le nom du joueur A ? : -");
 		Scanner sc = new Scanner(System.in);
-		String nameA = sc.next();
-
-		joueurA = new Joueur(Color.WHITE,n,nameA);
-	   
+		String nameA = sc.nextLine();
 
 		System.out.println("- Quel est le nom du joueur B ? : -");
 		Scanner sc1 = new Scanner(System.in);
-		String nameB = sc1.next();
+		String nameB = sc1.nextLine();
 
-		joueurB = new Joueur(Color.BLACK,n,nameB);
-		
+		String[] out = {nameA,nameB};
+		return out;
 	}
-
 
 	public Joueur partieFinie(){
-		return plateau.isOver(joueurA, joueurB);
+		return plateau.isOver();
 	}
+
 	public void jouerPartie(){
 		while(partieFinie()==null){
 			System.out.println("Cest à ton tour, "+joueurA.getName());
@@ -61,14 +59,29 @@ public class Jeu{
 			int x = demanderColonne();
 
 			System.out.println(" - Donner la direction :");
-			char direction = demanderDirection();
+			String direct = demanderDirection();
+			Direction direction;
+			boucle = false;
 
-			try{
-				plateau.push(y,x,direction,joueurA,joueurB);
-				boucle = false;
+			if (direct.equals("UP")) {
+				direction = Direction.UP;
+				plateau.push(new Position(x,y),direction);
 			}
-			catch(IncorrectMoveException e){
-				System.out.println(e);
+			else if (direct.equals("DOWN")) {
+				direction = Direction.DOWN;
+				plateau.push(new Position(x,y),direction);
+			}
+			else if (direct.equals("RIGHT")) {
+				direction = Direction.RIGHT;
+				plateau.push(new Position(x,y),direction);
+			}
+			else if (direct.equals("LEFT")){
+				direction = Direction.LEFT;
+				plateau.push(new Position(x,y),direction);
+			}
+			else {
+				System.out.println("Veuillez entrer une direction parmi celles proposées ci-dessous :\n\t- UP\n\t- DOWN\n\t- RIGHT\n\t- LEFT\n\n");
+				boucle = true;
 			}
 		}
 
@@ -125,33 +138,21 @@ public class Jeu{
 	}
 
 	@SuppressWarnings("resource")
-	public char demanderDirection(){
-		boolean boucle = true;
+	public String demanderDirection(){
 		String d = "";
-		while (boucle) {
-			System.out.println("'s' -> pousser en bas");
-			System.out.println("'e' -> pousser à droite");
-			System.out.println("'n' -> pousser en haut");
-			System.out.println("'w' -> pousser à gauche");
-		   
-			Scanner sc = new Scanner(System.in);
-			
-			d = sc.next();
-			switch (d.charAt(0)){
-				case 'n':boucle = false;break;
-				case 's':boucle = false;break;
-				case 'e':boucle = false;break;
-				case 'w':boucle = false;break;
-				default: System.out.println(" - Donner une direction valide :");break;
-			}
-				
-		}
-		return d.charAt(0);
+		System.out.println("'DOWN' -> pousser en bas");
+		System.out.println("'RIGHT' -> pousser à droite");
+		System.out.println("'UP' -> pousser en haut");
+		System.out.println("'LEFT' -> pousser à gauche");
+
+		Scanner sc = new Scanner(System.in);
+		d = sc.next();
+		return d;
 	}
 
 	public static void main(String[] args) {
-				
-		Jeu jeu = new Jeu(4);
+		String[] tmp = initialiseJoueur();
+		Jeu jeu = new Jeu(4,tmp[0],tmp[1]);
 		jeu.lancerPartie();
 		
 	}

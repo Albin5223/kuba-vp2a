@@ -1,5 +1,4 @@
 public class Joueur {
-
 	private String name; //Nom pour l'esthétisme pour le graphic
 	private Color color;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
@@ -9,6 +8,7 @@ public class Joueur {
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.name = name;
+		this.billesRougesCapturees = 0;
 	}
 
 	public String gagne(){
@@ -18,6 +18,7 @@ public class Joueur {
 	public String getName(){
 		return name;
 	}
+
 	public void loseMarble() {
 		nBilles --;
 	}
@@ -28,6 +29,10 @@ public class Joueur {
 
 	public int getBilles() {
 		return nBilles;
+	}
+
+	public void winRedMarble() {
+		this.billesRougesCapturees ++;
 	}
 
 	public int getBillesRougesCapturees() {

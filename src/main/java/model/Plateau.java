@@ -6,8 +6,10 @@ public class Plateau {
 	private int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	private Joueur j1;
+	private Joueur j2;
 
-	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
+	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
 		this.lengthN = n;
 		this.board = new Bille[longueur][longueur];
@@ -17,6 +19,8 @@ public class Plateau {
 			}
 		}
 		this.billesRouges = 8*(n*n)-12*n+5;
+		this.j1 = j1;
+		this.j2 = j2;
 	}
 
 	public int getLongueur() {
@@ -25,6 +29,10 @@ public class Plateau {
 
 	public Bille[][] getBoard() {//attention aux effets de bords en utilisant cette fonction car la liste originale est retourne
 		return this.board;
+	}
+
+	public Bille getTile(Position pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
+		return board[pos.x][pos.y];
 	}
 
 	public void fillUpTo(int ligne, int debut, int fin) {
@@ -68,16 +76,21 @@ public class Plateau {
 		ancienPlateau.add(s);
 	}
 
-	private Position push2 (Position pos, Direction direction, Joueur j) {
+	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
+		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
+	}
+
+	private Position push2 (Position pos, Direction direction) {
 		if (pos.x >= board.length || pos.y >= board.length || pos.x < 0 || pos.y < 0) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			if (pos.currentMarble.isRed()) {
 				billesRouges--;
+				j1.winRedMarble();
 			}
 			else {//si c'est une bille noire ou blanche
-				if (j.getColor() != pos.currentMarble.getColor()) {
+				if (j2.getColor() != pos.currentMarble.getColor()) {
 					return null;//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
-				j.loseMarble();//alors on enleve une bille au joueur
+				j2.loseMarble();//alors on enleve une bille au joueur
 			}
 			return pos;
 		}
@@ -85,30 +98,33 @@ public class Plateau {
 			board[pos.x][pos.y] = pos.currentMarble;
 			return new Position(pos.x, pos.y, null);
 		}
-		Position pos2 = push2(pos.goTo(direction,board[pos.x][pos.y]),direction,j);//et on avance dans la direction direc
-		board[pos.x][pos.y] = pos.currentMarble;
+		Position pos2 = push2(pos.goTo(direction,board[pos.x][pos.y]),direction);//et on avance dans la direction direc
+		if (pos2 != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
+			board[pos.x][pos.y] = pos.currentMarble;
+		}
 		return pos2;
 	}
 
-	public State push (int x, int y, Direction direction, Joueur j1, Joueur j2) {//le joueur 1 pousse la bille du joueur 2
-		if (board[x][y] ==  null) {
+	public State push (Position pos, Direction direction) {
+		if (board[pos.x][pos.y] ==  null) {
 			return State.TILEEMPTY;
 		}
-		if (j1.getColor() != board[x][y].getColor()) {
+		if (j1.getColor() != board[pos.x][pos.y].getColor()) {
 			return State.BADMARBLE;
 		}
-		Position tmp = push2(new Position(x,y,null),direction,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+		pos.currentMarble = null;//pour la premiere recursion ce sera utile car la premiere bille que l'on veut pousser va toujours devenir null car la case va se liberer
+		Position tmp = push2(pos,direction);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
 		if (tmp == null) {
 			return State.PUSHOWNMARBLE;
 		}
 		else if (configurationDejaExistante()) {
-			push2(tmp,inverse(direction),j2);
+			push2(tmp,inverse(direction));
 			return State.BOARDEXIST;
 		}
 		return State.SUCCESS;
 	}
 
-	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
+	public Joueur isOver() {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
 		if (j1.getBilles() == 0 || (lengthN != 1 && j2.getBillesRougesCapturees() == (8*(lengthN*lengthN)-12*lengthN+5)/2)) {
 			return j2;
 		}
@@ -154,6 +170,26 @@ public class Plateau {
 		System.out.println();
 		System.out.println();
 	}
+
+	private static Bille[][] stringToList(String s) {
+		int longueur = s.length()/s.length();
+		Bille[][] board2 = new Bille[longueur][longueur];
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '-') {
+				board2[i%longueur][i/longueur] = null;
+			}
+			else if (s.charAt(i) == 'W') {
+				board2[i%longueur][i/longueur] = new Bille(Color.WHITE);
+			}
+			else if (s.charAt(i) == 'B') {
+				board2[i%longueur][i/longueur] = new Bille(Color.BLACK);
+			}
+			else {
+				board2[i%longueur][i/longueur] = new Bille(Color.RED);
+			}
+		}
+		return board2;
+	} 
 
 	public String toString() {
 		String ret = "";
