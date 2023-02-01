@@ -150,10 +150,19 @@ public class Jeu{
 		return d;
 	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) {
 		String[] tmp = initialiseJoueur();
 		Jeu jeu = new Jeu(4,tmp[0],tmp[1]);
 		jeu.lancerPartie();
 		
 	}
+=======
+    public static void main(String[] args) {
+                
+        Jeu jeu = new Jeu(1);
+        jeu.lancerPartie();
+        
+    }
+>>>>>>> 865db4807435e978497828385c23b6ed0c1c18a5
 }
