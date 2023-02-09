@@ -1,0 +1,11 @@
+package main.java.Model1;
+
+
+public enum State {
+	EMPTYTILE,
+	MARBLEOWNERSHIPERROR,
+	PUSHINGOWNMARBLE,
+	REPEATINGBOARD,
+	SUCCESS
+
+}
