@@ -3,11 +3,18 @@ import java.util.Random;
 public class IA extends Joueur {
 	private Plateau plateau;
 	private Bille[][] board;
+	private Joueur jTest;
 
 	public IA(Color c, int n) {
 		super(c,n,"Jack");
-		this.plateau = new Plateau(n, new Joueur(c,n,"Joueur1"),this);
+		this.plateau = new Plateau(n);
 		this.board = plateau.getBoard();//etant donne que c'est un return et non une copie les effets de bord sur this.board feront changer this.plateau
+		if (c == Color.BLACK) {
+			this.jTest = new Joueur(Color.WHITE,n,"test");
+		}
+		else {
+			this.jTest = new Joueur(Color.BLACK,n,"test");
+		}
 	}
 
 	private int getProba() {
@@ -16,7 +23,7 @@ public class IA extends Joueur {
 
 	private int testMove (Position pos, Direction direct) {
 		int proba = 0;//au debut la proba de gagner est a zero et augmentera en fonction de ce qu'il voit dans le plateau
-		if (plateau.push(pos,direct) == State.SUCCESS) {
+		if (plateau.push(pos,direct,this,this.jTest) == State.SUCCESS) {
 			proba = getProba();
 			plateau.undoLastMove();
 		}
@@ -26,7 +33,7 @@ public class IA extends Joueur {
 	public Bille[][] bestSolution() {
 		int max = 0;//c'est un pourcentage alors on commence a 0
 		Position posMax = null;
-		Direction directMax = Direction.UP;
+		Direction directMax = Direction.INVALID;
 		int proba1 = 0;
 		int proba2 = 0;
 		int proba3 = 0;
@@ -34,30 +41,30 @@ public class IA extends Joueur {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
 				if (board[i][j] != null) {
-					proba1 = testMove(new Position(i,j,board[i][j]),Direction.UP);
-					proba2 = testMove(new Position(i,j,board[i][j]),Direction.DOWN);
-					proba3 = testMove(new Position(i,j,board[i][j]),Direction.LEFT);
-					proba4 = testMove(new Position(i,j,board[i][j]),Direction.RIGHT);
+					proba1 = testMove(new Position(i,j,board[i][j]),Direction.NORTH);
+					proba2 = testMove(new Position(i,j,board[i][j]),Direction.SOUTH);
+					proba3 = testMove(new Position(i,j,board[i][j]),Direction.EAST);
+					proba4 = testMove(new Position(i,j,board[i][j]),Direction.WEST);
 					if (Math.max(Math.max(proba1,proba2),Math.max(proba3,proba4)) > max) {
 						max = Math.max(Math.max(proba1,proba2),Math.max(proba3,proba4));
 						posMax = new Position(i,j,board[i][j]);
 						if (proba1 == max) {
-							directMax = Direction.UP;
+							directMax = Direction.NORTH;
 						}
 						else if (proba2 == max) {
-							directMax = Direction.DOWN;
+							directMax = Direction.SOUTH;
 						}
 						else if (proba3 == max) {
-							directMax = Direction.LEFT;
+							directMax = Direction.WEST;
 						}
 						else {
-							directMax = Direction.RIGHT;
+							directMax = Direction.EAST;
 						}
 					}
 				}
 			}
 		}
-		this.plateau.push(posMax,directMax);
+		this.plateau.push(posMax,directMax,this,this.jTest);
 		return this.board;
 	}
 }

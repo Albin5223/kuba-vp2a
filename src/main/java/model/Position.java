@@ -16,10 +16,10 @@ public class Position {
 	public Position goTo(Direction direction, Bille newCurrentMarble) {
 		Position pos = new Position(this.x,this.y,newCurrentMarble);
 		switch (direction) {
-		case UP : pos.x -= 1;break;
-		case DOWN : pos.x += 1;break;
-		case LEFT : pos.y -= 1;break;
-		case RIGHT : pos.y += 1;break;
+		case NORTH : pos.x -= 1;break;
+		case SOUTH : pos.x += 1;break;
+		case WEST : pos.y -= 1;break;
+		case EAST : pos.y += 1;break;
 		}
 		return pos;
 	}
