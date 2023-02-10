@@ -7,8 +7,8 @@ public enum Direction {
 	EAST,
 	INVALID;
 
-	final static int[] dirX = {1, 0, -1, 0, 0}; // ordonnés
-	final static int[] dirY = {0, 1, 0, -1, 0}; // absicces
+	final static int[] dirY = {0, -1, 0, 1, 0}; // ordonnés
+	final static int[] dirX = {-1, 0, 1, 0, 0}; // absicces
 	
 	
 	final static String[] dirName = {"NORTH","WEST","SOUTH","EAST","INVALID"};
