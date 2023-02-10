@@ -1,3 +1,5 @@
+package main.java.Model1;
+
 public class Bille {
 	private Color color;
 

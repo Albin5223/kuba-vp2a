@@ -1,3 +1,5 @@
+package main.java.Model1;
+
 public class Joueur {
 	private String name; //Nom pour l'esthétisme pour le graphic
 	private Color color;//'b' pour noir (= black) et 'w' pour blanc (=white)

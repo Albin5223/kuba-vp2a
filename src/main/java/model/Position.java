@@ -1,3 +1,5 @@
+package main.java.Model1;
+
 public class Position {
 	public int x;
 	public int y;
@@ -15,12 +17,16 @@ public class Position {
 
 	public Position goTo(Direction direction, Bille newCurrentMarble) {
 		Position pos = new Position(this.x,this.y,newCurrentMarble);
-		switch (direction) {
-		case UP : pos.x -= 1;break;
-		case DOWN : pos.x += 1;break;
-		case LEFT : pos.y -= 1;break;
-		case RIGHT : pos.y += 1;break;
-		}
+		pos.x+= direction.dirX();
+		pos.y+= direction.dirY();
 		return pos;
+	}
+
+	public int getX(){
+		return x;
+	}
+
+	public int getY(){
+		return y;
 	}
 }
