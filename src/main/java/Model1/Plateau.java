@@ -43,8 +43,8 @@ public class Plateau {
 		return switch (direct) {
 			case NORTH -> Direction.SOUTH;
 			case SOUTH -> Direction.NORTH;
-			case WEST -> Direction.EST;
-			case EST -> Direction.WEST;
+			case WEST -> Direction.EAST;
+			case EAST -> Direction.WEST;
 			default -> Direction.INVALID;
 		};
 	}
@@ -85,7 +85,7 @@ public class Plateau {
 				j1.winRedMarble();
 			}
 			else {//si c'est une bille noire ou blanche
-				if (j1.getColor() != pos.currentMarble.getColor()) {
+				if (j1.getColor() == pos.currentMarble.getColor()) {
 					return null;//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
 				j2.loseMarble();//alors on enleve une bille au joueur
@@ -110,6 +110,15 @@ public class Plateau {
 		if (j1.getColor() != board[pos.x][pos.y].getColor()) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
+		if (pos.x+inverse(direction).dirX() != -1 && pos.x+inverse(direction).dirX() != this.longueur && pos.y+inverse(direction).dirY() != -1 && pos.y+inverse(direction).dirY() != this.longueur) {
+			if (this.board[pos.x+inverse(direction).dirX()][pos.y+inverse(direction).dirY()] != null) {
+				return State.TILEBEFORENOTEMPTY;
+			}
+		}
+		if (direction == Direction.INVALID) {
+			return State.WRONGDIRECTION;
+		}
+		pos.currentMarble = null;//pour la premiere recursion ce sera utile car la premiere bille que l'on veut pousser va toujours devenir null car la case va se liberer
 		Position tmp = push2(pos,direction,j1,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
 		if (tmp == null) {
 			return State.PUSHINGOWNMARBLE;
@@ -118,7 +127,9 @@ public class Plateau {
 			push2(tmp,inverse(direction),j1,j2);
 			return State.REPEATINGBOARD;
 		}
-		return State.SUCCESS;
+		State state = State.SUCCESS;
+		state.setMarble(tmp.currentMarble);
+		return state;
 	}
 
 	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
