@@ -213,4 +213,43 @@ public class Plateau {
 		}
 		return ret;
 	}
+
+	/*
+	 * 
+	 * @return toString1 convertit le plateau en une chaine de caractère reduite
+	 */
+	public String toString1(){
+		String res = "";
+		char car = ' ';
+		int nb_apparition=0;
+		for (int i = 0; i < longueur; i++) {
+			for (int j = 0; j < longueur; j++) {
+				char sub;
+				if (board[i][j] == null) {
+					sub = '-';
+				}
+				else {
+					sub = board[i][j].toString().charAt(0);
+				}
+				if(car != sub){
+					res+=car+"";
+					if (res.length()!=1){
+						res+=(nb_apparition+1);
+					}
+					car = sub;
+					nb_apparition = 0;
+				}
+				else{
+					nb_apparition+=1;
+				}
+			}
+		}
+		res+=car+"";
+	
+		res+=(nb_apparition+1);
+		res = res.substring(1, res.length());
+		
+		return res;
+
+	}
 }
