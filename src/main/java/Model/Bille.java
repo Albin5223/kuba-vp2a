@@ -1,4 +1,4 @@
-package main.java.Model1;
+package Model;
 
 public class Bille {
 	private Color color;
