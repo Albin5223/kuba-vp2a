@@ -2,6 +2,8 @@ package Model;
 
 import java.util.ArrayList;
 
+import javax.swing.DebugGraphics;
+
 public class Plateau {
 	private Bille[][] board;
 	private int lengthN;
@@ -70,7 +72,7 @@ public class Plateau {
 			}
 		}
 
-		String s = this.toString();
+		String s = this.toString1();
 		ancienPlateau.add(s);
 	}
 
@@ -143,7 +145,7 @@ public class Plateau {
 	}
 
 	public boolean configurationDejaExistante() {
-		String s = this.toString();
+		String s = this.toString1();
 		System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
 			System.out.println("Plateau existant : "+tmp);
@@ -250,6 +252,74 @@ public class Plateau {
 		res = res.substring(1, res.length());
 		
 		return res;
+	}
 
+	// Cette fonction permet de passer d'une chaine de caractère encodé de manière efficace à un tableau de Bille
+	public static Bille[][] stringToList1(String s){
+		int l = 0; //Ici on détermine la longueur d'une tableau 
+		int occ = 0; // On additionne tous les nombres derrière les caractères
+		while(occ<s.length()){
+			int count = findNumber(s.substring(occ+1));
+			l+=count;
+			occ+=1+nbChiffre(count);
+		}
+		int longueur = (int)Math.sqrt(l); //La longueur est la racine de la somme
+		Bille [][] res = new Bille[longueur][longueur];
+
+		int i = 0;
+		int colonne = 0;
+		int ligne = 0; //Puis on remplie le tableau
+		while(i<s.length()){ //On parcourt tous les caractères BWR- et on regarde le nombre derrière
+			char couleur = s.charAt(i);
+			int nb = findNumber(s.substring(i+1));
+			
+
+			for (int k = 0;k<nb;k++){
+				if (ligne==longueur){ //On fait attention à ne pas dépasser les limites du tableaux
+					ligne = 0;
+					colonne+=1;
+				}
+				switch(couleur){
+					case 'W' : res[colonne][ligne] = new Bille(Color.WHITE);break;
+					case 'B' : res[colonne][ligne] = new Bille(Color.BLACK);break;
+					case 'R' : res[colonne][ligne] = new Bille(Color.RED);break;
+					default : res[colonne][ligne] = null;
+				}
+				ligne++;
+			}
+			i+=nbChiffre(nb)+1;
+
+		}
+		return res;
+	}
+
+
+	//Cette fonction permets de trouver le nombre qui se situe en premier sur la chaine de caractère
+	//CharAt(0) ne fonction pas car il se peut que le nombre contient 2 chiffres.
+
+	public static int findNumber(String s){
+		String nb="";
+		for (int i = 0;i<s.length();i++){
+			if (s.charAt(i)<='9' && s.charAt(i)>='0'){
+				nb+=s.charAt(i)+"";
+			}
+			else{
+				break;
+			}
+		}
+		int nombre = Integer.valueOf(nb);
+		return nombre;
+	}
+
+	//Cette fonction permet de connaitre le nombre de chiffre d'un nombre.
+	//Elle est utile lorsqu'on souhaite avancer sur la chaine de caractère encodé efficacement.
+
+	private static int nbChiffre(int n){
+		if (n/10 == 0){
+			return 1;
+		}
+		else{
+			return 1 + nbChiffre(n/10);
+		}
 	}
 }
