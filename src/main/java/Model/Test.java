@@ -10,8 +10,8 @@ public class Test {
 		System.out.println(p.toString());
 		System.out.println(p.reduceString(p.toString()));
 		System.out.println(p.push(new Position(2,2),Direction.NORTH,j1,j2));
-		//System.out.println(p.push(new Position(1,2),Direction.SOUTH,j1,j2));
-		//System.out.println(p.push(new Position(2,2),Direction.SOUTH,j1,j2));
+		System.out.println(p.push(new Position(1,1),Direction.SOUTH,j1,j2));
+		System.out.println(p.push(new Position(2,2),Direction.SOUTH,j1,j2));
 		p.affiche();
 		IA ia = new IA(Color.BLACK,3);
 		//new View(null);
