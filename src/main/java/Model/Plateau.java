@@ -143,7 +143,7 @@ public class Plateau {
 	}
 
 	public boolean configurationDejaExistante() {
-		String s = this.toString();
+		String s = this.reduceString(this.toString());
 		System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
 			System.out.println("Plateau existant : "+tmp);
@@ -197,7 +197,7 @@ public class Plateau {
 			}
 		}
 		return board2;
-	} 
+	}
 
 	public String toString() {
 		String ret = "";
@@ -213,4 +213,38 @@ public class Plateau {
 		}
 		return ret;
 	}
+
+	public String reduceString(String s) {
+		String ret = "";
+		int repet = 1;
+		char currentChar = s.charAt(0);
+		for (int i = 1; i<s.length(); i++) {
+			if (s.charAt(i)==currentChar) {
+				repet++;
+			}
+			else {
+				if (repet==1) {
+					ret+=currentChar;
+					repet=0;
+				}
+				if (repet>=2) {
+					ret += currentChar;
+					ret += repet;
+				}
+				repet = 1;
+				currentChar = s.charAt(i);
+			}
+		}
+		if (repet==1) {
+			ret+=currentChar;
+			repet=0;
+		}
+		if (repet>=2) {
+			ret += currentChar;
+			ret += repet;
+		}
+
+		return ret;
+	}
+
 }
