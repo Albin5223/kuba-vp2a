@@ -7,6 +7,7 @@ public class Model {
     Plateau plat;
     LinkedList<Joueur> joueurs;
     int joueurCurrent = 0; //L'entier indique le joueur courant
+    boolean partieFinie;
     View view;
     
 
@@ -44,11 +45,20 @@ public class Model {
         }
     }
 
+    public boolean isEnd(){
+        return partieFinie;
+    }
+
     public void push(Position p,Direction d){
         
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-        if(state != State.OPPREPLAY && state != State.REDREPLAY){
+        if(plat.isOver(joueurs.get(0),joueur.get(1))==null){
+            if(state != State.OPPREPLAY && state != State.REDREPLAY){
             joueurSuivant();
+            }
+        }
+        else{
+            partieFinie = true;
         }
         
         //view.update();

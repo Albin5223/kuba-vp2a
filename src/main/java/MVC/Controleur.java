@@ -55,7 +55,10 @@ public class Controleur extends MouseAdapter{
     public void move(Position depart, Position arrive){
         Direction direction = determineDirection(depart,arrive);
         System.out.println(direction.dirName());
-		//model.push(depart,direction);
+        if(!model.isEnd()){
+        	//model.push(depart,direction);
+        }
+		
          
 
     }
