@@ -1,12 +1,13 @@
-package main.java.MVC1;
+package MVC;
 import java.util.LinkedList;
-import main.java.Model1.*;
+import Model.*;
 
 
 public class Model {
     Plateau plat;
     LinkedList<Joueur> joueurs;
     int joueurCurrent = 0; //L'entier indique le joueur courant
+    boolean partieFinie;
     View view;
     
 
@@ -44,9 +45,22 @@ public class Model {
         }
     }
 
-    public State push(Position p,Direction d){
+    public boolean isEnd(){
+        return partieFinie;
+    }
+
+    public void push(Position p,Direction d){
         
-        return plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+        State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+        if(plat.isOver(joueurs.get(0),joueur.get(1))==null){
+            if(state != State.OPPREPLAY && state != State.REDREPLAY){
+            joueurSuivant();
+            }
+        }
+        else{
+            partieFinie = true;
+        }
+        
         //view.update();
     }
 

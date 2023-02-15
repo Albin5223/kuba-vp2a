@@ -1,6 +1,7 @@
-package main.java.Model1;
+package Model;
 
 import java.util.ArrayList;
+
 
 public class Plateau {
 	private Bille[][] board;
@@ -110,8 +111,8 @@ public class Plateau {
 		if (j1.getColor() != board[pos.x][pos.y].getColor()) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.x+inverse(direction).dirX() != -1 && pos.x+inverse(direction).dirX() != this.longueur && pos.y+inverse(direction).dirY() != -1 && pos.y+inverse(direction).dirY() != this.longueur) {
-			if (this.board[pos.x+inverse(direction).dirX()][pos.y+inverse(direction).dirY()] != null) {
+		if (pos.x+inverse(direction).dirY() != -1 && pos.x+inverse(direction).dirY() != this.longueur && pos.y+inverse(direction).dirX() != -1 && pos.y+inverse(direction).dirX() != this.longueur) {
+			if (this.board[pos.x+inverse(direction).dirY()][pos.y+inverse(direction).dirX()] != null) {
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -120,6 +121,7 @@ public class Plateau {
 		}
 		pos.currentMarble = null;//pour la premiere recursion ce sera utile car la premiere bille que l'on veut pousser va toujours devenir null car la case va se liberer
 		Position tmp = push2(pos,direction,j1,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+
 		if (tmp == null) {
 			return State.PUSHINGOWNMARBLE;
 		}
@@ -127,9 +129,15 @@ public class Plateau {
 			push2(tmp,inverse(direction),j1,j2);
 			return State.REPEATINGBOARD;
 		}
-		State state = State.SUCCESS;
-		state.setMarble(tmp.currentMarble);
-		return state;
+
+		if (tmp.currentMarble == null){
+			return State.SUCCESS;
+		}
+
+		if (tmp.currentMarble.isRed()) {
+			return State.REDREPLAY;
+		}
+		return State.OPPREPLAY;
 	}
 
 	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
@@ -178,39 +186,110 @@ public class Plateau {
 		System.out.println();
 		System.out.println();
 	}
-
-	private static Bille[][] stringToList(String s) {
-		int longueur = s.length()/s.length();
-		Bille[][] board2 = new Bille[longueur][longueur];
-		for (int i = 0; i < s.length(); i++) {
-			if (s.charAt(i) == '-') {
-				board2[i%longueur][i/longueur] = null;
-			}
-			else if (s.charAt(i) == 'W') {
-				board2[i%longueur][i/longueur] = new Bille(Color.WHITE);
-			}
-			else if (s.charAt(i) == 'B') {
-				board2[i%longueur][i/longueur] = new Bille(Color.BLACK);
-			}
-			else {
-				board2[i%longueur][i/longueur] = new Bille(Color.RED);
-			}
-		}
-		return board2;
-	} 
-
-	public String toString() {
-		String ret = "";
+	/*
+	 * 
+	 * @return toString1 convertit le plateau en une chaine de caractère reduite
+	 */
+	public String toString(){
+		String res = "";
+		char car = ' ';
+		int nb_apparition=0;
 		for (int i = 0; i < longueur; i++) {
 			for (int j = 0; j < longueur; j++) {
+				char sub;
 				if (board[i][j] == null) {
-					ret += "-";
+					sub = '-';
 				}
 				else {
-					ret += board[i][j].toString();
+					sub = board[i][j].toString().charAt(0);
+				}
+				if(car != sub){
+					res+=car+"";
+					if (res.length()!=1){
+						res+=(nb_apparition+1);
+					}
+					car = sub;
+					nb_apparition = 0;
+				}
+				else{
+					nb_apparition+=1;
 				}
 			}
 		}
-		return ret;
+		res+=car+"";
+	
+		res+=(nb_apparition+1);
+		res = res.substring(1, res.length());
+		
+		return res;
+	}
+
+	// Cette fonction permet de passer d'une chaine de caractère encodé de manière efficace à un tableau de Bille
+	public static Bille[][] stringToList(String s){
+		int l = 0; //Ici on détermine la longueur d'une tableau 
+		int occ = 0; // On additionne tous les nombres derrière les caractères
+		while(occ<s.length()){
+			int count = findNumber(s.substring(occ+1));
+			l+=count;
+			occ+=1+nbChiffre(count);
+		}
+		int longueur = (int)Math.sqrt(l); //La longueur est la racine de la somme
+		Bille [][] res = new Bille[longueur][longueur];
+
+		int i = 0;
+		int colonne = 0;
+		int ligne = 0; //Puis on remplie le tableau
+		while(i<s.length()){ //On parcourt tous les caractères BWR- et on regarde le nombre derrière
+			char couleur = s.charAt(i);
+			int nb = findNumber(s.substring(i+1));
+			
+
+			for (int k = 0;k<nb;k++){
+				if (ligne==longueur){ //On fait attention à ne pas dépasser les limites du tableaux
+					ligne = 0;
+					colonne+=1;
+				}
+				switch(couleur){
+					case 'W' : res[colonne][ligne] = new Bille(Color.WHITE);break;
+					case 'B' : res[colonne][ligne] = new Bille(Color.BLACK);break;
+					case 'R' : res[colonne][ligne] = new Bille(Color.RED);break;
+					default : res[colonne][ligne] = null;
+				}
+				ligne++;
+			}
+			i+=nbChiffre(nb)+1;
+
+		}
+		return res;
+	}
+
+
+	//Cette fonction permets de trouver le nombre qui se situe en premier sur la chaine de caractère
+	//CharAt(0) ne fonction pas car il se peut que le nombre contient 2 chiffres.
+
+	private static int findNumber(String s){
+		String nb="";
+		for (int i = 0;i<s.length();i++){
+			if (s.charAt(i)<='9' && s.charAt(i)>='0'){
+				nb+=s.charAt(i)+"";
+			}
+			else{
+				break;
+			}
+		}
+		int nombre = Integer.valueOf(nb);
+		return nombre;
+	}
+
+	//Cette fonction permet de connaitre le nombre de chiffre d'un nombre.
+	//Elle est utile lorsqu'on souhaite avancer sur la chaine de caractère encodé efficacement.
+
+	private static int nbChiffre(int n){
+		if (n/10 == 0){
+			return 1;
+		}
+		else{
+			return 1 + nbChiffre(n/10);
+		}
 	}
 }

@@ -1,4 +1,4 @@
-package main.java.MVC1;
+package MVC;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

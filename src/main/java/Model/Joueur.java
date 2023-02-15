@@ -1,4 +1,4 @@
-package main.java.Model1;
+package Model;
 
 public class Joueur {
 	private String name; //Nom pour l'esthétisme pour le graphic
