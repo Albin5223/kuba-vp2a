@@ -44,9 +44,13 @@ public class Model {
         }
     }
 
-    public State push(Position p,Direction d){
+    public void push(Position p,Direction d){
         
-        return plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+        State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+        if(state != State.OPPREPLAY && state != State.REDREPLAY){
+            joueurSuivant();
+        }
+        
         //view.update();
     }
 

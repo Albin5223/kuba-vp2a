@@ -7,7 +7,10 @@ public enum State {
 	REPEATINGBOARD,
 	TILEBEFORENOTEMPTY,
 	WRONGDIRECTION,
-	SUCCESS;
+	SUCCESS,
+	REDREPLAY,
+	OPPREPLAY;
+
 
 	private Bille marble;
 

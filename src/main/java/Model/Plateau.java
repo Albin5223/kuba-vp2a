@@ -2,7 +2,6 @@ package Model;
 
 import java.util.ArrayList;
 
-import javax.swing.DebugGraphics;
 
 public class Plateau {
 	private Bille[][] board;
@@ -72,7 +71,7 @@ public class Plateau {
 			}
 		}
 
-		String s = this.toString1();
+		String s = this.toString();
 		ancienPlateau.add(s);
 	}
 
@@ -121,7 +120,12 @@ public class Plateau {
 			return State.WRONGDIRECTION;
 		}
 		pos.currentMarble = null;//pour la premiere recursion ce sera utile car la premiere bille que l'on veut pousser va toujours devenir null car la case va se liberer
+		int oldNumberRedBall = billesRouges;
+		int oldNumberOpponentBall = j2.getBilles();
 		Position tmp = push2(pos,direction,j1,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+
+		int newNumberRedBall = billesRouges;
+		int newNumberOpponentBall = j2.getBilles();
 		if (tmp == null) {
 			return State.PUSHINGOWNMARBLE;
 		}
@@ -129,7 +133,16 @@ public class Plateau {
 			push2(tmp,inverse(direction),j1,j2);
 			return State.REPEATINGBOARD;
 		}
+
 		State state = State.SUCCESS;
+		if (oldNumberRedBall!=newNumberRedBall){
+			state = State.REDREPLAY;
+		}
+
+		if (oldNumberOpponentBall!=newNumberOpponentBall){
+			state = State.OPPREPLAY;
+		}
+
 		state.setMarble(tmp.currentMarble);
 		return state;
 	}
@@ -145,7 +158,7 @@ public class Plateau {
 	}
 
 	public boolean configurationDejaExistante() {
-		String s = this.toString1();
+		String s = this.toString();
 		System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
 			System.out.println("Plateau existant : "+tmp);
@@ -180,47 +193,11 @@ public class Plateau {
 		System.out.println();
 		System.out.println();
 	}
-
-	private static Bille[][] stringToList(String s) {
-		int longueur = s.length()/s.length();
-		Bille[][] board2 = new Bille[longueur][longueur];
-		for (int i = 0; i < s.length(); i++) {
-			if (s.charAt(i) == '-') {
-				board2[i%longueur][i/longueur] = null;
-			}
-			else if (s.charAt(i) == 'W') {
-				board2[i%longueur][i/longueur] = new Bille(Color.WHITE);
-			}
-			else if (s.charAt(i) == 'B') {
-				board2[i%longueur][i/longueur] = new Bille(Color.BLACK);
-			}
-			else {
-				board2[i%longueur][i/longueur] = new Bille(Color.RED);
-			}
-		}
-		return board2;
-	}
-
-	public String toString() {
-		String ret = "";
-		for (int i = 0; i < longueur; i++) {
-			for (int j = 0; j < longueur; j++) {
-				if (board[i][j] == null) {
-					ret += "-";
-				}
-				else {
-					ret += board[i][j].toString();
-				}
-			}
-		}
-		return ret;
-	}
-
 	/*
 	 * 
 	 * @return toString1 convertit le plateau en une chaine de caractère reduite
 	 */
-	public String toString1(){
+	public String toString(){
 		String res = "";
 		char car = ' ';
 		int nb_apparition=0;
@@ -255,7 +232,7 @@ public class Plateau {
 	}
 
 	// Cette fonction permet de passer d'une chaine de caractère encodé de manière efficace à un tableau de Bille
-	public static Bille[][] stringToList1(String s){
+	public static Bille[][] stringToList(String s){
 		int l = 0; //Ici on détermine la longueur d'une tableau 
 		int occ = 0; // On additionne tous les nombres derrière les caractères
 		while(occ<s.length()){
@@ -297,7 +274,7 @@ public class Plateau {
 	//Cette fonction permets de trouver le nombre qui se situe en premier sur la chaine de caractère
 	//CharAt(0) ne fonction pas car il se peut que le nombre contient 2 chiffres.
 
-	public static int findNumber(String s){
+	private static int findNumber(String s){
 		String nb="";
 		for (int i = 0;i<s.length();i++){
 			if (s.charAt(i)<='9' && s.charAt(i)>='0'){
