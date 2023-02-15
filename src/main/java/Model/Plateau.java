@@ -120,12 +120,8 @@ public class Plateau {
 			return State.WRONGDIRECTION;
 		}
 		pos.currentMarble = null;//pour la premiere recursion ce sera utile car la premiere bille que l'on veut pousser va toujours devenir null car la case va se liberer
-		int oldNumberRedBall = billesRouges;
-		int oldNumberOpponentBall = j2.getBilles();
 		Position tmp = push2(pos,direction,j1,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
 
-		int newNumberRedBall = billesRouges;
-		int newNumberOpponentBall = j2.getBilles();
 		if (tmp == null) {
 			return State.PUSHINGOWNMARBLE;
 		}
@@ -134,17 +130,14 @@ public class Plateau {
 			return State.REPEATINGBOARD;
 		}
 
-		State state = State.SUCCESS;
-		if (oldNumberRedBall!=newNumberRedBall){
-			state = State.REDREPLAY;
+		if (tmp.currentMarble == null){
+			return State.SUCCESS;
 		}
 
-		if (oldNumberOpponentBall!=newNumberOpponentBall){
-			state = State.OPPREPLAY;
+		if (tmp.currentMarble.isRed()) {
+			return State.REDREPLAY;
 		}
-
-		state.setMarble(tmp.currentMarble);
-		return state;
+		return State.OPPREPLAY;
 	}
 
 	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
