@@ -22,6 +22,13 @@ public class Plateau {
 		this.billesRouges = 8*(n*n)-12*n+5;
 	}
 
+	public Plateau(String strPlateau) {
+		Bille[][] tmp = stringToList(strPlateau);
+		this.longueur = tmp.length;
+		thisB.board = tmp;
+		this.lengthN = (tmp.longueur+1)/4;
+	}
+
 	public int getLongueur() {
 		return this.longueur;
 	}
