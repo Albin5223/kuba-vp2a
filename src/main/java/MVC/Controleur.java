@@ -21,7 +21,7 @@ public class Controleur extends MouseAdapter{
         SIZE = n;
     }
     
-    public void setPlateau(Model m){
+    public void setModel(Model m){
         model = m;
     }
 
