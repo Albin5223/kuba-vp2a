@@ -1,6 +1,6 @@
-package main.java.MVC1;
+package MVC;
 import java.util.LinkedList;
-import main.java.Model1.*;
+import Model.*;
 
 
 public class Model {

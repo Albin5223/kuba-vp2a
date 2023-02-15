@@ -1,4 +1,4 @@
-package main.java.Model1;
+package Model;
 
 public enum Direction {
 	NORTH,
