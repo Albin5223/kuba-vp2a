@@ -112,8 +112,8 @@ public class Plateau {
 		if (j1.getColor() != board[pos.x][pos.y].getColor()) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.x+inverse(direction).dirX() != -1 && pos.x+inverse(direction).dirX() != this.longueur && pos.y+inverse(direction).dirY() != -1 && pos.y+inverse(direction).dirY() != this.longueur) {
-			if (this.board[pos.x+inverse(direction).dirX()][pos.y+inverse(direction).dirY()] != null) {
+		if (pos.x+inverse(direction).dirY() != -1 && pos.x+inverse(direction).dirY() != this.longueur && pos.y+inverse(direction).dirX() != -1 && pos.y+inverse(direction).dirX() != this.longueur) {
+			if (this.board[pos.x+inverse(direction).dirY()][pos.y+inverse(direction).dirX()] != null) {
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -199,7 +199,7 @@ public class Plateau {
 			}
 		}
 		return board2;
-	} 
+	}
 
 	public String toString() {
 		String ret = "";
