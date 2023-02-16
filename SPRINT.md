@@ -29,7 +29,7 @@ Modification du model pour respecter les règles lorsqu'on rejoue.
 
 A faire :
 
-Méril Leforestier et Mathéo 
+Méril LEFORESTIER et Mathéo DE SOUSA 
 
 Prévu : modifier la fonction assemblage afin qu'elle superpose deux images, et non qu'elle les ajouter l'une à coté de l'autre + création du plateau
 
