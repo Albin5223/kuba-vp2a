@@ -35,4 +35,4 @@ Prévu : modifier la fonction assemblage afin qu'elle superpose deux images, et 
 
 fait : modification de assemblage + création des Sprites du plateau et d'un exemple de bille
 
-à faire : créer une fonction utisant assemblage pour créer le plateau courant + création des Sprites des billes Rouges et Blanches
+à faire : créer une fonction utisant assemblage pour créer le plateau courant + création des Sprites des billes Rouges et Blanches + correction des bugs liés au chemins relatifs des images
