@@ -26,7 +26,6 @@ public class Controleur extends MouseAdapter{
     }
 
 
-    //TODO : proriser les directions avec la différence la plus grande
     
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {

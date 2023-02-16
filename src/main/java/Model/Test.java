@@ -11,7 +11,7 @@ public class Test {
 		p.push(new Position(0,0),Direction.SOUTH,j1,j2);
 		p.affiche();
 		//IA ia = new IA(Color.BLACK,3);
-		//new View(null);
+		new View(null);
 
 		System.out.println(p.toString());
 		System.out.println(p.toString());
