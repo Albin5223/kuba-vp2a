@@ -1,10 +1,8 @@
-package main.java.MVC1;
+package MVC;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.event.MouseInputListener;
-
-import main.java.Model1.*;
+import Model.*;
 
 public class Controleur extends MouseAdapter{
 
@@ -23,12 +21,11 @@ public class Controleur extends MouseAdapter{
         SIZE = n;
     }
     
-    public void setPlateau(Model m){
+    public void setModel(Model m){
         model = m;
     }
 
 
-    //TODO : proriser les directions avec la différence la plus grande
     
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
@@ -57,7 +54,11 @@ public class Controleur extends MouseAdapter{
     public void move(Position depart, Position arrive){
         Direction direction = determineDirection(depart,arrive);
         System.out.println(direction.dirName());
-        //model.push(depart,direction); 
+        if(!model.isEnd()){
+        	//model.push(depart,direction);
+        }
+		
+         
 
     }
     
