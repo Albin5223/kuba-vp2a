@@ -1,5 +1,7 @@
-package MVC;
+package Model;
 import java.util.LinkedList;
+
+import GUI.View;
 import Model.*;
 
 

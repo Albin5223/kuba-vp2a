@@ -73,6 +73,15 @@ public class Plateau {
 		ancienPlateau.add(s);
 	}
 
+
+	public Bille getBille(int i, int j){
+		return board[i][j];
+	}
+
+	public Bille getBille(Position p){
+		return board[p.getY()][p.getX()];
+	}
+
 	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
 		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
 	}

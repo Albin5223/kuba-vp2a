@@ -1,5 +1,6 @@
 package Model;
-import MVC.*;
+import GUI.View;
+
 
 public class Test {
 	
