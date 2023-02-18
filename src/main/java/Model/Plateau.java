@@ -25,8 +25,8 @@ public class Plateau {
 	public Plateau(String strPlateau) {
 		Bille[][] tmp = stringToList(strPlateau);
 		this.longueur = tmp.length;
-		thisB.board = tmp;
-		this.lengthN = (tmp.longueur+1)/4;
+		this.board = tmp;
+		this.lengthN = (tmp.length+1)/4;
 	}
 
 	public int getLongueur() {
@@ -47,15 +47,6 @@ public class Plateau {
 		}
 	}
 
-	public Direction inverse(Direction direct) {
-		return switch (direct) {
-			case NORTH -> Direction.SOUTH;
-			case SOUTH -> Direction.NORTH;
-			case WEST -> Direction.EAST;
-			case EAST -> Direction.WEST;
-			default -> Direction.INVALID;
-		};
-	}
 
 	public void initialiseBille() {
 		for(int i = 0; i<lengthN; i++) {
@@ -118,8 +109,8 @@ public class Plateau {
 		if (j1.getColor() != board[pos.x][pos.y].getColor()) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.x+inverse(direction).dirY() != -1 && pos.x+inverse(direction).dirY() != this.longueur && pos.y+inverse(direction).dirX() != -1 && pos.y+inverse(direction).dirX() != this.longueur) {
-			if (this.board[pos.x+inverse(direction).dirY()][pos.y+inverse(direction).dirX()] != null) {
+		if (pos.x+direction.dirInverse().dirY() != -1 && pos.x+direction.dirInverse().dirY() != this.longueur && pos.y+direction.dirInverse().dirX() != -1 && pos.y+direction.dirInverse().dirX() != this.longueur) {
+			if (this.board[pos.x+direction.dirInverse().dirY()][pos.y+direction.dirInverse().dirX()] != null) {
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -133,7 +124,7 @@ public class Plateau {
 			return State.PUSHINGOWNMARBLE;
 		}
 		else if (configurationDejaExistante()) {
-			push2(tmp,inverse(direction),j1,j2);
+			push2(tmp,direction.dirInverse(),j1,j2);
 			return State.REPEATINGBOARD;
 		}
 
