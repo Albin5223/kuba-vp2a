@@ -19,6 +19,12 @@ public enum Direction {
 	int dirY() {
 		return dirY[this.ordinal()];
 	}
+
+	final static Direction[] dirInverse = {SOUTH,EAST,NORTH,WEST,INVALID};
+
+	Direction dirInverse(){
+		return dirInverse[this.ordinal()];
+	}
 	
 	public String dirName() {
 		return dirName[this.ordinal()];
