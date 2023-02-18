@@ -1,4 +1,4 @@
-package MVC;
+package Controleur;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -54,9 +54,9 @@ public class Controleur extends MouseAdapter{
     public void move(Position depart, Position arrive){
         Direction direction = determineDirection(depart,arrive);
         System.out.println(direction.dirName());
-        if(!model.isEnd()){
+        //if(!model.isEnd()){
         	//model.push(depart,direction);
-        }
+        //}
 		
          
 

@@ -1,7 +1,10 @@
-package MVC;
+package GUI;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import Controleur.Controleur;
+import Model.Model;
 
 public class View extends JFrame{
     
