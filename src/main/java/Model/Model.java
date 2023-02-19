@@ -7,7 +7,7 @@ import Model.*;
 
 public class Model {
     Plateau plat;
-    LinkedList<Joueur> joueurs;
+    Joueur[]joueurs;
     int joueurCurrent = 0; //L'entier indique le joueur courant
     boolean partieFinie;
     View view;
@@ -15,14 +15,14 @@ public class Model {
 
 
     public Model(int n,String s1,String s2){
-        joueurs = new LinkedList<>();
+        joueurs = new Joueur[2];
         plat = new Plateau(n);
         Joueur j1 = new Joueur(Color.BLACK,n,s1);
         Joueur j2 = new Joueur(Color.WHITE,n,s2);
         plat.initialiseBille();
 
-        joueurs.add(j1);
-        joueurs.add(j2);
+        joueurs[1] = j1;
+        joueurs[2] = j2;
     }
 
     public void setView(View v){
@@ -30,19 +30,19 @@ public class Model {
     }
 
     public Joueur getCurrentPlayer(){
-        return joueurs.get(joueurCurrent);
+        return joueurs[joueurCurrent];
     }
 
     public Joueur getOtherPlayer(){
         if (joueurCurrent==0){
-            return joueurs.get(1);
+            return joueurs[1];
         }
-        return joueurs.get(0);
+        return joueurs[0];
     }
 
     public void joueurSuivant(){
         joueurCurrent ++;
-        if (joueurCurrent>=joueurs.size()){
+        if (joueurCurrent>=2){
             joueurCurrent = 0;
         }
     }
@@ -54,7 +54,7 @@ public class Model {
     public void push(Position p,Direction d){
         
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-        if(plat.isOver(joueurs.get(0),joueur.get(1))==null){
+        if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(state != State.OPPREPLAY && state != State.REDREPLAY){
             joueurSuivant();
             }
