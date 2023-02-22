@@ -5,73 +5,146 @@ import java.awt.event.*;
 import java.io.*;
 import javax.imageio.*;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 
 public class LauncherG extends JFrame{
 	
-	private JPanel plateauG = new JPanel();
+	private JPanel fond = new JPanel();
 	private JFrame fen=new JFrame("Kuba");
-	private JLayeredPane pane;
+	private BufferedImage imagePlateau;
+	JPanel contour;
+	JPanel plateau ;
+	public int size;
+	int y;
 	
 	public LauncherG(int n) {
 		fen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fen.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		fen.setResizable(false);
-	
-		JPanel contour = new JPanel ();
-		int x = (Toolkit.getDefaultToolkit().getScreenSize().width- Toolkit.getDefaultToolkit().getScreenSize().height)/2;
 
-		contour.setBounds(x,0,Toolkit.getDefaultToolkit().getScreenSize().height-10,Toolkit.getDefaultToolkit().getScreenSize().height);
+		int x = (Toolkit.getDefaultToolkit().getScreenSize().width- Toolkit.getDefaultToolkit().getScreenSize().height)/2;
+		y = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+		contour = new JPanel ();
+		contour.setBounds(x,0,y,y); //(x,0,y-10,y) si bug d'affichage en bas
 		contour.setBorder(BorderFactory.createLineBorder(Color.black));
 		contour.setBackground(Color.LIGHT_GRAY);
-		contour.setLayout(null);
-		
-		JPanel cases = new JPanel ();
-		cases.setLayout(new GridLayout(4*n-1,4*n-1));
-		cases.setBounds(40,40,Toolkit.getDefaultToolkit().getScreenSize().height-90,Toolkit.getDefaultToolkit().getScreenSize().height-80);
-		for (int i =0; i< (4*n-1)*(4*n-1); i++) {
-			if (i==0) cases.add(new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\coin01.png")));
-			else {
-				if (i==(4*n-2))cases.add( new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\coin02.png")));
-				else {
-					if (i==(4*n-1)*(4*n-1)-(4*n-1))cases.add( new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\coin03.png")));
-					else {
-						if (i==(4*n-1)*(4*n-1)-1) cases.add( new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\coin04.png")));	
-						else {
-							if (i>0) {
-								if (i < (4*n-1))cases.add(new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\haut.png")));
-								else {
-									if (i >(4*n-1)*(4*n-1)-(4*n-1))cases.add(new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\bas.png")));
-									else {
-										if ( i %(4*n-1)==4*n-2)cases.add(new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\droite.png")));
-										else {
-											if ( i %(4*n-1)==0)cases.add(new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\gauche.png")));
-											else {
-												cases.add(new JLabel(new ImageIcon("C:\\uni\\projet\\kuba\\Kuba\\src\\intersection.png")));
-											}
-										}
-									}
-								}
-							}
-					}
-				}
-			}
-		}	
-		}
-		cases.setBackground(Color.LIGHT_GRAY);
-		contour.add(cases);
-		plateauG.setLayout(null);
-		plateauG.setVisible(true);
-		plateauG.add(contour);
+		contour.setLayout(new GridLayout(1,1));
+
+		size = y / (4*n-1);
+		//imagePlateau = new BufferedImage(y, y, BufferedImage.TYPE_INT_ARGB);
+
+		JLabel label = new JLabel();
+
+		label.setIcon(new ImageIcon(remplir(y)));//new ImageIcon(remplir(y))
+		label.setVisible(true);
+
+		plateau = new JPanel ();
+		plateau.setVisible(true);
+
+		plateau.add(label);
+		plateau.setBackground(Color.LIGHT_GRAY);
+		plateau.repaint();
+		plateau.revalidate();
+
+
+		contour.add(plateau);
+
+
+		fond.setLayout(null);
+		fond.setVisible(true);
+		fond.add(contour);
+
 		fen.setUndecorated(true);
-		fen.setContentPane(plateauG);
+		fen.setContentPane(fond);
 		fen.setVisible(true);
 		fen.repaint();
 	}
+
+	public BufferedImage remplir(Bille [][] tab){
+		BufferedImage image1 = null;
+		BufferedImage image2 = null;
+		BufferedImage image3 = null;
+		BufferedImage image4 = new BufferedImage(y, y, BufferedImage.TYPE_INT_ARGB);
+
+
+		Graphics2D graph;
+		for (int i =0; i< (4*n-1)*(4*n-1); i++){
+				try {
+					
+						if (i==0) image1 = ImageIO.read(new File("../../../ressource/coin01.png"));
+						else {
+							if (i==(4*n-2))image1 = ImageIO.read(new File("../../../ressource/coin02.png"));
+							else {
+								if image1 = ImageIO.read(new File("../../../ressource/coin03.png"));
+								else {
+									if image1 = ImageIO.read(new File("../../../ressource/coin04.png"));	
+									else {
+										if (i>0) {
+											if (i < (4*n-1))image1 = ImageIO.read(new File("../../../ressource/haut.png"));
+											else {
+												if (i >(4*n-1)*(4*n-1)-(4*n-1))image1 = ImageIO.read(new File("../../../ressource/bas.png"));
+												else {
+													if ( i %(4*n-1)==4*n-2)image1 = ImageIO.read(new File("../../../ressource/droite.png"));
+													else {
+														if ( i %(4*n-1)==0)image1 = ImageIO.read(new File("../../../ressource/gauche.png"));
+														else {
+															image1 = ImageIO.read(new File("../../../ressource/intersection.png"));
+															}
+														}
+													}
+												}
+											}
+									}
+								}
+							}
+						}	
+					int a =i/(4*n-1) ; // nb colonne
+					int b = i %(4*n-1); // nb ligne
+					if (tab[i/a][i %b ] != null && tab[i/a][i %b ].toString( ).equals("W")) image2 = ImageIO.read(new File("../../../ressource/BalleBlanche.png"));
+					if (tab[i/a][i %b ] != null && tab[i/a][i %b ].toString().equals("B")) image2 = ImageIO.read(new File("../../../ressource/BalleNoire.png"));
+					if (tab[i/a][i %b ] != null && tab[i/a][i % b].toString().equals("R")) image2 = ImageIO.read(new File("../../../ressource/BalleRouge.png"));
+					graph = image4.createGraphics();
+					image3 = assemblage(image1,image2);
+					graph.drawImage(image3,a*size,b*size,null);
+			}
+			 catch (IOException e) {			
+				e.printStackTrace();
+			}
+			
+		}
+		return image4;
+	}
+
+	  	  public BufferedImage assemblage(BufferedImage img1, BufferedImage img2) {
+	  		if (img2 == null) return img1;
+	        BufferedImage buf = null;
+
+            buf = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = buf.createGraphics();
+            g2.drawImage(img1, 0, 0,size,size, null);
+            g2.drawImage(img2, 0, 0,size,size, null);
+	        return buf;
+	    }
+
+
+
+
 	
 	public static void main(String[] args) {
-		//LauncherG l = new LauncherG(3);
-		TestImage yolo = new TestImage(3);
+		LauncherG l = new LauncherG(4);
+
 	}
+
+
 
 }
 
