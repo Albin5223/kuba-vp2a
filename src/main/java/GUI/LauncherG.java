@@ -20,9 +20,10 @@ public class LauncherG extends JFrame{
 	private JPanel fond = new JPanel();
 	private JFrame fen=new JFrame("Kuba");
 	private BufferedImage imagePlateau;
+	JLabel label;
 	JPanel contour;
 	JPanel plateau ;
-	public int size;
+	int size;
 	int y;
 	
 	public LauncherG(int n) {
@@ -42,9 +43,9 @@ public class LauncherG extends JFrame{
 		size = y / (4*n-1);
 		//imagePlateau = new BufferedImage(y, y, BufferedImage.TYPE_INT_ARGB);
 
-		JLabel label = new JLabel();
+		label = new JLabel();
 
-		label.setIcon(new ImageIcon(remplir(y)));//new ImageIcon(remplir(y))
+		
 		label.setVisible(true);
 
 		plateau = new JPanel ();
@@ -84,11 +85,10 @@ public class LauncherG extends JFrame{
 						else {
 							if (i==(4*n-2))image1 = ImageIO.read(new File("../../../ressource/coin02.png"));
 							else {
-								if image1 = ImageIO.read(new File("../../../ressource/coin03.png"));
+								if (i==(4*n-1)*(4*n-2)-1)image1 = ImageIO.read(new File("../../../ressource/coin03.png"));
 								else {
-									if image1 = ImageIO.read(new File("../../../ressource/coin04.png"));	
+									if (i==(4*n-1)*(4*n-1)-1) image1 = ImageIO.read(new File("../../../ressource/coin04.png"));	
 									else {
-										if (i>0) {
 											if (i < (4*n-1))image1 = ImageIO.read(new File("../../../ressource/haut.png"));
 											else {
 												if (i >(4*n-1)*(4*n-1)-(4*n-1))image1 = ImageIO.read(new File("../../../ressource/bas.png"));
@@ -102,7 +102,7 @@ public class LauncherG extends JFrame{
 														}
 													}
 												}
-											}
+											
 									}
 								}
 							}
@@ -111,7 +111,7 @@ public class LauncherG extends JFrame{
 					int b = i %(4*n-1); // nb ligne
 					if (tab[i/a][i %b ] != null && tab[i/a][i %b ].toString( ).equals("W")) image2 = ImageIO.read(new File("../../../ressource/BalleBlanche.png"));
 					if (tab[i/a][i %b ] != null && tab[i/a][i %b ].toString().equals("B")) image2 = ImageIO.read(new File("../../../ressource/BalleNoire.png"));
-					if (tab[i/a][i %b ] != null && tab[i/a][i % b].toString().equals("R")) image2 = ImageIO.read(new File("../../../ressource/BalleRouge.png"));
+					if (tab[i/a][i %b ] != null && tab[i/a][i % b].toString().equals("R")) image2 = ImageIO.read(new File("../../../ressource/BalleRouge2.png"));
 					graph = image4.createGraphics();
 					image3 = assemblage(image1,image2);
 					graph.drawImage(image3,a*size,b*size,null);
@@ -121,7 +121,7 @@ public class LauncherG extends JFrame{
 			}
 			
 		}
-		return image4;
+		label.setIcon(new ImageIcon(image4));
 	}
 
 	  	  public BufferedImage assemblage(BufferedImage img1, BufferedImage img2) {
