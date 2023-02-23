@@ -7,18 +7,7 @@ public enum State {
 	REPEATINGBOARD,
 	TILEBEFORENOTEMPTY,
 	WRONGDIRECTION,
-	SUCCESS,
-	REDREPLAY,
-	OPPREPLAY;
-
-
-	private Bille marble;
-
-	public Bille getMarble() {
-		return this.marble;
-	}
-
-	public void setMarble(Bille b) {
-		this.marble = b;
-	}
+	PUSHREDMARBLE,
+	PUSHOPPMARBLE,
+	SUCCESS
 }

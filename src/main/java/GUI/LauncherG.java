@@ -12,7 +12,6 @@ import java.io.IOException;
 import Model.*;
 import Controleur.*;
 
-
 public class LauncherG extends JFrame{
 	
 	private JPanel fond = new JPanel();
@@ -25,7 +24,7 @@ public class LauncherG extends JFrame{
 	int y;
 	int n;
 	
-	public LauncherG(int n,Bille [][] tab) {
+	public LauncherG(int n,Colour [][] tab) {
 		this.n = n;
 		fen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fen.setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -48,8 +47,7 @@ public class LauncherG extends JFrame{
     	contour.addMouseMotionListener(ctrl);
 		contour.setLayout(new GridLayout(1,1));
 
-		size = y / (4*n-1);
-		//imagePlateau = new BufferedImage(y, y, BufferedImage.TYPE_INT_ARGB);
+
 
 		label = new JLabel();
 		label.setIcon(new ImageIcon(remplir(tab)));
@@ -78,7 +76,7 @@ public class LauncherG extends JFrame{
 		fen.repaint();
 	}
 
-	public BufferedImage remplir(Bille [][] tab){
+	public BufferedImage remplir( Colour[][] tab){
 		BufferedImage image1 = null;
 		BufferedImage image2 = null;
 		BufferedImage image3 = null;
@@ -88,24 +86,25 @@ public class LauncherG extends JFrame{
 		Graphics2D graph;
 		for (int i =0; i< (4*n-1)*(4*n-1); i++){
 				try {
-					
-						if (i==0) image1 = ImageIO.read(new File("ressource/coin01.png"));
+					image1 = null;
+					image2 = null;
+						if (i==0) image1 = ImageIO.read(new File("src/ressource/coin01.png"));
 						else {
-							if (i==(4*n-2))image1 = ImageIO.read(new File("ressource/coin02.png"));
+							if (i==(4*n-2))image1 = ImageIO.read(new File("src/ressource/coin02.png"));
 							else {
-								if (i==(4*n-1)*(4*n-2)-1)image1 = ImageIO.read(new File("ressource/coin03.png"));
+								if (i==(4*n-1)*(4*n-2)-1)image1 = ImageIO.read(new File("src/ressource/coin03.png"));
 								else {
-									if (i==(4*n-1)*(4*n-1)-1) image1 = ImageIO.read(new File("ressource/coin04.png"));	
+									if (i==(4*n-1)*(4*n-1)-1) image1 = ImageIO.read(new File("src/ressource/coin04.png"));
 									else {
-											if (i < (4*n-1))image1 = ImageIO.read(new File("ressource/haut.png"));
+											if (i < (4*n-1))image1 = ImageIO.read(new File("src/ressource/haut.png"));
 											else {
-												if (i >(4*n-1)*(4*n-1)-(4*n-1))image1 = ImageIO.read(new File("ressource/bas.png"));
+												if (i >(4*n-1)*(4*n-1)-(4*n-1))image1 = ImageIO.read(new File("src/ressource/bas.png"));
 												else {
-													if ( i %(4*n-1)==4*n-2)image1 = ImageIO.read(new File("ressource/droite.png"));
+													if ( i %(4*n-1)==4*n-2)image1 = ImageIO.read(new File("src/ressource/droite.png"));
 													else {
-														if ( i %(4*n-1)==0)image1 = ImageIO.read(new File("ressource/gauche.png"));
+														if ( i %(4*n-1)==0)image1 = ImageIO.read(new File("src/ressource/gauche.png"));
 														else {
-															image1 = ImageIO.read(new File("ressource/intersection.png"));
+															image1 = ImageIO.read(new File("src/ressource/intersection.png"));
 															}
 														}
 													}
@@ -117,9 +116,9 @@ public class LauncherG extends JFrame{
 						}	
 					int a =i/(4*n-1) ; // nb colonne
 					int b = i %(4*n-1); // nb ligne
-					if (tab[a][b] != null && tab[a][b].toString().equals("W")) image2 = ImageIO.read(new File("ressource/BalleNoire.png")); //Ici mettre billeBlanche
-					if (tab[a][b ] != null && tab[a][b].toString().equals("B")) image2 = ImageIO.read(new File("ressource/BalleNoire.png"));
-					if (tab[a][b ] != null && tab[a][b].toString().equals("R")) image2 = ImageIO.read(new File("ressource/BalleRouge2.png"));
+					if (tab[a][b] != null && tab[a][b].toString().equals("W")) image2 = ImageIO.read(new File("src/ressource/BalleBlanche.png"));
+					if (tab[a][b ] != null && tab[a][b].toString().equals("B")) image2 = ImageIO.read(new File("src/ressource/BalleNoire.png"));
+					if (tab[a][b ] != null && tab[a][b].toString().equals("R")) image2 = ImageIO.read(new File("src/ressource/BalleRouge2.png"));
 					graph = image4.createGraphics();
 					image3 = assemblage(image1,image2);
 					graph.drawImage(image3,a*size,b*size,null);
@@ -151,6 +150,7 @@ public class LauncherG extends JFrame{
 	public static void main(String[] args) {
 		
 		Plateau p = new Plateau(4);
+		p.initialiseBille();
 		LauncherG l = new LauncherG(4,(p.getBoard()));
 
 	}

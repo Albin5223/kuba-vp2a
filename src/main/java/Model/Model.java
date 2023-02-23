@@ -1,24 +1,20 @@
 package Model;
-import java.util.LinkedList;
 
 import GUI.View;
-import Model.*;
 
 
 public class Model {
     Plateau plat;
-    Joueur[]joueurs;
+    Joueur[] joueurs;
     int joueurCurrent = 0; //L'entier indique le joueur courant
     boolean partieFinie;
     View view;
-    
 
-
-    public Model(int n,String s1,String s2){
+    public Model(int n){
         joueurs = new Joueur[2];
         plat = new Plateau(n);
-        Joueur j1 = new Joueur(Color.BLACK,n,s1);
-        Joueur j2 = new Joueur(Color.WHITE,n,s2);
+        Joueur j1 = new Joueur(Colour.BLACK,n);
+        Joueur j2 = new Joueur(Colour.WHITE,n);
         plat.initialiseBille();
 
         joueurs[1] = j1;
@@ -52,10 +48,11 @@ public class Model {
     }
 
     public void push(Position p,Direction d){
+
         
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         if(plat.isOver(joueurs[0],joueurs[1])==null){
-            if(state != State.OPPREPLAY && state != State.REDREPLAY){
+            if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE){
             joueurSuivant();
             }
         }
