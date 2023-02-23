@@ -1,32 +1,26 @@
 package Model;
 
 public class Position {
-	public int x;
-	public int y;
-	public Bille currentMarble;//argument pas obligatoire et utilise uniquement dans la fonction push de plateau
+	public int i;
+	public int j;
 
-	public Position (int x, int y, Bille b) {
-		this.x = x;
-		this.y = y;
-		this.currentMarble = b;
+	public Position (int i, int j) {
+		this.i = i;
+		this.j = j;
 	}
 
-	public Position(int x, int y) {
-		this(x,y,null);
-	}
-
-	public Position goTo(Direction direction, Bille newCurrentMarble) {
-		Position pos = new Position(this.x,this.y,newCurrentMarble);
-		pos.x+= direction.dirX();
-		pos.y+= direction.dirY();
+	public Position goTo(Direction direction) {
+		Position pos = new Position(this.i,this.j);
+		pos.i+= direction.dirX();
+		pos.j+= direction.dirY();
 		return pos;
 	}
 
-	public int getX(){
-		return x;
+	public int getI(){
+		return this.i;
 	}
 
-	public int getY(){
-		return y;
+	public int getJ(){
+		return this.j;
 	}
 }
