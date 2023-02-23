@@ -41,7 +41,7 @@ public class Plateau {
 		return board[pos.x][pos.y];
 	}
 
-	public void fillUpTo(int ligne, int debut, int fin) {
+	private void fillUpTo(int ligne, int debut, int fin) {
 		for (int i = debut;i<=fin;i++) {
 			board[ligne][i] = new Bille(Color.RED);
 		}
