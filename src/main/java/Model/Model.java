@@ -54,7 +54,7 @@ public class Model {
     public void push(Position p,Direction d){
         
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-        if(plat.isOver(joueurs.get(0),joueur.get(1))==null){
+        if(plat.isOver(joueurs.get(0),joueurs.get(1))==null){
             if(state != State.OPPREPLAY && state != State.REDREPLAY){
             joueurSuivant();
             }
