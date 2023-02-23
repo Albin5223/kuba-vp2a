@@ -76,7 +76,7 @@ public class LauncherG extends JFrame{
 		fen.repaint();
 	}
 
-	public BufferedImage remplir( Colour[][] tab){
+	public BufferedImage remplir(Colour[][] tab){
 		BufferedImage image1 = null;
 		BufferedImage image2 = null;
 		BufferedImage image3 = null;
@@ -88,23 +88,23 @@ public class LauncherG extends JFrame{
 				try {
 					image1 = null;
 					image2 = null;
-						if (i==0) image1 = ImageIO.read(new File("src/ressource/coin01.png"));
+						if (i==0) image1 = ImageIO.read(new File("./ressource/coin01.png"));
 						else {
-							if (i==(4*n-2))image1 = ImageIO.read(new File("src/ressource/coin02.png"));
+							if (i==(4*n-2))image1 = ImageIO.read(new File("./ressource/coin02.png"));
 							else {
-								if (i==(4*n-1)*(4*n-2)-1)image1 = ImageIO.read(new File("src/ressource/coin03.png"));
+								if (i==(4*n-1)*(4*n-2)-1)image1 = ImageIO.read(new File("./ressource/coin03.png"));
 								else {
-									if (i==(4*n-1)*(4*n-1)-1) image1 = ImageIO.read(new File("src/ressource/coin04.png"));
+									if (i==(4*n-1)*(4*n-1)-1) image1 = ImageIO.read(new File("./ressource/coin04.png"));
 									else {
-											if (i < (4*n-1))image1 = ImageIO.read(new File("src/ressource/haut.png"));
+											if (i < (4*n-1))image1 = ImageIO.read(new File("./ressource/haut.png"));
 											else {
-												if (i >(4*n-1)*(4*n-1)-(4*n-1))image1 = ImageIO.read(new File("src/ressource/bas.png"));
+												if (i >(4*n-1)*(4*n-1)-(4*n-1))image1 = ImageIO.read(new File("./ressource/bas.png"));
 												else {
-													if ( i %(4*n-1)==4*n-2)image1 = ImageIO.read(new File("src/ressource/droite.png"));
+													if ( i %(4*n-1)==4*n-2)image1 = ImageIO.read(new File("./ressource/droite.png"));
 													else {
-														if ( i %(4*n-1)==0)image1 = ImageIO.read(new File("src/ressource/gauche.png"));
+														if ( i %(4*n-1)==0)image1 = ImageIO.read(new File("./ressource/gauche.png"));
 														else {
-															image1 = ImageIO.read(new File("src/ressource/intersection.png"));
+															image1 = ImageIO.read(new File("./ressource/intersection.png"));
 															}
 														}
 													}
@@ -116,9 +116,9 @@ public class LauncherG extends JFrame{
 						}	
 					int a =i/(4*n-1) ; // nb colonne
 					int b = i %(4*n-1); // nb ligne
-					if (tab[a][b] != null && tab[a][b].toString().equals("W")) image2 = ImageIO.read(new File("src/ressource/BalleBlanche.png"));
-					if (tab[a][b ] != null && tab[a][b].toString().equals("B")) image2 = ImageIO.read(new File("src/ressource/BalleNoire.png"));
-					if (tab[a][b ] != null && tab[a][b].toString().equals("R")) image2 = ImageIO.read(new File("src/ressource/BalleRouge2.png"));
+					if (tab[a][b] != null && tab[a][b].toString().equals("W")) image2 = ImageIO.read(new File("./ressource/BalleBlanche.png"));
+					if (tab[a][b ] != null && tab[a][b].toString().equals("B")) image2 = ImageIO.read(new File("./ressource/BalleNoire.png"));
+					if (tab[a][b ] != null && tab[a][b].toString().equals("R")) image2 = ImageIO.read(new File("./ressource/BalleRouge2.png"));
 					graph = image4.createGraphics();
 					image3 = assemblage(image1,image2);
 					graph.drawImage(image3,a*size,b*size,null);
@@ -132,16 +132,16 @@ public class LauncherG extends JFrame{
 		
 	}
 
-	  	  public BufferedImage assemblage(BufferedImage img1, BufferedImage img2) {
-	  		if (img2 == null) return img1;
-	        BufferedImage buf = null;
+	public BufferedImage assemblage(BufferedImage img1, BufferedImage img2) {
+		if (img2 == null) return img1;
+		BufferedImage buf = null;
 
-            buf = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = buf.createGraphics();
-            g2.drawImage(img1, 0, 0,size,size, null);
-            g2.drawImage(img2, 0, 0,size,size, null);
-	        return buf;
-	    }
+		buf = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = buf.createGraphics();
+		g2.drawImage(img1, 0, 0,size,size, null);
+		g2.drawImage(img2, 0, 0,size,size, null);
+		return buf;
+	}
 
 
 
