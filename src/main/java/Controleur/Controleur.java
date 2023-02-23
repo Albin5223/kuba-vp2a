@@ -29,8 +29,8 @@ public class Controleur extends MouseAdapter{
     
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
-    	int detailX = arrive.getX() - depart.getX();
-    	int detailY = arrive.getY() - depart.getY();
+    	int detailX = arrive.getI() - depart.getI();
+    	int detailY = arrive.getJ() - depart.getJ();
     	if (Math.abs(detailX)>Math.abs(detailY)){
     		if(detailX<=0) {
     			return Direction.WEST;
@@ -42,7 +42,7 @@ public class Controleur extends MouseAdapter{
     
     
     private static Direction determineDirection(Position depart, Position arrive){
-        if (depart.getY()<arrive.getY()){
+        if (depart.getJ()<arrive.getJ()){
             return detailDirectionEstWest(depart,arrive,Direction.SOUTH);
         }
         else{
