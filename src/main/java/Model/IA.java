@@ -8,14 +8,14 @@ public class IA extends Joueur {
 	private Joueur jTest;
 
 	public IA(Color c, int n) {
-		super(c,n,"Jack");
+		super(c,n);
 		this.plateau = new Plateau(n);
 		this.board = plateau.getBoard();//etant donne que c'est un return et non une copie les effets de bord sur this.board feront changer this.plateau
 		if (c == Color.BLACK) {
-			this.jTest = new Joueur(Color.WHITE,n,"test");
+			this.jTest = new Joueur(Color.WHITE,n);
 		}
 		else {
-			this.jTest = new Joueur(Color.BLACK,n,"test");
+			this.jTest = new Joueur(Color.BLACK,n);
 		}
 	}
 

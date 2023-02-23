@@ -14,6 +14,7 @@ public class View extends JFrame{
     public View(Model m) {
     	this.setVisible(true);
     	this.setSize(600, 800);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     	model = m;
     	
     	JPanel conteneur = new JPanel();
