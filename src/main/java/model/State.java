@@ -1,4 +1,4 @@
-package main.java.Model1;
+package Model;
 
 public enum State {
 	EMPTYTILE,
@@ -7,15 +7,7 @@ public enum State {
 	REPEATINGBOARD,
 	TILEBEFORENOTEMPTY,
 	WRONGDIRECTION,
-	SUCCESS;
-
-	private Bille marble;
-
-	public Bille getMarble() {
-		return this.marble;
-	}
-
-	public void setMarble(Bille b) {
-		this.marble = b;
-	}
+	PUSHREDMARBLE,
+	PUSHOPPMARBLE,
+	SUCCESS
 }
