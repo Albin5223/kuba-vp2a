@@ -6,8 +6,8 @@ public class Test {
 	
 	public static void main(String[] args) {
 		
-		Joueur j1 = new Joueur(Colour.BLACK,3);
-		Joueur j2 = new Joueur(Colour.WHITE,3);
+		//Joueur j1 = new Joueur(Colour.BLACK,3);
+		//Joueur j2 = new Joueur(Colour.WHITE,3);
 		/* 
 		Plateau p = new Plateau(3);
 		p.initialiseBille();
@@ -22,11 +22,11 @@ public class Test {
 
 
 		//--------------------------TEST MVC-----------------
-		Plateau p = new Plateau(3);
-		p.initialiseBille();
-		System.out.println("State : "+p.push(new Position(0,9),Direction.SOUTH,j1,j2));
+		//Plateau p = new Plateau(3);
+		//p.initialiseBille();
+		//System.out.println("State : "+p.push(new Position(0,9),Direction.SOUTH,j1,j2));
 		
-		p.affiche();
+		//p.affiche();
 
 
 		Model m = new Model(3);

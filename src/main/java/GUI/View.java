@@ -15,6 +15,8 @@ public class View extends JFrame{
 	int taille_case;
 	JPanel plateau;
 	JPanel conteneur;
+	JoueurView jv1;
+	JoueurView jv2;
     
     public View(Model m) {
     	this.setVisible(true);
@@ -41,9 +43,23 @@ public class View extends JFrame{
 		plateau.addMouseMotionListener(ctrl);
 		plateau.addMouseListener(ctrl);
 
+
+		jv1 = new JoueurView(m.getCurrentPlayer());
+		jv1.setBounds(10,plateau.getY(),plateau.getX()-20,longueur*taille_case/3);
+		jv2 = new JoueurView(m.getOtherPlayer());
+		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,plateau.getX()-20,longueur*taille_case/3);
+
+
+
+
     	this.setContentPane(conteneur);
 
-		conteneur.add(plateau,BorderLayout.CENTER);
+		conteneur.add(jv1);
+		conteneur.add(jv2);
+		conteneur.add(plateau);
+		this.joueurSuivant();
+
+		this.repaint();
     	
     	
     }
@@ -78,6 +94,19 @@ public class View extends JFrame{
 				updatePlateau(g);
 			}
 		};
+		this.repaint();
+	}
+
+	public void joueurSuivant(){
+		System.out.println(m.getCurrentPlayer().getColor());
+		if (m.getCurrentPlayer().getColor()==Colour.WHITE){
+			jv1.mettreBarre();
+			jv2.enleverBarre();
+		}
+		else{
+			jv2.mettreBarre();
+			jv1.enleverBarre();
+		}
 		this.repaint();
 	}
     

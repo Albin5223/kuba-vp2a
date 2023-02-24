@@ -64,6 +64,7 @@ public class Model {
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
             joueurSuivant();
+            view.joueurSuivant();
             }
         }
         else{
