@@ -13,7 +13,7 @@ public class PlateauG extends JPanel{
         this.n = n;
         this.longueur = 4*n -1;
         taille_case = this.getWidth()/longueur;
-        paintComponent(getGraphics());
+        revalidate();
     }
 
     public void paintComponent(Graphics g){

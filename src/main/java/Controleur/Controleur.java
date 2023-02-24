@@ -42,21 +42,27 @@ public class Controleur extends MouseAdapter{
     
     
     private static Direction determineDirection(Position depart, Position arrive){
+		if(depart.getJ()==arrive.getJ() && depart.getI() == arrive.getI()){
+			return Direction.INVALID;
+		}
         if (depart.getJ()<arrive.getJ()){
             return detailDirectionEstWest(depart,arrive,Direction.SOUTH);
         }
         else{
-            return detailDirectionEstWest(depart,arrive,Direction.NORTH);
+			return detailDirectionEstWest(depart,arrive,Direction.NORTH);
+			
         }
     }
 
     
     public void move(Position depart, Position arrive){
+		System.out.println("Depart i : "+depart.getI()+" Depart j : "+depart.getJ());
         Direction direction = determineDirection(depart,arrive);
+
         System.out.println(direction.dirName());
-        //if(!model.isEnd()){
-        	//model.push(depart,direction);
-        //}
+        if(!model.isEnd()){
+        	model.push(new Position(depart.getJ(), depart.getI()),direction);
+		}
 		
          
 

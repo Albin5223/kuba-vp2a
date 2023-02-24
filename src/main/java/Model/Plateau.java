@@ -124,8 +124,11 @@ public class Plateau {
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.i+direction.dirInverse().dirY() != -1 && pos.i+direction.dirInverse().dirY() != this.longueur && pos.j+direction.dirInverse().dirX() != -1 && pos.j+direction.dirInverse().dirX() != this.longueur) {
-			if (this.board[pos.i+direction.dirInverse().dirY()][pos.j+direction.dirInverse().dirX()] != null) {
+		//Mauvaise gestion 
+		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
+			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
+				System.out.println(pos.j+direction.dirInverse().dirX());
+				System.out.println(pos.i+direction.dirInverse().dirY());
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -162,9 +165,7 @@ public class Plateau {
 
 	public boolean configurationDejaExistante() {
 		String s = this.toString();
-		System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
-			System.out.println("Plateau existant : "+tmp);
 			if (s.equals(tmp)) {
 				return true;
 			}

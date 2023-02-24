@@ -9,6 +9,7 @@ public class Model {
     int joueurCurrent = 0; //L'entier indique le joueur courant
     boolean partieFinie;
     View view;
+    int n;
 
     public Model(int n){
         joueurs = new Joueur[2];
@@ -17,12 +18,17 @@ public class Model {
         Joueur j2 = new Joueur(Colour.WHITE,n);
         plat.initialiseBille();
 
-        joueurs[1] = j1;
-        joueurs[2] = j2;
+        joueurs[0] = j1;
+        joueurs[1] = j2;
+        this.n = n;
     }
 
     public void setView(View v){
         view = v;
+    }
+
+    public int getN(){
+        return n;
     }
 
     public Joueur getCurrentPlayer(){
@@ -47,12 +53,16 @@ public class Model {
         return partieFinie;
     }
 
-    public void push(Position p,Direction d){
+    public Plateau getPlateau(){
+        return plat;
+    }
 
-        
+    public void push(Position p,Direction d){        
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+        System.out.println("State retour : " +state);
+        System.out.println("Joueur courant : " + getCurrentPlayer().getColor());
         if(plat.isOver(joueurs[0],joueurs[1])==null){
-            if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE){
+            if(State.SUCCESS == state){
             joueurSuivant();
             }
         }
@@ -60,7 +70,7 @@ public class Model {
             partieFinie = true;
         }
         
-        //view.update();
+        view.update();
     }
 
     

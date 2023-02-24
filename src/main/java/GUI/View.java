@@ -4,44 +4,77 @@ import javax.swing.*;
 import java.awt.*;
 
 import Controleur.Controleur;
-import Model.Model;
+import Model.*;
 
 public class View extends JFrame{
     
     
-    Model model;
+   	Model m;
+	int longueur;
+	int n;
+	int taille_case;
+	JPanel conteneur;
     
     public View(Model m) {
     	this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
-    	model = m;
-		int n = 2;
+		this.m = m;
+
+		n = m.getN();
 
 
-		int longueur = 4*n -1+2;
-        int taille_case = (this.getHeight()-100)/longueur;
+		longueur = 4*n -1;
+        taille_case = (this.getHeight()-100)/longueur;
+		update();
+		
+		Controleur ctrl = new Controleur(m,taille_case);
 
-		JPanel conteneur = new JPanel(){
-			public void paintComponent(Graphics g){
-				for (int i = 0;i<longueur;i++){
-					for (int j = 0;j<longueur;j++){
-						g.drawRect(10+i*taille_case, 10+j*taille_case,taille_case,taille_case);
-					}
-				} 
-			}
-		};
+		conteneur.addMouseMotionListener(ctrl);
+		conteneur.addMouseListener(ctrl);
 
 
-    	//this.add(conteneur);
+    	this.add(conteneur);
 
-		PlateauG plat = new PlateauG(n);
-
-		this.add(plat);
-
+		//PlateauG plat = new PlateauG(n);
+		//this.add(plat);
+		revalidate();
     	
     	
     }
+
+	public void updatePlateau(Graphics g){
+		Plateau p = m.getPlateau();
+		for (int i = 0;i<longueur;i++){
+			for (int j = 0;j<longueur;j++){
+				Colour c = p.getColor(j, i);
+				if (c != null){
+					switch(c){
+						case RED : g.setColor(Color.red);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
+						case WHITE : g.setColor(Color.white);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
+						case BLACK : g.setColor(Color.black);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
+					}
+				}
+				
+			}
+		}
+	}
+
+	public void update(){
+		conteneur = new JPanel(){
+			public void paintComponent(Graphics g){
+				g.setColor(Color.black);
+				for (int i = 0;i<longueur;i++){
+					for (int j = 0;j<longueur;j++){
+						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
+					}
+				}
+
+				updatePlateau(g);
+			}
+		};
+		this.repaint();
+	}
     
 }
