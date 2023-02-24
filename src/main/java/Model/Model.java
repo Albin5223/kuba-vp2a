@@ -14,8 +14,8 @@ public class Model {
     public Model(int n){
         joueurs = new Joueur[2];
         plat = new Plateau(n);
-        Joueur j1 = new Joueur(Colour.BLACK,n);
-        Joueur j2 = new Joueur(Colour.WHITE,n);
+        Joueur j1 = new Joueur(Colour.WHITE,n);
+        Joueur j2 = new Joueur(Colour.BLACK,n);
         plat.initialiseBille();
 
         joueurs[0] = j1;

@@ -13,6 +13,7 @@ public class View extends JFrame{
 	int longueur;
 	int n;
 	int taille_case;
+	JPanel plateau;
 	JPanel conteneur;
     
     public View(Model m) {
@@ -26,20 +27,23 @@ public class View extends JFrame{
 
 
 		longueur = 4*n -1;
-        taille_case = (this.getHeight()-100)/longueur;
+        taille_case = ((this.getHeight()-100)/longueur)*7/8;
+		
+
+		conteneur = new JPanel();
+		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		conteneur.setLayout(null);
 		update();
+		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
 		
 		Controleur ctrl = new Controleur(m,taille_case);
 
-		conteneur.addMouseMotionListener(ctrl);
-		conteneur.addMouseListener(ctrl);
+		plateau.addMouseMotionListener(ctrl);
+		plateau.addMouseListener(ctrl);
 
+    	this.setContentPane(conteneur);
 
-    	this.add(conteneur);
-
-		//PlateauG plat = new PlateauG(n);
-		//this.add(plat);
-		revalidate();
+		conteneur.add(plateau,BorderLayout.CENTER);
     	
     	
     }
@@ -62,7 +66,7 @@ public class View extends JFrame{
 	}
 
 	public void update(){
-		conteneur = new JPanel(){
+		plateau = new JPanel(){
 			public void paintComponent(Graphics g){
 				g.setColor(Color.black);
 				for (int i = 0;i<longueur;i++){
