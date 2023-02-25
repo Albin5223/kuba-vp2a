@@ -88,8 +88,6 @@ public class Controleur extends MouseAdapter{
 			if (positionDepartX != e.getX()/SIZE || positionDepartY != e.getY()/SIZE) {
 				positionArriveX = e.getX()/SIZE;
 				positionArriveY = e.getY()/SIZE;
-				
-				
 			}
 		}
 		

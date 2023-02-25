@@ -36,6 +36,19 @@ public class View extends JFrame{
 		conteneur = new JPanel();
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
+
+
+		plateau = new JPanel(){
+			public void paintComponent(Graphics g){
+				g.setColor(Color.black);
+				for (int i = 0;i<longueur;i++){
+					for (int j = 0;j<longueur;j++){
+						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
+					}
+				}
+				updatePlateau(g);
+			}
+		};
 		update(State.SUCCESS);
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
 		
@@ -46,15 +59,13 @@ public class View extends JFrame{
 
 
 		jv1 = new JoueurView(m.getCurrentPlayer());
-		jv1.setBounds(10,plateau.getY(),plateau.getX()-20,longueur*taille_case/3);
+		int taille_Jv = plateau.getX()-20;
+		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		currentJoueur = jv1;
 		jv2 = new JoueurView(m.getOtherPlayer());
-		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,plateau.getX()-20,longueur*taille_case/3);
+		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
-
-
-
 
     	this.setContentPane(conteneur);
 
@@ -84,29 +95,29 @@ public class View extends JFrame{
 
 	public void update(State state){
 		if (state == State.PUSHOPPMARBLE){
+			bougerRight();
 			currentJoueur.addOpponentMarble();
 			currentJoueur.repaint();
 		}
 		else{
 			if(state == State.PUSHREDMARBLE){
+				bougerLeft();
 				currentJoueur.addRedMarble();
 				currentJoueur.repaint();
 			}
 		}
-		conteneur.repaint();
-		plateau = new JPanel(){
-			public void paintComponent(Graphics g){
-				g.setColor(Color.black);
-				for (int i = 0;i<longueur;i++){
-					for (int j = 0;j<longueur;j++){
-						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
-					}
-				}
-				updatePlateau(g);
-			}
-		};
 		this.repaint();
 	}
+
+	public void bougerRight(){
+		plateau.setBounds(plateau.getX()+20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+	}
+
+	public void bougerLeft(){
+		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+	}
+
+	
 
 	public void joueurSuivant(){
 		if (m.getCurrentPlayer().getColor()==Colour.WHITE){
@@ -119,7 +130,6 @@ public class View extends JFrame{
 			jv1.enleverBarre();
 			currentJoueur = jv2;
 		}
-		this.repaint();
 	}
     
 }

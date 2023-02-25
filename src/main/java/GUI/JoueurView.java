@@ -10,7 +10,6 @@ public class JoueurView extends JPanel{
     JLabel titre;
     JPanel barre;
     Colour couleur;
-   
     int nbRedMarble;
     int nbOppMarble;
     JPanel paneRedMarble;
@@ -82,9 +81,6 @@ public class JoueurView extends JPanel{
         paneOppMarble.setBounds(25,this.getHeight()*3/5,this.getWidth()*7/8,this.getHeight()*2/7);
         paneOppMarble.setBorder(new MyBorder());
         this.add(paneOppMarble);
-
-
-
     }
 
 
