@@ -34,6 +34,5 @@ public class Test {
 		View v = new View(m);
 		m.setView(v);
 
-		
 	}
 }

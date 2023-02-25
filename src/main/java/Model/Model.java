@@ -59,8 +59,7 @@ public class Model {
 
     public void push(Position p,Direction d){        
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-        System.out.println("State retour : " +state);
-        System.out.println("Joueur courant : " + getCurrentPlayer().getColor());
+    
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
             joueurSuivant();
@@ -71,7 +70,7 @@ public class Model {
             partieFinie = true;
         }
         
-        view.update();
+        view.update(state);
     }
 
     
