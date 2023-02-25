@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Controleur.Controleur;
 import Model.*;
@@ -94,14 +96,15 @@ public class View extends JFrame{
 	}
 
 	public void update(State state){
+		if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE && state != State.SUCCESS){
+			vibrer();
+		}
 		if (state == State.PUSHOPPMARBLE){
-			bougerRight();
 			currentJoueur.addOpponentMarble();
 			currentJoueur.repaint();
 		}
 		else{
 			if(state == State.PUSHREDMARBLE){
-				bougerLeft();
 				currentJoueur.addRedMarble();
 				currentJoueur.repaint();
 			}
@@ -115,6 +118,31 @@ public class View extends JFrame{
 
 	public void bougerLeft(){
 		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+	}
+
+	public void vibrer(){
+		Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			int time = 8;
+			boolean i = false;
+			int posX = plateau.getX();
+
+    		public void run() {
+				if(i){
+					bougerLeft();
+				}
+				else{
+					bougerRight();
+				}
+				i=!i;
+				if(time == 0){
+					cancel();
+					plateau.setBounds(posX,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+
+				}
+				time--;
+    		}
+		},0, 50);
 	}
 
 	
