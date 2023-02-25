@@ -10,11 +10,7 @@ public class JoueurView extends JPanel{
     JLabel titre;
     JPanel barre;
     Colour couleur;
-    int redMarbleX = 5;
-    int redMarbleY = 5;
-
-    int oppMarbleX = 5;
-    int oppMarbleY = 5;
+   
     int nbRedMarble;
     int nbOppMarble;
     JPanel paneRedMarble;
@@ -42,9 +38,15 @@ public class JoueurView extends JPanel{
         paneRedMarble = new JPanel(){
             public void paintComponent(Graphics g){
                 g.setColor(Color.red);
-                //TODO : regler l'affichage pour afficher toutes les lignes
+                int MarbleY = 5;
+                int MarbleX = 5;
                 for (int i = 0;i<nbRedMarble;i++){
-                    g.fillOval((i*25)+5,redMarbleY,15, 15);
+                    if(MarbleX>=paneRedMarble.getWidth()-25){
+                        MarbleY+=25;
+                        MarbleX = 5;
+                    }
+                    g.fillOval(MarbleX,MarbleY,15, 15);
+                    MarbleX+=25;
                 }
             }
         };
@@ -62,9 +64,15 @@ public class JoueurView extends JPanel{
                 else{
                     g.setColor(Color.black);
                 }
+                int MarbleY = 5;
+                int MarbleX = 5;
                 for (int i = 0;i<nbOppMarble;i++){
-                    //TODO : regler l'affichage pour afficher toutes les lignes
-                    g.fillOval((i*25)+5,oppMarbleY,15, 15);
+                    if(MarbleX>=paneRedMarble.getWidth()-25){
+                        MarbleY+=25;
+                        MarbleX = 5;
+                    }
+                    g.fillOval(MarbleX,MarbleY,15, 15);
+                    MarbleX+=25;
                 }
                 
             }
@@ -81,31 +89,13 @@ public class JoueurView extends JPanel{
 
 
     public void addRedMarble(){
-        System.out.println("Add Marble Red : "+ redMarbleX+" , "+redMarbleY);
         nbRedMarble++;
         paneRedMarble.repaint();
-        redMarbleX+=25;
-        System.out.println("Taille : "+(paneRedMarble.getWidth()-25));
-        if (redMarbleX>=paneRedMarble.getWidth()-25){
-            redMarbleX=25;
-            redMarbleY+=25;
-            System.out.println("Augementation du redY");
-        }
-        
-        
     }
 
     public void addOpponentMarble(){
-        System.out.println("Add Marble OPP : "+ oppMarbleX+" , "+oppMarbleY);
         nbOppMarble++;
         paneOppMarble.repaint();
-        oppMarbleX+=25;
-        System.out.println("Taille : "+(paneOppMarble.getWidth()-25));
-        if (oppMarbleX>=paneOppMarble.getWidth()-25){
-            oppMarbleX=25;
-            oppMarbleY+=25;
-        }
-        
     }
 
     public void mettreBarre(){
