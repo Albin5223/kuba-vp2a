@@ -12,13 +12,12 @@ public class Model {
 
     public Model(int n){
         joueurs = new Joueur[2];
-        plat = new Plateau(n);
         Joueur j1 = new Joueur(Colour.BLACK,n);
         Joueur j2 = new Joueur(Colour.WHITE,n);
-        plat.initialiseBille();
-
         joueurs[1] = j1;
         joueurs[2] = j2;
+        plat = new Plateau(n,j1,j2);
+        plat.initialiseBille();
     }
 
     public void setView(View v){
@@ -47,7 +46,7 @@ public class Model {
         return partieFinie;
     }
 
-    public void push(Position p,Direction d){
+    public void push(Pos p,Direction d){
 
         
         State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());

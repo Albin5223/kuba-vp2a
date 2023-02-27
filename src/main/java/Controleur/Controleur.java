@@ -28,7 +28,7 @@ public class Controleur extends MouseAdapter{
 
     
     
-    private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
+    private static Direction detailDirectionEstWest(Pos depart, Pos arrive, Direction dir) {
     	int detailX = arrive.getI() - depart.getI();
     	int detailY = arrive.getJ() - depart.getJ();
     	if (Math.abs(detailX)>Math.abs(detailY)){
@@ -41,7 +41,7 @@ public class Controleur extends MouseAdapter{
     }
     
     
-    private static Direction determineDirection(Position depart, Position arrive){
+    private static Direction determineDirection(Pos depart, Pos arrive){
         if (depart.getJ()<arrive.getJ()){
             return detailDirectionEstWest(depart,arrive,Direction.SOUTH);
         }
@@ -51,7 +51,7 @@ public class Controleur extends MouseAdapter{
     }
 
     
-    public void move(Position depart, Position arrive){
+    public void move(Pos depart, Pos arrive){
         Direction direction = determineDirection(depart,arrive);
         System.out.println(direction.dirName());
         //if(!model.isEnd()){
@@ -64,8 +64,8 @@ public class Controleur extends MouseAdapter{
     
     @Override
     public void mouseReleased(MouseEvent e) {
-    	Position p1 = new Position(positionDepartX,positionDepartY);
-		Position p2 = new Position(positionArriveX,positionArriveY);
+    	Pos p1 = new Pos(positionDepartX,positionDepartY);
+		Pos p2 = new Pos(positionArriveX,positionArriveY);
 		
 		
 		

@@ -1,22 +1,33 @@
 package Model;
 
-import java.util.LinkedList;
 
 public class NoeudIA  {
 	private Plateau plateau;
 	private NoeudIA parent;
-	private LinkedList<NoeudIA> fils;
 	Joueur joueurAcc;
 	Joueur joueurAdv;
 	int diffPoint;
 
-public int rateDiffMarble () {
-	if (this.parent==null) {
-		return 0;
+	public void predictForDepth () {
+		for (int i = 0; i<plateau.getLongueur(); i++) {
+			for (int j = 0; j<plateau.getLongueur(); j++) {
+				if (plateau.getBoard()[i][j]==joueurAcc.getColor()) {
+					
+				}
+			}
+		}
 	}
-	return ((-this.joueurAcc.getBilles()+parent.joueurAdv.getBilles())*2+
-	this.plateau.billesRouges-parent.plateau.billesRouges);
-}
+
+
+
+
+	public int rateDiffMarble () {
+		if (this.parent==null) {
+			return 0;
+		}
+		return ((-this.joueurAcc.getBilles()+parent.joueurAdv.getBilles())*2+
+		this.plateau.billesRouges-parent.plateau.billesRouges);
+	}
 
 }
 
