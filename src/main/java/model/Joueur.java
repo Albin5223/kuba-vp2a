@@ -33,7 +33,7 @@ public class Joueur {
 		return billesRougesCapturees;
 	}
 
-	public Pos [] initTabBilles (int n, Colour c) {
+	public void initTabBilles (int n, Colour c) {
 		Pos[] tab= new Pos[n*n*2];
 		int a = 0;
 		if (c==Colour.WHITE) {
@@ -43,8 +43,8 @@ public class Joueur {
 					a++;
 				}
 			}
-			for (int i = n*2-1; i<n + n*2-1; i++) {
-				for (int j = n*2-1; j<n + n*2-1; j++) {
+			for (int i = n*3-1; i<n + n*3-1; i++) {
+				for (int j = n*3-1; j<n + n*3-1; j++) {
 					tab[a]= new Pos(i,j);
 					a++;
 				}
@@ -52,21 +52,21 @@ public class Joueur {
 		}
 
 		if (c==Colour.BLACK) {
-			for (int i = n*2-1; i<n + n*2-1; i++) {
+			for (int i = n*3-1; i<n + n*3-1; i++) {
 				for (int j = 0; j<n; j++) {
 					tab[a]= new Pos(i,j);
 					a++;
 				}
 			}
 			for (int i = 0; i<n; i++) {
-				for (int j = n*2-1; j<n + n*2-1; j++) {
+				for (int j = n*3-1; j<n + n*3-1; j++) {
 					tab[a]= new Pos(i,j);
 					a++;
 				}
 			}
 		}
 
-		return tab;
+		this.tabBilles = tab;
 	}
 
 	public void afficheTab () {

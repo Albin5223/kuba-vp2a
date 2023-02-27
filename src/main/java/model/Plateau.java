@@ -26,8 +26,6 @@ public class Plateau implements Cloneable{
 		this.j2 = j2;
 		this.j1.initTabBilles(n, j1.getColor());
 		this.j2.initTabBilles(n, j2.getColor());
-		j1.afficheTab();
-		j2.afficheTab();
 	}
 
 	public Plateau(String strPlateau) {

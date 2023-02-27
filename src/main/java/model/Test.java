@@ -7,6 +7,7 @@ public class Test {
 		Joueur j1 = new Joueur(Colour.WHITE,3);
 		Joueur j2 = new Joueur(Colour.BLACK,3);
 		Plateau p = new Plateau(3,j1,j2);
+		j1.afficheTab();
 		p.initialiseBille();
 		p.push(new Pos(0,0),Direction.SOUTH,j1,j2);
 		p.affiche();
