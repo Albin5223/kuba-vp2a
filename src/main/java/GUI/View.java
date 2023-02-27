@@ -28,7 +28,7 @@ public class View extends JFrame{
 		this.setResizable(false);
 		this.m = m;
 
-		n = m.getN();
+ 		n = m.getN();
 
 
 		longueur = 4*n -1;
@@ -97,7 +97,7 @@ public class View extends JFrame{
 
 	public void update(State state){
 		if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE && state != State.SUCCESS){
-			vibrer();
+			vibrer(state);
 		}
 		if (state == State.PUSHOPPMARBLE){
 			currentJoueur.addOpponentMarble();
@@ -120,7 +120,7 @@ public class View extends JFrame{
 		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
 	}
 
-	public void vibrer(){
+	public void vibrer(State state){
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
 			int time = 8;
@@ -138,11 +138,34 @@ public class View extends JFrame{
 				if(time == 0){
 					cancel();
 					plateau.setBounds(posX,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+					afficherPopUp(state);
 
 				}
 				time--;
     		}
 		},0, 50);
+	}
+
+
+	public void afficherPopUp(State state){
+		PopUpError popUp = new PopUpError(state);
+		
+		popUp.setBounds(plateau.getWidth()/2-250,plateau.getHeight()/2-250,500,500);
+		plateau.add(popUp);
+		Timer affiche = new Timer();
+		affiche.schedule(new TimerTask() {
+			int time = 8;
+
+    		public void run() {
+				if(time == 0){
+					cancel();
+					plateau.remove(popUp);
+					conteneur.repaint();
+				}
+				time--;
+    		}
+		},0, 150);
+		
 	}
 
 	
