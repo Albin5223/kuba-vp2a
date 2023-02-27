@@ -74,6 +74,12 @@ public class Plateau {
 
 	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
 		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
+		if (s == State.PUSHREDMARBLE) {
+			this.billesRouges++;
+		}
+		else if (s == State.PUSHOPPMARBLE) {
+			j2.undoLoseMarble();
+		}
 	}
 
 	private State push_rec (Position pos, Direction direction, Color color, Joueur j1, Joueur j2) {
@@ -112,8 +118,8 @@ public class Plateau {
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.i+direction.dirInverse().dirY() != -1 && pos.i+direction.dirInverse().dirY() != this.longueur && pos.j+direction.dirInverse().dirX() != -1 && pos.j+direction.dirInverse().dirX() != this.longueur) {
-			if (this.board[pos.i+direction.dirInverse().dirY()][pos.j+direction.dirInverse().dirX()] != null) {
+		if (pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur && pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur) {
+			if (this.board[pos.j+(direction.dirInverse().dirY())][pos.i+(direction.dirInverse().dirX())] != null) {
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}

@@ -1,4 +1,4 @@
-package MVC;
+package Controleur;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,12 +26,11 @@ public class Controleur extends MouseAdapter{
     }
 
 
-    //TODO : proriser les directions avec la différence la plus grande
     
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
-    	int detailX = arrive.getX() - depart.getX();
-    	int detailY = arrive.getY() - depart.getY();
+    	int detailX = arrive.getI() - depart.getI();
+    	int detailY = arrive.getJ() - depart.getJ();
     	if (Math.abs(detailX)>Math.abs(detailY)){
     		if(detailX<=0) {
     			return Direction.WEST;
@@ -43,7 +42,7 @@ public class Controleur extends MouseAdapter{
     
     
     private static Direction determineDirection(Position depart, Position arrive){
-        if (depart.getY()<arrive.getY()){
+        if (depart.getJ()<arrive.getJ()){
             return detailDirectionEstWest(depart,arrive,Direction.SOUTH);
         }
         else{
@@ -55,9 +54,9 @@ public class Controleur extends MouseAdapter{
     public void move(Position depart, Position arrive){
         Direction direction = determineDirection(depart,arrive);
         System.out.println(direction.dirName());
-        if(!model.isEnd()){
+        //if(!model.isEnd()){
         	//model.push(depart,direction);
-        }
+        //}
 		
          
 

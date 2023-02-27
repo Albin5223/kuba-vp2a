@@ -15,6 +15,10 @@ public class Joueur {
 		nBilles --;
 	}
 
+	public void undoLoseMarble() {
+		nBilles ++;
+	}
+
 	public Color getColor() {
 		return color;
 	}
