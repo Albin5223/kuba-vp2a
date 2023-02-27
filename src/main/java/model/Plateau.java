@@ -3,14 +3,16 @@ package Model;
 import java.util.ArrayList;
 
 
-public class Plateau {
+public class Plateau implements Cloneable{
 	private Colour[][] board;
 	private int lengthN;
-	private int billesRouges;
+	protected int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	protected Joueur j1;
+	protected Joueur j2;
 
-	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
+	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
 		this.lengthN = n;
 		this.board = new Colour[longueur][longueur];
@@ -20,6 +22,12 @@ public class Plateau {
 			}
 		}
 		this.billesRouges = 8*(n*n)-12*n+5;
+		this.j1 = j1;
+		this.j2 = j2;
+		this.j1.initTabBilles(n, j1.getColor());
+		this.j2.initTabBilles(n, j2.getColor());
+		j1.afficheTab();
+		j2.afficheTab();
 	}
 
 	public Plateau(String strPlateau) {
@@ -39,7 +47,7 @@ public class Plateau {
 		return this.board;
 	}
 
-	public Colour getTile(Position pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
+	public Colour getTile(Pos pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
 		return board[pos.i][pos.j];
 	}
 
@@ -79,7 +87,7 @@ public class Plateau {
 		return board[i][j];
 	}
 
-	public Colour getColor(Position p){
+	public Colour getColor(Pos p){
 		return board[p.getI()][p.getJ()];
 	}
 
@@ -87,7 +95,7 @@ public class Plateau {
 		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
 	}
 
-	private State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
+	private State push_rec (Pos pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
 		if (pos.i >= board.length || pos.j >= board.length || pos.i < 0 || pos.j < 0) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			if (colour == Colour.RED) {
 				billesRouges--;
@@ -113,7 +121,7 @@ public class Plateau {
 		return state;
 	}
 
-	public State push (Position pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
+	public State push (Pos pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
 
 		if (direction == Direction.INVALID) {
 			return State.WRONGDIRECTION;
@@ -302,4 +310,9 @@ public class Plateau {
 			return 1 + nbChiffre(n/10);
 		}
 	}
+
+	@Override
+    protected Plateau clone() throws CloneNotSupportedException {
+        return (Plateau) super.clone();
+    }
 }
