@@ -2,8 +2,11 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.imageio.ImageIO;
 
 import Controleur.Controleur;
 import Model.*;
@@ -20,6 +23,8 @@ public class View extends JFrame{
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
+
+	Image imageBackground;
     
     public View(Model m) {
     	this.setVisible(true);
@@ -33,9 +38,24 @@ public class View extends JFrame{
 
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
-		
 
-		conteneur = new JPanel();
+
+		//Trouver une boone image de fond
+		try {
+			imageBackground = ImageIO.read(new File("ressource\\Basic_image1.PNG"));
+		} catch (IOException e1) {
+			System.out.println("Image non trouvé");
+			e1.printStackTrace();
+		}
+
+		conteneur = new JPanel(){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(imageBackground,0,0,null);
+				this.repaint();
+				
+			}
+		};
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
 
@@ -152,6 +172,7 @@ public class View extends JFrame{
 		
 		popUp.setBounds(plateau.getWidth()/2-250,plateau.getHeight()/2-250,500,500);
 		plateau.add(popUp);
+		plateau.repaint();
 		Timer affiche = new Timer();
 		affiche.schedule(new TimerTask() {
 			int time = 8;
