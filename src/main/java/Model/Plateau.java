@@ -49,6 +49,10 @@ public class Plateau {
 		}
 	}
 
+	public void resetHistorique(){
+		ancienPlateau.clear();
+	}
+
 	public void initialiseBille() {
 		for(int i = 0; i<lengthN; i++) {
 			for (int j = 0; j<lengthN ;j++) {
@@ -149,7 +153,9 @@ public class Plateau {
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
-
+		if(state == State.PUSHREDMARBLE || state == State.PUSHOPPMARBLE){
+			resetHistorique();
+		}
 		return state;
 	}
 

@@ -1,7 +1,10 @@
 package GUI;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import Model.*;
 
@@ -14,6 +17,7 @@ public class JoueurView extends JPanel{
     int nbOppMarble;
     JPanel paneRedMarble;
     JPanel paneOppMarble;
+    Image imageBackground;
 
     public JoueurView(Joueur j){
         this.setLayout(null);
@@ -26,12 +30,27 @@ public class JoueurView extends JPanel{
             case WHITE : titre.setText("Joueur BLANC");break;
             default : titre.setText("Erreur");break;
         }
-        this.add(titre);
+        try {
+			imageBackground = ImageIO.read(new File("ressource\\Basic_image1.PNG"));
+		} catch (IOException e1) {
+			System.out.println("Image non trouvé");
+			e1.printStackTrace();
+		}
+        
         this.add(barre);
         this.setBackground(Color.lightGray);
     }
 
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        //g.drawImage(imageBackground,0,0,null);
+        this.repaint();
+        
+    }
+
     public void initialisePaneMarbleCaptured(){
+        titre.setBounds(this.getWidth()/3, 10, 100, 20);
+        this.add(titre);
         paneRedMarble = new JPanel();
         
         paneRedMarble = new JPanel(){
@@ -83,7 +102,7 @@ public class JoueurView extends JPanel{
         this.add(paneOppMarble);
     }
 
-
+    
     public void addRedMarble(){
         nbRedMarble++;
         paneRedMarble.repaint();

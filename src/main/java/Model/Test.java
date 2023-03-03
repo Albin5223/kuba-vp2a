@@ -29,7 +29,7 @@ public class Test {
 		//p.affiche();
 
 
-		Model m = new Model(3);
+		Model m = new Model(7);
 
 		View v = new View(m);
 		m.setView(v);

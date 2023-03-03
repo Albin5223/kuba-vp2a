@@ -51,7 +51,7 @@ public class View extends JFrame{
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				g.drawImage(imageBackground,0,0,null);
+				//g.drawImage(imageBackground,0,0,null);
 				this.repaint();
 				
 			}
