@@ -2,15 +2,20 @@ package Model;
 
 import GUI.View;
 
+import java.util.LinkedList;
 
-public class Model {
+
+public class Model implements Observé<Data> {
     Plateau plat;
     Joueur[] joueurs;
     int joueurCurrent = 0; //L'entier indique le joueur courant
     boolean partieFinie;
     View view;
 
+    LinkedList<Observeur<Data>> obsList;
+
     public Model(int n){
+        obsList=new LinkedList<>();
         joueurs = new Joueur[2];
         plat = new Plateau(n);
         Joueur j1 = new Joueur(Colour.BLACK,n);
@@ -61,6 +66,18 @@ public class Model {
         }
         
         //view.update();
+    }
+
+    public void addObserveur(Observeur<Data> obs) {
+        obsList.add(obs);
+    }
+
+    @Override
+    public void noticeObserveurs(Data obj) {
+        for (Observeur<Data> o:
+                obsList) {
+            o.update(this,obj);
+        }
     }
 
     
