@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -76,7 +77,11 @@ public class View extends JFrame implements Observeur<Data>{
 						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
 					}
 				}
-				updatePlateau(g,obj);
+				try {
+					updatePlateau(g,obj);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
@@ -103,16 +108,21 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.addMouseListener(ctrl);
 	}
 
-	public void updatePlateau(Graphics g,Data plateau){
+	public void updatePlateau(Graphics g,Data plateau) throws IOException {
 		for (int i = 0;i<longueur;i++){
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i);
 				if (c != null){
+					BufferedImage im=null;
 					switch(c){
-						case RED : g.setColor(Color.red);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
-						case WHITE : g.setColor(new Color(144, 144, 144));g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
-						case BLACK : g.setColor(Color.black);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
+						case RED :
+							im=ImageIO.read(new File("src/ressource/BalleRouge2.png"));break;
+						case WHITE :
+							im=ImageIO.read(new File("src/ressource/BalleBlanche.png"));break;
+						case BLACK : im=ImageIO.read(new File("src/ressource/BalleNoire.png"));break;
 					}
+					Image image=im.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+					g.drawImage(image,i*taille_case,j*taille_case,null);
 				}
 			}
 		}
