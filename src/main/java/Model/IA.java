@@ -1,20 +1,21 @@
 package Model;
 
+import java.util.Random;
 
 public class IA extends Joueur {
 	private Plateau plateau;
-	private Colour[][] board;
+	private Bille[][] board;
 	private Joueur jTest;
 
-	public IA(Colour c, int n) {
+	public IA(Color c, int n) {
 		super(c,n);
 		this.plateau = new Plateau(n);
 		this.board = plateau.getBoard();//etant donne que c'est un return et non une copie les effets de bord sur this.board feront changer this.plateau
-		if (c == Colour.BLACK) {
-			this.jTest = new Joueur(Colour.WHITE,n);
+		if (c == Color.BLACK) {
+			this.jTest = new Joueur(Color.WHITE,n);
 		}
 		else {
-			this.jTest = new Joueur(Colour.BLACK,n);
+			this.jTest = new Joueur(Color.BLACK,n);
 		}
 	}
 
@@ -31,7 +32,7 @@ public class IA extends Joueur {
 		return proba;
 	}
 
-	public Colour[][] bestSolution() {
+	public Bille[][] bestSolution() {
 		int max = 0;//c'est un pourcentage alors on commence a 0
 		Position posMax = null;
 		Direction directMax = Direction.INVALID;
@@ -42,13 +43,13 @@ public class IA extends Joueur {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
 				if (board[i][j] != null) {
-					proba1 = testMove(new Position(i,j),Direction.NORTH);
-					proba2 = testMove(new Position(i,j),Direction.SOUTH);
-					proba3 = testMove(new Position(i,j),Direction.WEST);
-					proba4 = testMove(new Position(i,j),Direction.EAST);
+					proba1 = testMove(new Position(i,j,board[i][j]),Direction.NORTH);
+					proba2 = testMove(new Position(i,j,board[i][j]),Direction.SOUTH);
+					proba3 = testMove(new Position(i,j,board[i][j]),Direction.WEST);
+					proba4 = testMove(new Position(i,j,board[i][j]),Direction.EAST);
 					if (Math.max(Math.max(proba1,proba2),Math.max(proba3,proba4)) > max) {
 						max = Math.max(Math.max(proba1,proba2),Math.max(proba3,proba4));
-						posMax = new Position(i,j);
+						posMax = new Position(i,j,board[i][j]);
 						if (proba1 == max) {
 							directMax = Direction.NORTH;
 						}

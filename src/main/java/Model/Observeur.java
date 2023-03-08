@@ -2,5 +2,5 @@ package Model;
 
 public interface Observeur<T> {
 
-    public void update(Observé<T> obs, T obj);
+    public void update(T obj);
 }
