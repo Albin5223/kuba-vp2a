@@ -19,19 +19,19 @@ public class JoueurView extends JPanel{
     JPanel paneOppMarble;
     Image imageBackground;
 
-    public JoueurView(Joueur j){
+    public JoueurView(Colour c){
         this.setLayout(null);
         titre = new JLabel("");
         barre = new JPanel();
         mettreBarre();
-        couleur = j.getColor();
+        couleur = c;
         switch(couleur){
             case BLACK : titre.setText("Joueur NOIR");break;
             case WHITE : titre.setText("Joueur BLANC");break;
             default : titre.setText("Erreur");break;
         }
         try {
-			imageBackground = ImageIO.read(new File("ressource\\Basic_image1.PNG"));
+			imageBackground = ImageIO.read(new File("src/ressource/Basic_image1.PNG"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();

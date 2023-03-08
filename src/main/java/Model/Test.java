@@ -1,5 +1,6 @@
 package Model;
 
+import Controleur.Controleur;
 import GUI.View;
 
 public class Test {
@@ -30,9 +31,10 @@ public class Test {
 
 
 		Model m = new Model(7);
-
-		View v = new View(m);
+		View v = new View(7);
+		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.setView(v);
+		v.addCtrl(ctrl);
 
 	}
 }

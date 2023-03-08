@@ -19,7 +19,6 @@ public enum Direction {
 	int dirY() {
 		return dirY[this.ordinal()];
 	}
-
 	
 	public String dirName() {
 		return dirName[this.ordinal()];
