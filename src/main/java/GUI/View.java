@@ -11,10 +11,10 @@ import javax.imageio.ImageIO;
 import Controleur.Controleur;
 import Model.*;
 
-public class View extends JFrame{
+public class View extends JFrame implements Observeur<Data>{
     
     
-   	Model m;
+   	//Model m;
 	int longueur;
 	int n;
 	int taille_case;
@@ -26,14 +26,14 @@ public class View extends JFrame{
 
 	Image imageBackground;
     
-    public View(Model m) {
+    public View(int nb) {
     	this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setResizable(false);
-		this.m = m;
+		this.setResizable(true);
+		//this.m = m;
 
- 		n = m.getN();
+ 		n = nb;
 
 
 		longueur = 4*n -1;
@@ -42,7 +42,7 @@ public class View extends JFrame{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource\\Basic_image1.PNG"));
+			imageBackground = ImageIO.read(new File("src/ressource/Basic_image1.PNG"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
@@ -60,6 +60,14 @@ public class View extends JFrame{
 		conteneur.setLayout(null);
 
 
+		//update(m);
+
+    	
+    }
+
+
+
+	public void start(Data obj){
 		plateau = new JPanel(){
 			public void paintComponent(Graphics g){
 				g.setColor(Color.black);
@@ -68,46 +76,41 @@ public class View extends JFrame{
 						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
 					}
 				}
-				updatePlateau(g);
+				updatePlateau(g,obj);
 			}
 		};
-		update(State.SUCCESS);
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
-		
-		Controleur ctrl = new Controleur(m,taille_case);
-
-		plateau.addMouseMotionListener(ctrl);
-		plateau.addMouseListener(ctrl);
-
-
-		jv1 = new JoueurView(m.getCurrentPlayer());
+		jv1 = new JoueurView(Colour.WHITE);
 		int taille_Jv = plateau.getX()-20;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
+		jv1.mettreBarre();
 		currentJoueur = jv1;
-		jv2 = new JoueurView(m.getOtherPlayer());
+		jv2 = new JoueurView(Colour.BLACK);
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
-    	this.setContentPane(conteneur);
+		this.setContentPane(conteneur);
 
 		conteneur.add(jv1);
 		conteneur.add(jv2);
 		conteneur.add(plateau);
-		this.joueurSuivant();
-    	
-    	
-    }
 
-	public void updatePlateau(Graphics g){
-		Plateau p = m.getPlateau();
+	}
+
+	public void addCtrl(Controleur ctrl){
+		plateau.addMouseMotionListener(ctrl);
+		plateau.addMouseListener(ctrl);
+	}
+
+	public void updatePlateau(Graphics g,Data plateau){
 		for (int i = 0;i<longueur;i++){
 			for (int j = 0;j<longueur;j++){
-				Colour c = p.getColor(j, i);
+				Colour c = plateau.getMarble(j , i);
 				if (c != null){
 					switch(c){
 						case RED : g.setColor(Color.red);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
-						case WHITE : g.setColor(Color.white);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
+						case WHITE : g.setColor(new Color(144, 144, 144));g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
 						case BLACK : g.setColor(Color.black);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
 					}
 				}
@@ -115,22 +118,22 @@ public class View extends JFrame{
 		}
 	}
 
-	public void update(State state){
-		if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE && state != State.SUCCESS){
-			vibrer(state);
-		}
-		if (state == State.PUSHOPPMARBLE){
-			currentJoueur.addOpponentMarble();
-			currentJoueur.repaint();
-		}
-		else{
-			if(state == State.PUSHREDMARBLE){
-				currentJoueur.addRedMarble();
-				currentJoueur.repaint();
-			}
-		}
-		this.repaint();
-	}
+//	public void update(State state){
+//		if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE && state != State.SUCCESS){
+//			vibrer(state);
+//		}
+//		if (state == State.PUSHOPPMARBLE){
+//			currentJoueur.addOpponentMarble();
+//			currentJoueur.repaint();
+//		}
+//		else{
+//			if(state == State.PUSHREDMARBLE){
+//				currentJoueur.addRedMarble();
+//				currentJoueur.repaint();
+//			}
+//		}
+//		this.repaint();
+//	}
 
 	public void bougerRight(){
 		plateau.setBounds(plateau.getX()+20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
@@ -191,8 +194,8 @@ public class View extends JFrame{
 
 	
 
-	public void joueurSuivant(){
-		if (m.getCurrentPlayer().getColor()==Colour.WHITE){
+	public void joueurSuivant(Data obj){
+		if (obj.getJoueur().getColor()==Colour.WHITE){
 			jv1.mettreBarre();
 			jv2.enleverBarre();
 			currentJoueur = jv1;
@@ -203,5 +206,34 @@ public class View extends JFrame{
 			currentJoueur = jv2;
 		}
 	}
-    
+
+	public int getTaille_case(){
+		return taille_case;
+	}
+	@Override
+	public void update(Data obj) {
+		if(plateau==null){
+			start(obj);
+		}
+		else {
+			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
+				vibrer(obj.getState());
+			} else {
+				if (obj.getState() == State.PUSHOPPMARBLE) {
+					currentJoueur.addOpponentMarble();
+					currentJoueur.repaint();
+				} else {
+					if (obj.getState() == State.PUSHREDMARBLE) {
+						currentJoueur.addRedMarble();
+						currentJoueur.repaint();
+					}
+				}
+				if (currentJoueur != null) {
+					joueurSuivant(obj);
+				}
+
+			}
+			this.repaint();
+		}
+	}
 }
