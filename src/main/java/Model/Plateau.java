@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class Plateau {
-	private Color[][] board;
+	private Colour[][] board;
 	private int lengthN;
 	private int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
@@ -13,7 +13,7 @@ public class Plateau {
 	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
 		this.lengthN = n;
-		this.board = new Color[longueur][longueur];
+		this.board = new Colour[longueur][longueur];
 		for (int i=0;i<longueur;i++){
 			for (int j=0;j<longueur;j++){
 				board[i][j]=null;
@@ -23,37 +23,43 @@ public class Plateau {
 	}
 
 	public Plateau(String strPlateau) {
-		Color[][] tmp = stringToList(strPlateau);
+		Colour[][] tmp = stringToList(strPlateau);
 		this.longueur = tmp.length;
 		this.board = tmp;
 		this.lengthN = (this.longueur+1)/4;
+
+
 	}
 
 	public int getLongueur() {
 		return this.longueur;
 	}
 
-	public Color[][] getBoard() {//attention aux effets de bords en utilisant cette fonction car la liste originale est retourne
+	public Colour[][] getBoard() {//attention aux effets de bords en utilisant cette fonction car la liste originale est retourne
 		return this.board;
 	}
 
-	public Color getTile(Position pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
+	public Colour getTile(Position pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
 		return board[pos.i][pos.j];
 	}
 
 	public void fillUpTo(int ligne, int debut, int fin) {
 		for (int i = debut;i<=fin;i++) {
-			board[ligne][i] = Color.RED;
+			board[ligne][i] = Colour.RED;
 		}
+	}
+
+	public void resetHistorique(){
+		ancienPlateau.clear();
 	}
 
 	public void initialiseBille() {
 		for(int i = 0; i<lengthN; i++) {
 			for (int j = 0; j<lengthN ;j++) {
-				board[i][j] = Color.WHITE;
-				board[i][longueur-1-j] = Color.BLACK;
-				board[longueur-1-i][longueur-1-j] = Color.WHITE;
-				board[longueur-1-i][j] = Color.BLACK;
+				board[i][j] = Colour.WHITE;
+				board[i][longueur-1-j] = Colour.BLACK;
+				board[longueur-1-i][longueur-1-j] = Colour.WHITE;
+				board[longueur-1-i][j] = Colour.BLACK;
 			}
 		}
 		int milieu=longueur/2;
@@ -72,25 +78,28 @@ public class Plateau {
 		ancienPlateau.add(s);
 	}
 
-	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
-		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
-		if (s == State.PUSHREDMARBLE) {
-			this.billesRouges++;
-		}
-		else if (s == State.PUSHOPPMARBLE) {
-			j2.undoLoseMarble();
-		}
+
+	public Colour getColor(int i, int j){
+		return board[i][j];
 	}
 
-	private State push_rec (Position pos, Direction direction, Color color, Joueur j1, Joueur j2) {
+	public Colour getColor(Position p){
+		return board[p.getI()][p.getJ()];
+	}
+
+	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
+		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
+	}
+
+	private State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
 		if (pos.i >= board.length || pos.j >= board.length || pos.i < 0 || pos.j < 0) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
-			if (color == Color.RED) {
+			if (colour == Colour.RED) {
 				billesRouges--;
 				j1.winRedMarble();
 				return State.PUSHREDMARBLE;
 			}
 			else {//si c'est une bille noire ou blanche
-				if (j1.getColor() == color) {
+				if (j1.getColor() == colour) {
 					return null;//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
 				j2.loseMarble();//alors on enleve une bille au joueur
@@ -98,17 +107,18 @@ public class Plateau {
 			}
 		}
 		if (board[pos.i][pos.j] == null) {
-			board[pos.i][pos.j] = color;
+			board[pos.i][pos.j] = colour;
 			return State.SUCCESS;
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
-			board[pos.i][pos.j] = color;
+			board[pos.i][pos.j] = colour;
 		}
 		return state;
 	}
 
 	public State push (Position pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
+
 		if (direction == Direction.INVALID) {
 			return State.WRONGDIRECTION;
 		}
@@ -118,8 +128,11 @@ public class Plateau {
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur && pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur) {
-			if (this.board[pos.j+(direction.dirInverse().dirY())][pos.i+(direction.dirInverse().dirX())] != null) {
+		//Mauvaise gestion 
+		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
+			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
+				System.out.println(pos.j+direction.dirInverse().dirX());
+				System.out.println(pos.i+direction.dirInverse().dirY());
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -140,7 +153,9 @@ public class Plateau {
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
-
+		if(state == State.PUSHREDMARBLE || state == State.PUSHOPPMARBLE){
+			resetHistorique();
+		}
 		return state;
 	}
 
@@ -156,9 +171,7 @@ public class Plateau {
 
 	public boolean configurationDejaExistante() {
 		String s = this.toString();
-		System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
-			System.out.println("Plateau existant : "+tmp);
 			if (s.equals(tmp)) {
 				return true;
 			}
@@ -229,7 +242,7 @@ public class Plateau {
 	}
 
 	// Cette fonction permet de passer d'une chaine de caractère encodé de manière efficace à un tableau de Bille
-	public static Color[][] stringToList(String s){
+	public static Colour[][] stringToList(String s){
 		int l = 0; //Ici on détermine la longueur d'une tableau 
 		int occ = 0; // On additionne tous les nombres derrière les caractères
 		while(occ<s.length()){
@@ -238,7 +251,7 @@ public class Plateau {
 			occ+=1+nbChiffre(count);
 		}
 		int longueur = (int)Math.sqrt(l); //La longueur est la racine de la somme
-		Color [][] res = new Color[longueur][longueur];
+		Colour[][] res = new Colour[longueur][longueur];
 
 		int i = 0;
 		int colonne = 0;
@@ -254,9 +267,9 @@ public class Plateau {
 					colonne+=1;
 				}
 				switch(couleur){
-					case 'W' : res[colonne][ligne] = Color.WHITE;break;
-					case 'B' : res[colonne][ligne] = Color.BLACK;break;
-					case 'R' : res[colonne][ligne] = Color.RED;break;
+					case 'W' : res[colonne][ligne] = Colour.WHITE;break;
+					case 'B' : res[colonne][ligne] = Colour.BLACK;break;
+					case 'R' : res[colonne][ligne] = Colour.RED;break;
 					default : res[colonne][ligne] = null;
 				}
 				ligne++;

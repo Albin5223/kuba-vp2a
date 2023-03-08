@@ -1,29 +1,45 @@
-package MVC;
-import java.util.LinkedList;
-import Model.*;
+package Model;
+
 import GUI.View;
 
+import java.util.LinkedList;
 
-public class Model {
+
+public class Model implements Observé<Data>,Data{
     Plateau plat;
     Joueur[] joueurs;
     int joueurCurrent = 0; //L'entier indique le joueur courant
     boolean partieFinie;
-    View view;
-
+    //View view;
+    int n;
+    State state;
+    LinkedList<Observeur<Data>> observeurs;
     public Model(int n){
+        observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
         plat = new Plateau(n);
-        Joueur j1 = new Joueur(Color.BLACK,n);
-        Joueur j2 = new Joueur(Color.WHITE,n);
+        Joueur j1 = new Joueur(Colour.WHITE,n);
+        Joueur j2 = new Joueur(Colour.BLACK,n);
+        state=State.SUCCESS;
+        joueurs[0] = j1;
+        joueurs[1] = j2;
+        this.n = n;
+    }
+
+    public void initialiseBille(){
         plat.initialiseBille();
 
-        joueurs[1] = j1;
-        joueurs[2] = j2;
     }
 
     public void setView(View v){
-        view = v;
+        //view = v;
+        addObserveur(v);
+        plat.initialiseBille();
+        noticeObserveurs(this);
+    }
+
+    public int getN(){
+        return n;
     }
 
     public Joueur getCurrentPlayer(){
@@ -48,12 +64,15 @@ public class Model {
         return partieFinie;
     }
 
-    public void push(Position p,Direction d){
+    public Plateau getPlateau(){
+        return plat;
+    }
 
-        
-        State state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+    public void push(Position p,Direction d){        
+        state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+    
         if(plat.isOver(joueurs[0],joueurs[1])==null){
-            if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE){
+            if(State.SUCCESS == state){
             joueurSuivant();
             }
         }
@@ -61,8 +80,35 @@ public class Model {
             partieFinie = true;
         }
         
-        //view.update();
+        noticeObserveurs(this);
     }
 
-    
+
+    @Override
+    public void addObserveur(Observeur<Data> obs) {
+        if(!observeurs.contains(obs)){
+        observeurs.add(obs);}
+    }
+
+    @Override
+    public void noticeObserveurs(Data obj) {
+        for (Observeur<Data> o: observeurs) {
+            o.update(obj);
+        }
+    }
+
+    @Override
+    public Colour getMarble(int i, int j) {
+        return plat.getColor(i,j);
+    }
+
+    @Override
+    public State getState() {
+        return state;
+    }
+
+    @Override
+    public Joueur getJoueur() {
+        return getCurrentPlayer();
+    }
 }

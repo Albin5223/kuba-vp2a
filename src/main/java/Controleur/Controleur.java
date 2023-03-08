@@ -24,8 +24,6 @@ public class Controleur extends MouseAdapter{
     public void setModel(Model m){
         model = m;
     }
-
-
     
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
@@ -42,63 +40,54 @@ public class Controleur extends MouseAdapter{
     
     
     private static Direction determineDirection(Position depart, Position arrive){
+		if(depart.getJ()==arrive.getJ() && depart.getI() == arrive.getI()){
+			return Direction.INVALID;
+		}
         if (depart.getJ()<arrive.getJ()){
             return detailDirectionEstWest(depart,arrive,Direction.SOUTH);
         }
         else{
-            return detailDirectionEstWest(depart,arrive,Direction.NORTH);
+			return detailDirectionEstWest(depart,arrive,Direction.NORTH);
+			
         }
     }
 
     
     public void move(Position depart, Position arrive){
         Direction direction = determineDirection(depart,arrive);
-        System.out.println(direction.dirName());
-        //if(!model.isEnd()){
-        	//model.push(depart,direction);
-        //}
-		
-         
 
+        if(!model.isEnd()){
+        	model.push(new Position(depart.getJ(), depart.getI()),direction);
+		}
     }
     
     @Override
     public void mouseReleased(MouseEvent e) {
     	Position p1 = new Position(positionDepartX,positionDepartY);
 		Position p2 = new Position(positionArriveX,positionArriveY);
-		
-		
-		
+			
 		move(p1,p2);
     	resetPosition();
     }
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		
-		
+			
 		positionDepartX = e.getX()/SIZE;
 		positionDepartY = e.getY()/SIZE;
 		
 		positionArriveX = positionDepartX;
-		positionArriveY = positionDepartY;
-		
-		
-		
+		positionArriveY = positionDepartY;	
 	}
 
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		
-		
-		
 		if (positionDepartX != -1 && positionDepartY != -1) {
 			if (positionDepartX != e.getX()/SIZE || positionDepartY != e.getY()/SIZE) {
 				positionArriveX = e.getX()/SIZE;
 				positionArriveY = e.getY()/SIZE;
-				
-				
 			}
 		}
 		
@@ -111,8 +100,6 @@ public class Controleur extends MouseAdapter{
 		positionArriveX = -1;
 		positionArriveY = -1;
 	}
-		
-	
 }
 
 
