@@ -17,7 +17,7 @@ public class Model {
         joueurs[1] = j1;
         joueurs[2] = j2;
         plat = new Plateau(n,j1,j2);
-        plat.initialiseBille();
+        Plateau.initialiseBille(plat);
     }
 
     public void setView(View v){

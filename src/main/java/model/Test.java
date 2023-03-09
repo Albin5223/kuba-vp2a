@@ -8,7 +8,7 @@ public class Test {
 		Joueur j2 = new Joueur(Colour.BLACK,3);
 		Plateau p = new Plateau(3,j1,j2);
 		j1.afficheTab();
-		p.initialiseBille();
+		Plateau.initialiseBille(p);
 		p.push(new Pos(0,0),Direction.SOUTH,j1,j2);
 		p.affiche();
 		State test = p.push(new Pos(3,0),Direction.NORTH,j1,j2);
