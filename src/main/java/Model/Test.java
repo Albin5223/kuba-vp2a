@@ -7,6 +7,8 @@ public class Test {
 	
 	public static void main(String[] args) {
 		
+
+		//----------------------TEST PLATEAU--------------------
 		//Joueur j1 = new Joueur(Colour.BLACK,3);
 		//Joueur j2 = new Joueur(Colour.WHITE,3);
 		/* 
@@ -30,8 +32,10 @@ public class Test {
 		//p.affiche();
 
 
-		Model m = new Model(7);
-		View v = new View(7);
+		//----------------------TEST GRAPHIQUE-----------------------
+		int n = 30;
+		Model m = new Model(n);
+		View v = new View(n);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.setView(v);
 		v.addCtrl(ctrl);

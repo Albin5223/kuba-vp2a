@@ -2,7 +2,6 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -15,7 +14,6 @@ import Model.*;
 public class View extends JFrame implements Observeur<Data>{
     
     
-   	//Model m;
 	int longueur;
 	int n;
 	int taille_case;
@@ -26,13 +24,21 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView currentJoueur;
 
 	Image imageBackground;
+
+
+	Image redMarble;
+	Image blackMarble;
+	Image whiteMarble;
+
+	Image redMarbleScaled;
+	Image blackMarbleScaled;
+	Image whiteMarbleScaled;
     
     public View(int nb) {
     	this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
-		//this.m = m;
 
  		n = nb;
 
@@ -43,11 +49,18 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("src/ressource/Basic_image1.PNG"));
+			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
+			redMarble = ImageIO.read(new File("ressource/BalleRouge2.png"));
+			whiteMarble = ImageIO.read(new File("ressource/BalleBlanche.png"));
+			blackMarble = ImageIO.read(new File("ressource/BalleNoire.png"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
 		}
+
+		redMarbleScaled=redMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+		whiteMarbleScaled = whiteMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+		blackMarbleScaled=blackMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
@@ -59,11 +72,6 @@ public class View extends JFrame implements Observeur<Data>{
 		};
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
-
-
-		//update(m);
-
-    	
     }
 
 
@@ -72,9 +80,9 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau = new JPanel(){
 			public void paintComponent(Graphics g){
 				g.setColor(Color.black);
-				for (int i = 0;i<longueur;i++){
-					for (int j = 0;j<longueur;j++){
-						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
+				for (int i = 0;i<longueur-1;i++){
+					for (int j = 0;j<longueur-1;j++){
+						g.drawRect(taille_case/2+i*taille_case,taille_case/2+j*taille_case,taille_case,taille_case);
 					}
 				}
 				try {
@@ -113,16 +121,18 @@ public class View extends JFrame implements Observeur<Data>{
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i);
 				if (c != null){
-					BufferedImage im=null;
 					switch(c){
 						case RED :
-							im=ImageIO.read(new File("src/ressource/BalleRouge2.png"));break;
+							g.drawImage(redMarbleScaled,i*taille_case,j*taille_case,null);
+							break;
 						case WHITE :
-							im=ImageIO.read(new File("src/ressource/BalleBlanche.png"));break;
-						case BLACK : im=ImageIO.read(new File("src/ressource/BalleNoire.png"));break;
+							g.drawImage(whiteMarbleScaled,i*taille_case,j*taille_case,null);
+							break;
+						case BLACK :
+							g.drawImage(blackMarbleScaled,i*taille_case,j*taille_case,null);
+							break;
+						default : break;
 					}
-					Image image=im.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-					g.drawImage(image,i*taille_case,j*taille_case,null);
 				}
 			}
 		}
