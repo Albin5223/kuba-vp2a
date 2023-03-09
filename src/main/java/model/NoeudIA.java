@@ -18,29 +18,29 @@ public class NoeudIA  {
 	}
 
 	public void createNextNode () throws CloneNotSupportedException {
-		for (int i = 0; i<plateau.getLongueur(); i++) {
-			for (int j = 0; j < plateau.getLongueur(); j++) {
-				if (joueurAdv.tabBilles[i][j]!=null && joueurAdv.tabBilles[i][j] == Colour.BLACK ) {//en admettant que l'IA soit toujours les noirs
-					if (plateau.push(new Pos(i,j),Direction.NORTH,joueurAdv,joueurAcc)==State.SUCCESS) {
-						fils.add(new NoeudIA(this));
-						plateau.undoLastMove();
-					}
-					if (plateau.push(new Pos(i,j),Direction.WEST,joueurAdv,joueurAcc)==State.SUCCESS) {
-						fils.add(new NoeudIA(this));
-						plateau.undoLastMove();
-					}
-					if (plateau.push(new Pos(i,j),Direction.EAST,joueurAdv,joueurAcc)==State.SUCCESS) {
-						fils.add(new NoeudIA(this));
-						plateau.undoLastMove();
-					}
-					if (plateau.push(new Pos(i,j),Direction.SOUTH,joueurAdv,joueurAcc)==State.SUCCESS) {
-						fils.add(new NoeudIA(this));
-						plateau.undoLastMove();
-					}
+		for (int i = 0; i<joueurAdv.tabBilles.length ; i++) {
+			if (joueurAdv.tabBilles[i].i!=-1) {
+				if (plateau.push(joueurAdv.tabBilles[i],Direction.NORTH,joueurAdv,joueurAcc)==State.SUCCESS) {
+					fils.add(new NoeudIA(this));
+					plateau.undoLastMove();
+				}
+				if (plateau.push(joueurAdv.tabBilles[i],Direction.WEST,joueurAdv,joueurAcc)==State.SUCCESS) {
+					fils.add(new NoeudIA(this));
+					plateau.undoLastMove();
+				}
+				if (plateau.push(joueurAdv.tabBilles[i],Direction.EAST,joueurAdv,joueurAcc)==State.SUCCESS) {
+					fils.add(new NoeudIA(this));
+					plateau.undoLastMove();
+				}
+				if (plateau.push(joueurAdv.tabBilles[i],Direction.SOUTH,joueurAdv,joueurAcc)==State.SUCCESS) {
+					fils.add(new NoeudIA(this));
+					plateau.undoLastMove();
 				}
 			}
+			
 		}
 	}
+
 
 	public void updateDiffPoint () {
 		for (NoeudIA n : this.fils) {
@@ -49,6 +49,9 @@ public class NoeudIA  {
 		}
 	}
 
+
+
+
 	public int rateDiffMarble () {
 		if (this.parent==null) {
 			return 0;
@@ -56,4 +59,5 @@ public class NoeudIA  {
 		return ((-this.joueurAcc.getBilles()+parent.joueurAdv.getBilles())*2+
 		this.plateau.billesRouges-parent.plateau.billesRouges);
 	}
+
 }

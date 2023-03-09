@@ -151,6 +151,13 @@ public class Plateau implements Cloneable{
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
+		if (state == State.PUSHOPPMARBLE) {
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (j1.tabBilles[i].i == pos.i && j1.tabBilles[i].j == pos.j) {
+					j1.tabBilles[i].i = -1;
+				}
+			}
+		}
 		return state;
 	}
 

@@ -5,7 +5,7 @@ public class Joueur {
 	private Colour colour;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
-	protected Colour[][] tabBilles;
+	protected Pos[] tabBilles;
 
 	public Joueur(Colour c, int n) {
 		this.nBilles = 2*(n*n);
@@ -34,25 +34,39 @@ public class Joueur {
 	}
 
 	public void initTabBilles (int n, Colour c) {
-		for(int i = 0; i<n; i++) {
-			for (int j = 0; j<n ;j++) {
-				this.tabBilles[i][j] = Colour.WHITE;
-				this.tabBilles[i][n-1-j] = Colour.BLACK;
-				this.tabBilles[n-1-i][n-1-j] = Colour.WHITE;
-				this.tabBilles[n-1-i][j] = Colour.BLACK;
+		Pos[] tab= new Pos[n*n*2];
+		int a = 0;
+		if (c==Colour.WHITE) {
+			for (int i = 0; i<n; i++) {
+				for (int j = 0; j<n; j++) {
+					tab[a]= new Pos(i,j);
+					a++;
+				}
+			}
+			for (int i = n*3-1; i<n + n*3-1; i++) {
+				for (int j = n*3-1; j<n + n*3-1; j++) {
+					tab[a]= new Pos(i,j);
+					a++;
+				}
 			}
 		}
-		int milieu=n/2;
-		int l = 0;
-		for(int k = 1; k<n-1 ;k++) {
-			Plateau.fillUpTo(k, milieu-l, milieu+l,this.tabBilles);
-			if(k >= milieu) {
-				l--;
+
+		if (c==Colour.BLACK) {
+			for (int i = n*3-1; i<n + n*3-1; i++) {
+				for (int j = 0; j<n; j++) {
+					tab[a]= new Pos(i,j);
+					a++;
+				}
 			}
-			else {
-				l++;
+			for (int i = 0; i<n; i++) {
+				for (int j = n*3-1; j<n + n*3-1; j++) {
+					tab[a]= new Pos(i,j);
+					a++;
+				}
 			}
 		}
+
+		this.tabBilles = tab;
 	}
 
 	public void afficheTab () {
