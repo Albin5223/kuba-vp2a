@@ -29,13 +29,16 @@ public class View extends JFrame implements Observeur<Data>{
 	Image redMarble;
 	Image blackMarble;
 	Image whiteMarble;
+
+	Image redMarbleScaled;
+	Image blackMarbleScaled;
+	Image whiteMarbleScaled;
     
     public View(int nb) {
     	this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
-		//this.m = m;
 
  		n = nb;
 
@@ -55,6 +58,10 @@ public class View extends JFrame implements Observeur<Data>{
 			e1.printStackTrace();
 		}
 
+		redMarbleScaled=redMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+		whiteMarbleScaled = whiteMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+		blackMarbleScaled=blackMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -65,11 +72,6 @@ public class View extends JFrame implements Observeur<Data>{
 		};
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
-
-
-		//update(m);
-
-    	
     }
 
 
@@ -121,16 +123,13 @@ public class View extends JFrame implements Observeur<Data>{
 				if (c != null){
 					switch(c){
 						case RED :
-							Image image=redMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-							g.drawImage(image,i*taille_case,j*taille_case,null);
+							g.drawImage(redMarbleScaled,i*taille_case,j*taille_case,null);
 							break;
 						case WHITE :
-							Image image1 = whiteMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-							g.drawImage(image1,i*taille_case,j*taille_case,null);
+							g.drawImage(whiteMarbleScaled,i*taille_case,j*taille_case,null);
 							break;
 						case BLACK :
-							Image image2=blackMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-							g.drawImage(image2,i*taille_case,j*taille_case,null);
+							g.drawImage(blackMarbleScaled,i*taille_case,j*taille_case,null);
 							break;
 						default : break;
 					}

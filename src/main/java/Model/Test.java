@@ -29,7 +29,7 @@ public class Test {
 		
 		//p.affiche();
 
-		int n = 3;
+		int n = 1;
 		Model m = new Model(n);
 		View v = new View(n);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
