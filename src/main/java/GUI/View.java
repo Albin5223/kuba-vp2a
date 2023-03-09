@@ -46,10 +46,10 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
-			redMarble = ImageIO.read(new File("ressource/BalleRouge2.png"));
-			whiteMarble = ImageIO.read(new File("ressource/BalleBlanche.png"));
-			blackMarble = ImageIO.read(new File("ressource/BalleNoire.png"));
+			imageBackground = ImageIO.read(new File("src/ressource/Basic_image1.PNG"));
+			redMarble = ImageIO.read(new File("src/ressource/BalleRouge2.png"));
+			whiteMarble = ImageIO.read(new File("src/ressource/BalleBlanche.png"));
+			blackMarble = ImageIO.read(new File("src/ressource/BalleNoire.png"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
