@@ -2,7 +2,6 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -15,7 +14,6 @@ import Model.*;
 public class View extends JFrame implements Observeur<Data>{
     
     
-   	//Model m;
 	int longueur;
 	int n;
 	int taille_case;
@@ -26,6 +24,11 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView currentJoueur;
 
 	Image imageBackground;
+
+
+	Image redMarble;
+	Image blackMarble;
+	Image whiteMarble;
     
     public View(int nb) {
     	this.setVisible(true);
@@ -43,7 +46,10 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("src/ressource/Basic_image1.PNG"));
+			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
+			redMarble = ImageIO.read(new File("ressource/BalleRouge2.png"));
+			whiteMarble = ImageIO.read(new File("ressource/BalleBlanche.png"));
+			blackMarble = ImageIO.read(new File("ressource/BalleNoire.png"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
@@ -113,16 +119,21 @@ public class View extends JFrame implements Observeur<Data>{
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i);
 				if (c != null){
-					BufferedImage im=null;
 					switch(c){
 						case RED :
-							im=ImageIO.read(new File("src/ressource/BalleRouge2.png"));break;
+							Image image=redMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+							g.drawImage(image,i*taille_case,j*taille_case,null);
+							break;
 						case WHITE :
-							im=ImageIO.read(new File("src/ressource/BalleBlanche.png"));break;
-						case BLACK : im=ImageIO.read(new File("src/ressource/BalleNoire.png"));break;
+							Image image1 = whiteMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+							g.drawImage(image1,i*taille_case,j*taille_case,null);
+							break;
+						case BLACK :
+							Image image2=blackMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+							g.drawImage(image2,i*taille_case,j*taille_case,null);
+							break;
+						default : break;
 					}
-					Image image=im.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-					g.drawImage(image,i*taille_case,j*taille_case,null);
 				}
 			}
 		}

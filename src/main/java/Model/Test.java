@@ -29,9 +29,9 @@ public class Test {
 		
 		//p.affiche();
 
-
-		Model m = new Model(7);
-		View v = new View(7);
+		int n = 3;
+		Model m = new Model(n);
+		View v = new View(n);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.setView(v);
 		v.addCtrl(ctrl);
