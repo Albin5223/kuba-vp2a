@@ -26,15 +26,13 @@ public class View extends JFrame implements Observeur<Data>{
 	Image imageBackground;
 
 
-	Image redMarble;
-	Image blackMarble;
-	Image whiteMarble;
-
-	Image redMarbleScaled;
-	Image blackMarbleScaled;
-	Image whiteMarbleScaled;
+	
+	Image[] banqueMarblImages;
     
     public View(int nb) {
+
+		banqueMarblImages = new Image[3];
+
     	this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -45,22 +43,23 @@ public class View extends JFrame implements Observeur<Data>{
 
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
-
-
+		
 		//Trouver une boone image de fond
 		try {
 			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
-			redMarble = ImageIO.read(new File("ressource/BalleRouge2.png"));
-			whiteMarble = ImageIO.read(new File("ressource/BalleBlanche.png"));
-			blackMarble = ImageIO.read(new File("ressource/BalleNoire.png"));
+			for (int i = 0;i<3;i++){
+				String s="ressource/Balle"+i+".png";
+				Image marble = ImageIO.read(new File(s));
+				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+				banqueMarblImages[i] = marbleScaled;
+			}
+
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
 		}
 
-		redMarbleScaled=redMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-		whiteMarbleScaled = whiteMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-		blackMarbleScaled=blackMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+		
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
@@ -123,13 +122,13 @@ public class View extends JFrame implements Observeur<Data>{
 				if (c != null){
 					switch(c){
 						case RED :
-							g.drawImage(redMarbleScaled,i*taille_case,j*taille_case,null);
+							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
 							break;
 						case WHITE :
-							g.drawImage(whiteMarbleScaled,i*taille_case,j*taille_case,null);
+							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
 							break;
 						case BLACK :
-							g.drawImage(blackMarbleScaled,i*taille_case,j*taille_case,null);
+							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
 							break;
 						default : break;
 					}
@@ -138,22 +137,6 @@ public class View extends JFrame implements Observeur<Data>{
 		}
 	}
 
-//	public void update(State state){
-//		if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE && state != State.SUCCESS){
-//			vibrer(state);
-//		}
-//		if (state == State.PUSHOPPMARBLE){
-//			currentJoueur.addOpponentMarble();
-//			currentJoueur.repaint();
-//		}
-//		else{
-//			if(state == State.PUSHREDMARBLE){
-//				currentJoueur.addRedMarble();
-//				currentJoueur.repaint();
-//			}
-//		}
-//		this.repaint();
-//	}
 
 	public void bougerRight(){
 		plateau.setBounds(plateau.getX()+20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
@@ -166,7 +149,7 @@ public class View extends JFrame implements Observeur<Data>{
 	public void vibrer(State state){
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
-			int time = 8;
+			int time = 4;
 			boolean i = false;
 			int posX = plateau.getX();
 
@@ -186,14 +169,14 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 				time--;
     		}
-		},0, 50);
+		},0,100);
 	}
 
 
 	public void afficherPopUp(State state){
 		PopUpError popUp = new PopUpError(state);
 		
-		popUp.setBounds(plateau.getWidth()/2-250,plateau.getHeight()/2-250,500,500);
+		popUp.setBounds(plateau.getWidth()/2-100,plateau.getHeight()/2-50,250,100);
 		plateau.add(popUp);
 		plateau.repaint();
 		Timer affiche = new Timer();

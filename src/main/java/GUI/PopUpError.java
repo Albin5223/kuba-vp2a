@@ -12,8 +12,7 @@ public class PopUpError extends JPanel{
 
     public PopUpError(State state){
         JLabel message = new JLabel("Message");
-        this.setOpaque(false);
-        message.setBounds(200, 25, 500,500);
+        message.setBounds(0, 0, 250,100);
         message.setFont(new Font("Serif", Font.ROMAN_BASELINE, 25));
         message.setForeground(Color.black);
         erreur = state;
@@ -27,6 +26,7 @@ public class PopUpError extends JPanel{
             default : break;
 
         }
+        this.setBackground(new Color(150,150,150,150));
         this.add(message);
     }
 
