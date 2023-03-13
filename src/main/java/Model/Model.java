@@ -5,15 +5,17 @@ import GUI.View;
 import java.util.LinkedList;
 
 
-public class Model implements Observé<Data>,Data{
-    Plateau plat;
-    Joueur[] joueurs;
-    int joueurCurrent = 0; //L'entier indique le joueur courant
-    boolean partieFinie;
+public class Model implements Observe<Data>,Data{
+    public Plateau plat;
+    public Joueur[] joueurs;
+    public int joueurCurrent = 0; //L'entier indique le joueur courant
+    public boolean partieFinie;
     //View view;
-    int n;
-    State state;
-    LinkedList<Observeur<Data>> observeurs;
+    public int n;
+    public State state;
+    public LinkedList<Observeur<Data>> observeurs;
+
+    
     public Model(int n){
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];

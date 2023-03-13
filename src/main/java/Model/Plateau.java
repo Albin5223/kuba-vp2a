@@ -9,6 +9,7 @@ public class Plateau {
 	private int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	public boolean defi = false;
 
 	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -27,8 +28,10 @@ public class Plateau {
 		this.longueur = tmp.length;
 		this.board = tmp;
 		this.lengthN = (this.longueur+1)/4;
+	}
 
-
+	public void setBoard( Colour [][] tab){
+		this.board = tab;
 	}
 
 	public int getLongueur() {

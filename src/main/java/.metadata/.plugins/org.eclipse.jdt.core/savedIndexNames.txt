@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+C:\uni\projet\kuba-vp2a\src\main\java\.metadata\.plugins\org.eclipse.jdt.core
