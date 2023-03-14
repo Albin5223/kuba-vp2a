@@ -9,9 +9,9 @@ public class TestDefi {
 	public static void main(String[] args) {
 
 		Defi m = new Defi(0);
-		View v = new View(7);
+		View v = new View(4);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
-		ctrl.defi = true;
+		//ctrl.defi = true;
 		m.setView(v);
 		v.addCtrl(ctrl);
 
