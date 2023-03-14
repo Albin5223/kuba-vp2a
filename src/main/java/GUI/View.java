@@ -146,6 +146,14 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
 	}
 
+	public void bougerDown(){
+		plateau.setBounds(plateau.getX(),plateau.getY()+10, plateau.getWidth(), plateau.getHeight());
+	}
+
+	public void bougerUp(){
+		plateau.setBounds(plateau.getX(),plateau.getY()-10, plateau.getWidth(), plateau.getHeight());
+	}
+
 	public void vibrer(State state){
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
@@ -170,6 +178,54 @@ public class View extends JFrame implements Observeur<Data>{
 				time--;
     		}
 		},0,100);
+	}
+
+	public void plateauMove(Data obj){
+		Colour c = obj.getVainqueur().getColor();
+		Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			int time = 80;
+			
+    		public void run() {
+
+				bougerDown();
+
+				if(time == 0){
+					cancel();
+					PanneauFinDeJeu panneauFinDeJeu = new PanneauFinDeJeu(c);
+					panneauFinDeJeu.setBounds(View.this.getWidth()/2-150, View.this.getHeight()/2-100, 300, 200);
+					panneauFinDeJeu.initialise();
+
+					conteneur.add(panneauFinDeJeu);
+					conteneur.repaint();
+
+					rejouer(obj, panneauFinDeJeu);
+					
+				}
+				time--;
+    		}
+		},0,10);
+	}
+
+
+	public void rejouer(Data obj,PanneauFinDeJeu p){
+		conteneur.remove(p);
+		
+		obj.reset();
+		conteneur.repaint();
+		Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			int time = 80;
+    		public void run() {
+
+				bougerUp();
+
+				if(time == 0){
+					cancel();	
+				}
+				time--;
+    		}
+		},0,10);
 	}
 
 
@@ -215,28 +271,33 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 	@Override
 	public void update(Data obj) {
-		if(plateau==null){
-			start(obj);
+		if(obj.getVainqueur()!=null){
+			plateauMove(obj);
 		}
-		else {
-			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
-				vibrer(obj.getState());
-			} else {
-				if (obj.getState() == State.PUSHOPPMARBLE) {
-					currentJoueur.addOpponentMarble();
-					currentJoueur.repaint();
-				} else {
-					if (obj.getState() == State.PUSHREDMARBLE) {
-						currentJoueur.addRedMarble();
-						currentJoueur.repaint();
-					}
-				}
-				if (currentJoueur != null) {
-					joueurSuivant(obj);
-				}
-
+		else{
+			if(plateau==null){
+			start(obj);
 			}
-			this.repaint();
+			else {
+				if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
+					vibrer(obj.getState());
+				} else {
+					if (obj.getState() == State.PUSHOPPMARBLE) {
+						currentJoueur.addOpponentMarble();
+						currentJoueur.repaint();
+					} else {
+						if (obj.getState() == State.PUSHREDMARBLE) {
+							currentJoueur.addRedMarble();
+							currentJoueur.repaint();
+						}
+					}
+					if (currentJoueur != null) {
+						joueurSuivant(obj);
+					}
+
+				}
+				this.repaint();
+			}
 		}
 	}
 }

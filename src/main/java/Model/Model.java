@@ -109,4 +109,21 @@ public class Model implements Observe<Data>,Data{
     public Joueur getJoueur() {
         return getCurrentPlayer();
     }
+
+    @Override
+    public Joueur getVainqueur() {
+        return plat.isOver(joueurs[0],joueurs[1]);
+    }
+
+    @Override
+    public void reset(){
+        partieFinie=false;
+        plat.resetAll();
+        plat.initialiseBille();
+        for (int i = 0;i<2;i++){
+            joueurs[i].resetData();
+        }
+
+        noticeObserveurs(this);
+    }
 }

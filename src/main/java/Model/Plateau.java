@@ -153,9 +153,6 @@ public class Plateau {
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
-		if(state == State.PUSHREDMARBLE || state == State.PUSHOPPMARBLE){
-			resetHistorique();
-		}
 		return state;
 	}
 
@@ -167,6 +164,21 @@ public class Plateau {
 			return j1;
 		}
 		return null;
+	}
+
+	public void resetAll(){
+		resetHistorique();
+		resetPlateau();
+
+	}
+
+
+	public void resetPlateau(){
+		for (int i = 0;i<longueur;i++){
+			for (int j = 0;j<longueur;j++){
+				board[i][j]=null;
+			}
+		}
 	}
 
 	public boolean configurationDejaExistante() {
