@@ -128,5 +128,11 @@ public class JoueurView extends JPanel{
     public void enleverBarre(){
         barre.setBackground(Color.lightGray);
     }
+
+    public void resetData(){
+        nbMarble[0]=0;
+        nbMarble[1]=0;
+        this.repaint();
+    }
     
 }

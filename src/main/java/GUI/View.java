@@ -200,7 +200,13 @@ public class View extends JFrame implements Observeur<Data>{
 					conteneur.add(panneauFinDeJeu);
 					conteneur.repaint();
 
-					rejouerJeu(data, panneauFinDeJeu);
+					panneauFinDeJeu.getButtonRejouer().addActionListener( e->{
+						conteneur.remove(panneauFinDeJeu);
+						rejouerJeu(data);
+					});
+
+					
+					
 				}
 				time--;
     		}
@@ -208,11 +214,11 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 
 
-	public void rejouerJeu(Data obj,PanneauFinDeJeu p){
-		conteneur.remove(p);
+	public void rejouerJeu(Data obj){
 		
 		obj.reset();
-
+		jv1.resetData();
+		jv2.resetData();
 		conteneur.repaint();
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
@@ -272,33 +278,32 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 	@Override
 	public void update(Data obj) {
-		if(obj.getVainqueur()!=null){
-			plateauMove(obj);
+		if(plateau==null){
+		start(obj);
 		}
-		else{
-			if(plateau==null){
-			start(obj);
-			}
-			else {
-				if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
-					vibrer(obj.getState());
+		else {
+			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
+				vibrer(obj.getState());
+			} else {
+				if (obj.getState() == State.PUSHOPPMARBLE) {
+					currentJoueur.addMarble(1);
+					currentJoueur.repaint();
 				} else {
-					if (obj.getState() == State.PUSHOPPMARBLE) {
-						currentJoueur.addMarble(1);
+					if (obj.getState() == State.PUSHREDMARBLE) {
+						currentJoueur.addMarble(0);
 						currentJoueur.repaint();
-					} else {
-						if (obj.getState() == State.PUSHREDMARBLE) {
-							currentJoueur.addMarble(0);
-							currentJoueur.repaint();
-						}
 					}
-					if (currentJoueur != null) {
-						joueurSuivant(obj);
-					}
-
 				}
-				this.repaint();
+				if (currentJoueur != null) {
+					joueurSuivant(obj);
+				}
+
+			}
+			this.repaint();
+			if(obj.getVainqueur()!=null){
+				plateauMove(obj);
 			}
 		}
+		
 	}
 }

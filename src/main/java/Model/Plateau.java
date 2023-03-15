@@ -128,11 +128,10 @@ public class Plateau {
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		//Mauvaise gestion 
+
 		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
 			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
-				System.out.println(pos.j+direction.dirInverse().dirX());
-				System.out.println(pos.i+direction.dirInverse().dirY());
+				
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
