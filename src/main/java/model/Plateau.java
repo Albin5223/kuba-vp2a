@@ -49,25 +49,25 @@ public class Plateau implements Cloneable{
 		return board[pos.i][pos.j];
 	}
 
-	public void fillUpTo(int ligne, int debut, int fin) {
+	public static void fillUpTo(int ligne, int debut, int fin, Colour[][] board) {
 		for (int i = debut;i<=fin;i++) {
 			board[ligne][i] = Colour.RED;
 		}
 	}
 
-	public void initialiseBille() {
-		for(int i = 0; i<lengthN; i++) {
-			for (int j = 0; j<lengthN ;j++) {
-				board[i][j] = Colour.WHITE;
-				board[i][longueur-1-j] = Colour.BLACK;
-				board[longueur-1-i][longueur-1-j] = Colour.WHITE;
-				board[longueur-1-i][j] = Colour.BLACK;
+	public static void initialiseBille(Plateau plat) {
+		for(int i = 0; i<plat.lengthN; i++) {
+			for (int j = 0; j<plat.lengthN ;j++) {
+				plat.board[i][j] = Colour.WHITE;
+				plat.board[i][plat.longueur-1-j] = Colour.BLACK;
+				plat.board[plat.longueur-1-i][plat.longueur-1-j] = Colour.WHITE;
+				plat.board[plat.longueur-1-i][j] = Colour.BLACK;
 			}
 		}
-		int milieu=longueur/2;
+		int milieu=plat.longueur/2;
 		int l = 0;
-		for(int k = 1; k<longueur-1 ;k++) {
-			fillUpTo(k, milieu-l, milieu+l);
+		for(int k = 1; k<plat.longueur-1 ;k++) {
+			Plateau.fillUpTo(k, milieu-l, milieu+l,plat.board);
 			if(k >= milieu) {
 				l--;
 			}
@@ -76,8 +76,8 @@ public class Plateau implements Cloneable{
 			}
 		}
 
-		String s = this.toString();
-		ancienPlateau.add(s);
+		String s = plat.toString();
+		plat.ancienPlateau.add(s);
 	}
 
 
@@ -120,7 +120,6 @@ public class Plateau implements Cloneable{
 	}
 
 	public State push (Pos pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
-
 		if (direction == Direction.INVALID) {
 			return State.WRONGDIRECTION;
 		}
@@ -152,7 +151,13 @@ public class Plateau implements Cloneable{
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
-
+		if (state == State.PUSHOPPMARBLE) {
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (j1.tabBilles[i].i == pos.i && j1.tabBilles[i].j == pos.j) {
+					j1.tabBilles[i].i = -1;
+				}
+			}
+		}
 		return state;
 	}
 
