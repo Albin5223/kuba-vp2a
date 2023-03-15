@@ -33,7 +33,7 @@ public class Test {
 
 
 		//----------------------TEST GRAPHIQUE-----------------------
-		int n = 30;
+		int n = 5;
 		Model m = new Model(n);
 		View v = new View(n);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());

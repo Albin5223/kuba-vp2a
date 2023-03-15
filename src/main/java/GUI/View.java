@@ -30,6 +30,7 @@ public class View extends JFrame implements Observeur<Data>{
 	Image blackMarble;
 	Image whiteMarble;
 
+	Image imageBackgroundScale;
 	Image redMarbleScaled;
 	Image blackMarbleScaled;
 	Image whiteMarbleScaled;
@@ -49,15 +50,15 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
-			redMarble = ImageIO.read(new File("ressource/BalleRouge2.png"));
-			whiteMarble = ImageIO.read(new File("ressource/BalleBlanche.png"));
-			blackMarble = ImageIO.read(new File("ressource/BalleNoire.png"));
+			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
+			redMarble = ImageIO.read(new File("src/ressource/BalleRouge2.png"));
+			whiteMarble = ImageIO.read(new File("src/ressource/BalleBlanche.png"));
+			blackMarble = ImageIO.read(new File("src/ressource/BalleNoire.png"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
 		}
-
+		imageBackgroundScale=imageBackground.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_FAST);
 		redMarbleScaled=redMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 		whiteMarbleScaled = whiteMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 		blackMarbleScaled=blackMarble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
@@ -65,7 +66,7 @@ public class View extends JFrame implements Observeur<Data>{
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				//g.drawImage(imageBackground,0,0,null);
+				g.drawImage(imageBackgroundScale,0,0,null);
 				this.repaint();
 				
 			}
