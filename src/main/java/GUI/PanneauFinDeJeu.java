@@ -14,12 +14,12 @@ public class PanneauFinDeJeu extends JPanel{
     JLabel afficheVainqueur;
     JLabel afficheDemande;
 
+
     public PanneauFinDeJeu(Colour c){
         afficheDemande = new JLabel("Voulez-vous rejouer?");
         afficheVainqueur = new JLabel("Le joueur "+c.getName()+" a gagné");
         rejouer = new JButton("Rejouer");
         quitter = new JButton("Quitter");
-
     }
 
     public void initialise(){

@@ -13,13 +13,17 @@ public class JoueurView extends JPanel{
     JLabel titre;
     JPanel barre;
     Colour couleur;
-    int nbRedMarble;
-    int nbOppMarble;
-    JPanel paneRedMarble;
-    JPanel paneOppMarble;
+    
+
+    int[] nbMarble;
+    //Indice 0 : red
+    //Indice 1 : Opp
+    JPanel[] paneMarble;
     Image imageBackground;
 
     public JoueurView(Colour c){
+        paneMarble = new JPanel[2];
+        nbMarble = new int[2];
         this.setLayout(null);
         titre = new JLabel("");
         barre = new JPanel();
@@ -51,67 +55,70 @@ public class JoueurView extends JPanel{
     public void initialisePaneMarbleCaptured(){
         titre.setBounds(this.getWidth()/3, 10, 100, 20);
         this.add(titre);
-        paneRedMarble = new JPanel();
         
-        paneRedMarble = new JPanel(){
+        paneMarble[0] = new JPanel(){
             public void paintComponent(Graphics g){
-                g.setColor(Color.red);
-                int MarbleY = 5;
-                int MarbleX = 5;
-                for (int i = 0;i<nbRedMarble;i++){
-                    if(MarbleX>=paneRedMarble.getWidth()-25){
-                        MarbleY+=25;
-                        MarbleX = 5;
-                    }
-                    g.fillOval(MarbleX,MarbleY,15, 15);
-                    MarbleX+=25;
-                }
+                paintMarble(g,0);
             }
         };
 
-        paneRedMarble.setBackground(Color.lightGray);
-        paneRedMarble.setBounds(25,this.getHeight()/4,this.getWidth()*7/8,this.getHeight()*2/7);
-        paneRedMarble.setBorder(new MyBorder());
-        this.add(paneRedMarble);
         
-        paneOppMarble = new JPanel(){
+        paneMarble[0].setBounds(25,this.getHeight()/4,this.getWidth()*7/8,this.getHeight()*2/7);
+        
+        
+        paneMarble[1] = new JPanel(){
             public void paintComponent(Graphics g){
-                if (couleur == Colour.BLACK){
-                    g.setColor(Color.white);
-                }
-                else{
-                    g.setColor(Color.black);
-                }
-                int MarbleY = 5;
-                int MarbleX = 5;
-                for (int i = 0;i<nbOppMarble;i++){
-                    if(MarbleX>=paneRedMarble.getWidth()-25){
-                        MarbleY+=25;
-                        MarbleX = 5;
-                    }
-                    g.fillOval(MarbleX,MarbleY,15, 15);
-                    MarbleX+=25;
-                }
-                
+                paintMarble(g, 1);
             }
         };
 
-        paneOppMarble.setBackground(Color.lightGray);
-        paneOppMarble.setBounds(25,this.getHeight()*3/5,this.getWidth()*7/8,this.getHeight()*2/7);
-        paneOppMarble.setBorder(new MyBorder());
-        this.add(paneOppMarble);
+       
+        paneMarble[1].setBounds(25,this.getHeight()*3/5,this.getWidth()*7/8,this.getHeight()*2/7);
+        
+        initDetailPanneau();
+        
+    }
+
+    private void initDetailPanneau(){
+        for (int i =0;i<2;i++){
+            paneMarble[i].setBackground(Color.lightGray);
+            paneMarble[i].setBorder(new MyBorder());
+            this.add(paneMarble[i]);
+        }
+        
+    }
+
+    public void paintMarble(Graphics g ,int i){
+        if (i==0){
+            g.setColor(Color.red);
+        }
+        else{
+            if (couleur == Colour.BLACK){
+                g.setColor(Color.white);
+            } 
+            else{
+                g.setColor(Color.black);
+            }
+        }
+        int MarbleY = 5;
+        int MarbleX = 5;
+        for (int j = 0;j<nbMarble[i];j++){
+            if(MarbleX>=paneMarble[i].getWidth()-25){
+                MarbleY+=25;
+                MarbleX = 5;
+            }
+            g.fillOval(MarbleX,MarbleY,15, 15);
+            MarbleX+=25;
+        }
     }
 
     
-    public void addRedMarble(){
-        nbRedMarble++;
-        paneRedMarble.repaint();
+    public void addMarble(int i){
+        nbMarble[i]++;
+        paneMarble[i].repaint();
     }
 
-    public void addOpponentMarble(){
-        nbOppMarble++;
-        paneOppMarble.repaint();
-    }
+    
 
     public void mettreBarre(){
         barre.setBounds(0,0,20,this.getHeight());
