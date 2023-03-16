@@ -5,7 +5,7 @@ public class Joueur {
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
 	private int n;
-	protected Pos[] tabBilles;
+	protected Position[] tabBilles;
 
 	public Joueur(Colour c, int n) {
 		this.n = n;
@@ -44,18 +44,18 @@ public class Joueur {
 	}
 
 	public void initTabBilles (int n, Colour c) {
-		Pos[] tab= new Pos[n*n*2];
+		Position[] tab= new Position[n*n*2];
 		int a = 0;
 		if (c==Colour.WHITE) {
 			for (int i = 0; i<n; i++) {
 				for (int j = 0; j<n; j++) {
-					tab[a]= new Pos(i,j);
+					tab[a]= new Position(i,j);
 					a++;
 				}
 			}
 			for (int i = n*3-1; i<n + n*3-1; i++) {
 				for (int j = n*3-1; j<n + n*3-1; j++) {
-					tab[a]= new Pos(i,j);
+					tab[a]= new Position(i,j);
 					a++;
 				}
 			}
@@ -64,13 +64,13 @@ public class Joueur {
 		if (c==Colour.BLACK) {
 			for (int i = n*3-1; i<n + n*3-1; i++) {
 				for (int j = 0; j<n; j++) {
-					tab[a]= new Pos(i,j);
+					tab[a]= new Position(i,j);
 					a++;
 				}
 			}
 			for (int i = 0; i<n; i++) {
 				for (int j = n*3-1; j<n + n*3-1; j++) {
-					tab[a]= new Pos(i,j);
+					tab[a]= new Position(i,j);
 					a++;
 				}
 			}

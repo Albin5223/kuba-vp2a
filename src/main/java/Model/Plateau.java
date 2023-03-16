@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 
-public class Plateau {
+public class Plateau implements Cloneable{
 	private Colour[][] board;
 	private int lengthN;
 	private int billesRouges;
@@ -320,4 +320,9 @@ public class Plateau {
 			return 1 + nbChiffre(n/10);
 		}
 	}
+
+	protected Plateau clone() throws CloneNotSupportedException {
+		return (Plateau) super.clone();
+	}
+
 }

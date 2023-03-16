@@ -8,7 +8,7 @@ public class NoeudIA  {
 	Joueur joueurAdv;
 	int value;
 	Direction dir;
-	Pos pos;
+	Position pos;
 	LinkedList<NoeudIA> fils;
 
 	public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
