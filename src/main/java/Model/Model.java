@@ -15,7 +15,7 @@ public class Model implements Observe<Data>,Data{
     public State state;
     public LinkedList<Observeur<Data>> observeurs;
 
-    
+
     public Model(int n){
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
@@ -37,6 +37,13 @@ public class Model implements Observe<Data>,Data{
         //view = v;
         addObserveur(v);
         plat.initialiseBille();
+        noticeObserveurs(this);
+    }
+
+      public void setView2(View v){
+        //view = v;
+        addObserveur(v);
+        //plat.initialiseBille();
         noticeObserveurs(this);
     }
 
