@@ -26,9 +26,9 @@ public class View extends JFrame implements Observeur<Data>{
 	Image imageBackground;
 
 
-	
+
 	Image[] banqueMarblImages;
-    
+	Image imageBackgroundScale;
     public View(int nb) {
 
 		banqueMarblImages = new Image[3];
@@ -43,10 +43,10 @@ public class View extends JFrame implements Observeur<Data>{
 
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
-		
+
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
+			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
 			for (int i = 0;i<3;i++){
 				String s="ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
@@ -59,12 +59,12 @@ public class View extends JFrame implements Observeur<Data>{
 			e1.printStackTrace();
 		}
 
-		
+		imageBackgroundScale=imageBackground.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_FAST);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				//g.drawImage(imageBackground,0,0,null);
+				g.drawImage(imageBackgroundScale,0,0,null);
 				this.repaint();
 				
 			}
