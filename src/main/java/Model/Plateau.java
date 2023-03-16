@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 
-public class Plateau {
+public class Plateau implements Cloneable{
 	private Colour[][] board;
 	private int lengthN;
 	private int billesRouges;
@@ -128,11 +128,10 @@ public class Plateau {
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		//Mauvaise gestion 
+
 		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
 			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
-				System.out.println(pos.j+direction.dirInverse().dirX());
-				System.out.println(pos.i+direction.dirInverse().dirY());
+				
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -153,9 +152,6 @@ public class Plateau {
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
-		if(state == State.PUSHREDMARBLE || state == State.PUSHOPPMARBLE){
-			resetHistorique();
-		}
 		return state;
 	}
 
@@ -167,6 +163,21 @@ public class Plateau {
 			return j1;
 		}
 		return null;
+	}
+
+	public void resetAll(){
+		resetHistorique();
+		resetPlateau();
+
+	}
+
+
+	public void resetPlateau(){
+		for (int i = 0;i<longueur;i++){
+			for (int j = 0;j<longueur;j++){
+				board[i][j]=null;
+			}
+		}
 	}
 
 	public boolean configurationDejaExistante() {
@@ -309,4 +320,9 @@ public class Plateau {
 			return 1 + nbChiffre(n/10);
 		}
 	}
+
+	protected Plateau clone() throws CloneNotSupportedException {
+		return (Plateau) super.clone();
+	}
+
 }

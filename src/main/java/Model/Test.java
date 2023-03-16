@@ -1,5 +1,6 @@
 package Model;
 
+
 import Controleur.Controleur;
 import GUI.View;
 
@@ -33,12 +34,11 @@ public class Test {
 
 
 		//----------------------TEST GRAPHIQUE-----------------------
-		int n = 3;
+		int n = 1;
 		Model m = new Model(n);
 		View v = new View(n);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.setView(v);
 		v.addCtrl(ctrl);
-
 	}
 }

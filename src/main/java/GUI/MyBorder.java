@@ -34,24 +34,5 @@ public class MyBorder implements Border{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.drawRoundRect(x+adjustXY, y+adjustXY, width-adjustWH, height-adjustWH, arc, arc);
     }
-   
-   
-    //pour le test
-    public static void main(String[] args) {
-        JFrame f = new JFrame();
-        f.setSize(300, 300);
-        f.setLocationRelativeTo(null);
-        f.setDefaultCloseOperation(3);
-        f.setLayout(new FlowLayout());
-       
-        //on fait un panel pour le test
-        JPanel p = new JPanel();
-        p.add(new JButton("Composant de test"));
-        p.setPreferredSize(new Dimension(200, 100));
-        p.setBorder(new MyBorder());
-       
-        f.add(p);
-        f.setVisible(true);
-    }
 
 }
