@@ -48,7 +48,7 @@ public class View extends JFrame implements Observeur<Data>{
 		try {
 			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
 			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
+				String s="src/ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;
