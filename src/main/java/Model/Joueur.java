@@ -4,8 +4,10 @@ public class Joueur {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
+	private int n;
 
 	public Joueur(Colour c, int n) {
+		this.n = n;
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.billesRougesCapturees = 0;
@@ -33,5 +35,10 @@ public class Joueur {
 
 	public int getBillesRougesCapturees() {
 		return billesRougesCapturees;
+	}
+
+	public void resetData(){
+		nBilles = 2*(n*n);
+		billesRougesCapturees=0;
 	}
 }

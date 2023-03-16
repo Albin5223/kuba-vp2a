@@ -8,6 +8,10 @@ public interface Data {
 
     public Joueur getJoueur();
 
+    public Joueur getVainqueur();
+
+    public void reset();
+
 
 
 
