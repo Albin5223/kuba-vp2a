@@ -104,13 +104,18 @@ public class Plateau implements Cloneable{
 				if (j1.getColor() == colour) {
 					return null;//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
-				j2.loseMarble();//alors on enleve une bille au joueur
+				j2.loseMarble(pos);//alors on enleve une bille au joueur
 				return State.PUSHOPPMARBLE;
 			}
 		}
 		if (board[pos.i][pos.j] == null) {
 			board[pos.i][pos.j] = colour;
 			return State.SUCCESS;
+		}
+		for (int i = 0; i < j1.tabBilles.length; i++) {
+			if (pos.i == j1.tabBilles[i].i && pos.j == j1.tabBilles[i].j) {
+				j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+			}
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
@@ -158,6 +163,7 @@ public class Plateau implements Cloneable{
 				}
 			}
 		}
+
 		return state;
 	}
 

@@ -5,7 +5,7 @@ public class Joueur {
 	private Colour colour;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
-	protected Pos[] tabBilles;
+	public Pos[] tabBilles;
 
 	public Joueur(Colour c, int n) {
 		this.nBilles = 2*(n*n);
@@ -13,7 +13,12 @@ public class Joueur {
 		this.billesRougesCapturees = 0;
 	}
 
-	public void loseMarble() {
+	public void loseMarble(Pos pos) {
+		for (int i = 0; i < tabBilles.length; i++) {
+			if (tabBilles[i].i == pos.i && tabBilles[i].j == pos.j) {
+				tabBilles[i].i = -1;
+			}
+		}
 		nBilles --;
 	}
 
