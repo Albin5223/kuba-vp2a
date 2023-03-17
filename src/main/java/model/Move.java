@@ -9,5 +9,3 @@ public class Move {
         this.dir=dir;
     }
 }
-
-

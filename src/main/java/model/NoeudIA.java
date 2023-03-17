@@ -111,5 +111,4 @@ public class NoeudIA  {
 	public int rateValue (NoeudIA parent) { //A FAIRE
 		return 0;
 	}
-
 }
