@@ -120,39 +120,17 @@ public class View extends JFrame implements Observeur<Data>{
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i);
 				if (c != null){
-					switch(c){
-						case RED :
-							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
-							break;
-						case WHITE :
-							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
-							break;
-						case BLACK :
-							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
-							break;
-						default : break;
-					}
+					g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
+							
 				}
 			}
 		}
 	}
 
-
-	public void bougerRight(){
-		plateau.setBounds(plateau.getX()+20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+	public void bougerPlateau(Direction d){
+		plateau.setBounds(plateau.getX()+d.dirX()*20,plateau.getY()+d.dirY()*10, plateau.getWidth(), plateau.getHeight());
 	}
 
-	public void bougerLeft(){
-		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
-	}
-
-	public void bougerDown(){
-		plateau.setBounds(plateau.getX(),plateau.getY()+10, plateau.getWidth(), plateau.getHeight());
-	}
-
-	public void bougerUp(){
-		plateau.setBounds(plateau.getX(),plateau.getY()-10, plateau.getWidth(), plateau.getHeight());
-	}
 
 	public void vibrer(State state){
 		Timer vibe = new Timer();
@@ -163,10 +141,10 @@ public class View extends JFrame implements Observeur<Data>{
 
     		public void run() {
 				if(i){
-					bougerLeft();
+					bougerPlateau(Direction.NORTH);
 				}
 				else{
-					bougerRight();
+					bougerPlateau(Direction.SOUTH);
 				}
 				i=!i;
 				if(time == 0){
@@ -188,7 +166,7 @@ public class View extends JFrame implements Observeur<Data>{
 			
     		public void run() {
 
-				bougerDown();
+				bougerPlateau(Direction.EAST);
 
 				if(time == 0){
 					cancel();
@@ -225,7 +203,7 @@ public class View extends JFrame implements Observeur<Data>{
 			int time = 80;
     		public void run() {
 
-				bougerUp();
+				bougerPlateau(Direction.WEST);
 
 				if(time == 0){
 					cancel();	
