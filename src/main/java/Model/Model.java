@@ -66,18 +66,18 @@ public class Model implements Observe<Data>,Data{
         return plat;
     }
 
-    public void push(Position p,Direction d){        
+    public void push(Position p,Direction d){
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-    
+
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
-            joueurSuivant();
+                joueurSuivant();
             }
         }
         else{
             partieFinie = true;
         }
-        
+
         noticeObserveurs(this);
     }
 
@@ -85,7 +85,7 @@ public class Model implements Observe<Data>,Data{
     @Override
     public void addObserveur(Observeur<Data> obs) {
         if(!observeurs.contains(obs)){
-        observeurs.add(obs);}
+            observeurs.add(obs);}
     }
 
     @Override
