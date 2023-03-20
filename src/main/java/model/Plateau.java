@@ -163,7 +163,6 @@ public class Plateau implements Cloneable{
 				}
 			}
 		}
-
 		return state;
 	}
 

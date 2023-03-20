@@ -18,7 +18,7 @@ public class NoeudIA  {
 	}
 
 	public NoeudIA (NoeudIA n) throws CloneNotSupportedException {
-		plateau = plateau.clone();
+		plateau = n.plateau.clone();
 		joueurAcc = n.joueurAdv;
 		joueurAdv = n.joueurAcc;
 	}
