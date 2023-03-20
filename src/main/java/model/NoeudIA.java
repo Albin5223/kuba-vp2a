@@ -4,69 +4,79 @@ import java.util.LinkedList;
 
 public class NoeudIA  {
 	private Plateau plateau;
-	Joueur joueurAcc;
-	Joueur joueurAdv;
-	int value;
-	Direction dir;
-	Pos pos;
-	LinkedList<NoeudIA> fils;
+	protected Joueur joueurAcc;
+	protected Joueur joueurAdv;
+	protected int value;
+	protected Direction dir;
+	protected Pos pos;
+	protected LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
 
 	public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-		plateau = p.clone();
+		//plateau = p.clone();
+		this.plateau = p;
 		this.joueurAcc=joueurAcc;
 		this.joueurAdv=joueurAdv;
 	}
 
-	public NoeudIA (NoeudIA n) throws CloneNotSupportedException {
-		plateau = n.plateau.clone();
+	public NoeudIA (NoeudIA n, Plateau p) throws CloneNotSupportedException {
+		//plateau = n.plateau.clone();
+		this.plateau = p;
 		joueurAcc = n.joueurAdv;
 		joueurAdv = n.joueurAcc;
 	}
 
+	public static boolean validState(State s) {
+		return s == State.SUCCESS || s == State.PUSHOPPMARBLE || s == State.PUSHREDMARBLE;
+	}
+
 	public void createNextNodes () throws CloneNotSupportedException {
 		for (int i = 0; i<joueurAdv.tabBilles.length ; i++) {
-			if (joueurAdv.tabBilles[i].i!=-1) {
-				if (plateau.push(joueurAdv.tabBilles[i],Direction.NORTH,joueurAdv,joueurAcc)==State.SUCCESS) {
-					NoeudIA newNode = new NoeudIA(this);
-					newNode.value=newNode.rateValue(this);
-					newNode.dir=Direction.NORTH;
-					fils.add(newNode);
-					plateau.undoLastMove();
-				}
-				if (plateau.push(joueurAdv.tabBilles[i],Direction.WEST,joueurAdv,joueurAcc)==State.SUCCESS) {
-					NoeudIA newNode = new NoeudIA(this);
-					newNode.value=newNode.rateValue(this);
-					newNode.dir=Direction.WEST;
-					fils.add(newNode);
-					plateau.undoLastMove();
-				}
-				if (plateau.push(joueurAdv.tabBilles[i],Direction.EAST,joueurAdv,joueurAcc)==State.SUCCESS) {
-					NoeudIA newNode = new NoeudIA(this);
-					newNode.value=newNode.rateValue(this);
-					newNode.dir=Direction.EAST;
-					fils.add(newNode);
-					plateau.undoLastMove();
-				}
-				if (plateau.push(joueurAdv.tabBilles[i],Direction.SOUTH,joueurAdv,joueurAcc)==State.SUCCESS) {
-					NoeudIA newNode = new NoeudIA(this);
-					newNode.value=newNode.rateValue(this);
-					newNode.dir=Direction.SOUTH;
-					fils.add(newNode);
-					plateau.undoLastMove();
-				}
+			if (this.plateau.isOver(joueurAcc,joueurAdv) != null) {
+				return;
 			}
-			
+			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.NORTH,joueurAdv,joueurAcc))) {
+				NoeudIA newNode = new NoeudIA(this,this.plateau);
+				newNode.value=newNode.rateValue(this);
+				newNode.dir=Direction.NORTH;
+				newNode.pos=joueurAdv.tabBilles[i];
+				fils.add(newNode);
+				plateau.undoLastMove();
+			}
+			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.WEST,joueurAdv,joueurAcc))) {
+				NoeudIA newNode = new NoeudIA(this,this.plateau);
+				newNode.value=newNode.rateValue(this);
+				newNode.dir=Direction.WEST;
+				newNode.pos=joueurAdv.tabBilles[i];
+				fils.add(newNode);
+				plateau.undoLastMove();
+			}
+			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.EAST,joueurAdv,joueurAcc))) {
+				NoeudIA newNode = new NoeudIA(this,this.plateau);
+				newNode.value=newNode.rateValue(this);
+				newNode.dir=Direction.EAST;
+				newNode.pos=joueurAdv.tabBilles[i];
+				fils.add(newNode);
+				plateau.undoLastMove();
+			}
+			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.SOUTH,joueurAdv,joueurAcc))) {
+				NoeudIA newNode = new NoeudIA(this,this.plateau);
+				newNode.value=newNode.rateValue(this);
+				newNode.dir=Direction.SOUTH;
+				newNode.pos=joueurAdv.tabBilles[i];
+				fils.add(newNode);
+				plateau.undoLastMove();
+			}
 		}
 	}
 
 	public static Move determineBestMove (Plateau p, int depth, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
 		NoeudIA arbre = createTree(p, depth, joueurAcc, joueurAdv);
 		int bestValue = -999999999;
-		NoeudIA bestNode = arbre.fils.getFirst(); // Faire un cas de fin de partie si erreur
+		NoeudIA bestNode = arbre.fils.getFirst();
 		for (NoeudIA node : arbre.fils) {
-			int mm = node.minimax(depth);
-			if (bestValue < mm ) {
-				bestValue = mm;
+			int minm = node.minimax(depth);
+			if (bestValue < minm ) {
+				bestValue = minm;
 				bestNode = node;
 			}
 		}
@@ -102,7 +112,7 @@ public class NoeudIA  {
 		else {
 			int m = 999999999;
 			for (NoeudIA node : fils) {
-				m = Math.min(m, node.minimax(depth - 1));;
+				m = Math.min(m, node.minimax(depth - 1));
 			}
 			return m;
 		}

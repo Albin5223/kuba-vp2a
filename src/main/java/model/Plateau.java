@@ -90,7 +90,7 @@ public class Plateau implements Cloneable{
 	}
 
 	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
-		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
+		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-2));
 	}
 
 	private State push_rec (Pos pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
@@ -110,16 +110,23 @@ public class Plateau implements Cloneable{
 		}
 		if (board[pos.i][pos.j] == null) {
 			board[pos.i][pos.j] = colour;
-			return State.SUCCESS;
-		}
-		for (int i = 0; i < j1.tabBilles.length; i++) {
-			if (pos.i == j1.tabBilles[i].i && pos.j == j1.tabBilles[i].j) {
-				j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+			Pos pos2 = pos.goTo(direction.dirInverse());
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
+					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+				}
 			}
+			return State.SUCCESS;
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
 			board[pos.i][pos.j] = colour;
+			Pos pos2 = pos.goTo(direction.dirInverse());
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
+					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+				}
+			}
 		}
 		return state;
 	}
@@ -134,8 +141,8 @@ public class Plateau implements Cloneable{
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		if (pos.i+direction.dirInverse().dirY() != -1 && pos.i+direction.dirInverse().dirY() != this.longueur && pos.j+direction.dirInverse().dirX() != -1 && pos.j+direction.dirInverse().dirX() != this.longueur) {
-			if (this.board[pos.i+direction.dirInverse().dirY()][pos.j+direction.dirInverse().dirX()] != null) {
+		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
+			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -178,9 +185,9 @@ public class Plateau implements Cloneable{
 
 	public boolean configurationDejaExistante() {
 		String s = this.toString();
-		System.out.println("Plateau courant : "+s);
+		//System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
-			System.out.println("Plateau existant : "+tmp);
+			//System.out.println("Plateau existant : "+tmp);
 			if (s.equals(tmp)) {
 				return true;
 			}
