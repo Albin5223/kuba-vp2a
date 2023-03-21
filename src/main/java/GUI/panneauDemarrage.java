@@ -61,7 +61,7 @@ public class PanneauDemarrage extends JPanel{
        
     }
 
-
+ 
     public void anime(){
         Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
