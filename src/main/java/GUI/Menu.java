@@ -1,28 +1,16 @@
 package GUI;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Menu extends JPanel {
     JTextField taille;
-
     JButton launch;
+    
+    public Menu() {
 
-    Image background;
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
 
-        // Draw the background image.
-        g.drawImage(background, 0, 0, this);
-    }
-
-    public Menu() throws IOException {
-        super();
-        background =ImageIO.read(new File("src/ressource/ezgif.com-gif-maker.gif"));
+        this.setOpaque(false);
 
         JPanel grid=new JPanel();
         grid.setLayout(new BoxLayout(grid,BoxLayout.Y_AXIS));
@@ -37,7 +25,8 @@ public class Menu extends JPanel {
         grid.add(launch);
         this.add(grid);
         this.setVisible(true);
-        revalidate();
+
+        this.repaint();
     }
 
 }
