@@ -2,6 +2,10 @@ package GUI;
 
 
 import javax.swing.*;
+
+import Controleur.Controleur;
+import Model.Model;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,6 +22,9 @@ public class PanneauDemarrage extends JPanel{
     Menu menu;
 
     JLabel play;
+    JLabel option;
+
+    boolean menuActivated;
 
 
     public PanneauDemarrage(JFrame fen){
@@ -43,19 +50,61 @@ public class PanneauDemarrage extends JPanel{
         play.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                container.removeAll();
-                container.add(menu);
-                fenetre.revalidate();
+                if(!menuActivated){
+                    container.removeAll();
+                    container.add(menu);
+                    fenetre.revalidate();
+                    menuActivated=!menuActivated;
+                }
+                else{
+                    fenetre.setVisible(false);
+                    int n = menu.getN();
+                    Model m = new Model(n);
+                    View v = new View(n,fenetre);
+                    Controleur ctrl= new Controleur(m,v.getTaille_case());
+                    m.setView(v);
+                    v.addCtrl(ctrl);
+                }
+                
             }
         });
         play.setVisible(false);
+
+
+        option=new JLabel("Options");
+        option.setSize(100,100);
+        option.setFont(new Font("Impact",Font.PLAIN,30));
+        option.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(!menuActivated){
+                    container.removeAll();
+                    container.add(menu);
+                    fenetre.revalidate();
+                    menuActivated=!menuActivated;
+                }
+                else{
+                    fenetre.setVisible(false);
+                    int n = menu.getN();
+                    Model m = new Model(n);
+                    View v = new View(n,fenetre);
+                    Controleur ctrl= new Controleur(m,v.getTaille_case());
+                    m.setView(v);
+                    v.addCtrl(ctrl);
+                }
+                
+            }
+        });
+        option.setVisible(false);
 
 
         this.add(container,BorderLayout.NORTH);
 
         containerButton = new JPanel();
         containerButton.setOpaque(false);
-        containerButton.add(play);
+        containerButton.setLayout(new BorderLayout(100,200));
+        containerButton.add(play,BorderLayout.CENTER);
+        containerButton.add(option,BorderLayout.CENTER);
         this.add(containerButton);
 
        
@@ -77,6 +126,7 @@ public class PanneauDemarrage extends JPanel{
                 if(time == -6){
 					cancel();
                     play.setVisible(true);
+                    option.setVisible(true);
                     fenetre.repaint();	
 				}
 				

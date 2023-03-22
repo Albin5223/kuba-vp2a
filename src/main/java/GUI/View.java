@@ -25,15 +25,18 @@ public class View extends JFrame implements Observeur<Data>{
 
 	Image imageBackground;
 
-
+	JFrame launcher;
 
 	Image[] banqueMarblImages;
 	Image imageBackgroundScale;
-    public View(int nb) {
-
+    public View(int nb,JFrame l) {
+		launcher = l;
+		this.setTitle("Plateau KUBA");
 		banqueMarblImages = new Image[3];
 
-    	this.setVisible(true);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
+		this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
@@ -46,9 +49,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
+			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
 			for (int i = 0;i<3;i++){
-				String s="src/ressource/Balle"+i+".png";
+				String s="ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;
@@ -181,6 +184,11 @@ public class View extends JFrame implements Observeur<Data>{
 					panneauFinDeJeu.getButtonRejouer().addActionListener( e->{
 						conteneur.remove(panneauFinDeJeu);
 						rejouerJeu(data);
+					});
+
+					panneauFinDeJeu.getButtonQuitter().addActionListener(e ->{
+						View.this.dispose();
+						launcher.setVisible(true);
 					});
 
 					

@@ -42,24 +42,36 @@ public class Menu extends JPanel {
         containerButton.setOpaque(false);
         fleches = new JLabel[2];
 
-        for (int i = 0;i<2;i++){
+        for(int i = 0;i<2;i++){
             fleches[i] = new JLabel(new ImageIcon("ressource/fleche"+i+".png"));
-            fleches[i].addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    
-                    if (n==15){
-                        n=0;
-                    }
-                    n+=1;
-                    taille.setText(n+"");
-                    container.repaint();
-                    
-                }
-            });
             containerButton.add(fleches[i]);
-
         }
+
+        fleches[0].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(n==10){
+                    n=0;
+                }
+                n+=1;
+                taille.setText(n+"");
+                container.repaint();
+                
+            }
+        });
+
+        fleches[1].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (n==1){
+                    n=11;
+                }
+                n-=1;
+                taille.setText(n+"");
+                container.repaint();   
+            }
+        });
+
 
 
 
@@ -69,6 +81,10 @@ public class Menu extends JPanel {
 
         this.setVisible(true);
         this.repaint();
+    }
+
+    public int getN(){
+        return n;
     }
 
 }

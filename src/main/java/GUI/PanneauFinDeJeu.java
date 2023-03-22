@@ -43,5 +43,9 @@ public class PanneauFinDeJeu extends JPanel{
     public JButton getButtonRejouer(){
         return rejouer;
     }
+
+    public JButton getButtonQuitter(){
+        return quitter;
+    }
     
 }
