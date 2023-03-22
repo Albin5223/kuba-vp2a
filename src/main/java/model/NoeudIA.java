@@ -29,41 +29,20 @@ public class NoeudIA  {
 	}
 
 	public void createNextNodes () throws CloneNotSupportedException {
-		for (int i = 0; i<joueurAdv.tabBilles.length ; i++) {
-			if (this.plateau.isOver(joueurAcc,joueurAdv) != null) {
-				return;
-			}
-			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.NORTH,joueurAdv,joueurAcc))) {
-				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue();
-				newNode.dir=Direction.NORTH;
-				newNode.pos=joueurAdv.tabBilles[i];
-				fils.add(newNode);
-				plateau.undoLastMove();
-			}
-			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.WEST,joueurAdv,joueurAcc))) {
-				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue();
-				newNode.dir=Direction.WEST;
-				newNode.pos=joueurAdv.tabBilles[i];
-				fils.add(newNode);
-				plateau.undoLastMove();
-			}
-			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.EAST,joueurAdv,joueurAcc))) {
-				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue();
-				newNode.dir=Direction.EAST;
-				newNode.pos=joueurAdv.tabBilles[i];
-				fils.add(newNode);
-				plateau.undoLastMove();
-			}
-			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.SOUTH,joueurAdv,joueurAcc))) {
-				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue();
-				newNode.dir=Direction.SOUTH;
-				newNode.pos=joueurAdv.tabBilles[i];
-				fils.add(newNode);
-				plateau.undoLastMove();
+		for (int i = 0; i < joueurAdv.tabBilles.length ; i++) {
+			for (int j = 0; j < 4; j++) {
+				Direction dir = Direction.values()[j];
+				if (this.plateau.isOver(joueurAcc,joueurAdv) != null) {
+					return;
+				}
+				if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],dir,joueurAdv,joueurAcc))) {
+					NoeudIA newNode = new NoeudIA(this,this.plateau);
+					newNode.value=newNode.rateValue();
+					newNode.dir=dir;
+					newNode.pos=joueurAdv.tabBilles[i];
+					fils.add(newNode);
+					plateau.undoLastMove();
+				}
 			}
 		}
 	}
