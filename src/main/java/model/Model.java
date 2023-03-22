@@ -47,11 +47,11 @@ public class Model {
         return partieFinie;
     }
 
-    public void push(Pos p,Direction d){
+    public void push(Pos p,Direction d) throws CloneNotSupportedException{
         State state = null;
         if (joueurCurrent == 1 && this.isIA) {//si c'est au tour de l'IA
-            Move move = NoeudIA.determineBestMove(this.plat, 5, getCurrentPlayer(), getOtherPlayer())
-            state = plat.push(move.pos,move.dir,getCurrentPlayer(), getOtherPlayer());
+            Move move = NoeudIA.determineBestMove(this.plat, 5, getCurrentPlayer(), getOtherPlayer());
+            state = plat.push(move.pos,move.dir,getOtherPlayer(), getCurrentPlayer());
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
