@@ -12,15 +12,14 @@ public class NoeudIA  {
 	protected LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
 
 	public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-		//plateau = p.clone();
+		plateau = p.clone();
 		this.plateau = p;
 		this.joueurAcc=joueurAcc;
 		this.joueurAdv=joueurAdv;
 	}
 
 	public NoeudIA (NoeudIA n, Plateau p) throws CloneNotSupportedException {
-		//plateau = n.plateau.clone();
-		this.plateau = p;
+		plateau = n.plateau.clone();
 		joueurAcc = n.joueurAdv;
 		joueurAdv = n.joueurAcc;
 	}
@@ -36,7 +35,7 @@ public class NoeudIA  {
 			}
 			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.NORTH,joueurAdv,joueurAcc))) {
 				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue(this);
+				newNode.value=newNode.rateValue();
 				newNode.dir=Direction.NORTH;
 				newNode.pos=joueurAdv.tabBilles[i];
 				fils.add(newNode);
@@ -44,7 +43,7 @@ public class NoeudIA  {
 			}
 			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.WEST,joueurAdv,joueurAcc))) {
 				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue(this);
+				newNode.value=newNode.rateValue();
 				newNode.dir=Direction.WEST;
 				newNode.pos=joueurAdv.tabBilles[i];
 				fils.add(newNode);
@@ -52,7 +51,7 @@ public class NoeudIA  {
 			}
 			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.EAST,joueurAdv,joueurAcc))) {
 				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue(this);
+				newNode.value=newNode.rateValue();
 				newNode.dir=Direction.EAST;
 				newNode.pos=joueurAdv.tabBilles[i];
 				fils.add(newNode);
@@ -60,7 +59,7 @@ public class NoeudIA  {
 			}
 			if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],Direction.SOUTH,joueurAdv,joueurAcc))) {
 				NoeudIA newNode = new NoeudIA(this,this.plateau);
-				newNode.value=newNode.rateValue(this);
+				newNode.value=newNode.rateValue();
 				newNode.dir=Direction.SOUTH;
 				newNode.pos=joueurAdv.tabBilles[i];
 				fils.add(newNode);
@@ -118,7 +117,8 @@ public class NoeudIA  {
 		}
 	}
 
-	public int rateValue (NoeudIA parent) { //A FAIRE
-		return 0;
+	public int rateValue () { //A FAIRE
+		return this.joueurAcc.getBilles()-this.joueurAdv.getBilles()
+		+ this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees();
 	}
 }

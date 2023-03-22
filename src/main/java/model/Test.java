@@ -9,8 +9,10 @@ public class Test {
 		try {
 			NoeudIA ia = new NoeudIA(p,j1,j2);
 			Plateau.initialiseBille(p);
-			Move move = NoeudIA.determineBestMove(p,3,j1,j2);
-			//p.push(move.pos,move.dir,j1,j2);
+			Move move = NoeudIA.determineBestMove(p,5,j2,j1);
+			System.out.println(p.push(move.pos,move.dir,j1,j2));
+			System.out.println(move.pos.i + " " + move.pos.j);
+			System.out.println(move.dir);
 			p.affiche();
 		}
 		catch (CloneNotSupportedException e) {

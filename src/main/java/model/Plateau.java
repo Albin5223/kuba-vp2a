@@ -91,6 +91,7 @@ public class Plateau implements Cloneable{
 
 	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
 		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-2));
+		ancienPlateau.remove(ancienPlateau.size()-1);
 	}
 
 	private State push_rec (Pos pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
@@ -328,6 +329,13 @@ public class Plateau implements Cloneable{
 
 	@Override
     protected Plateau clone() throws CloneNotSupportedException {
-        return (Plateau) super.clone();
+		Plateau clonedPlat = new Plateau(this.lengthN,this.j1,this.j2);
+		clonedPlat.board = this.getBoard();
+		clonedPlat.ancienPlateau = new ArrayList<String>();
+		clonedPlat.billesRouges = this.billesRouges;
+		for (int i = 0; i<this.ancienPlateau.size(); i++) {
+			clonedPlat.ancienPlateau.add(this.ancienPlateau.get(i));
+		}
+        return clonedPlat;
     }
 }
