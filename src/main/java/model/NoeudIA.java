@@ -13,8 +13,8 @@ public class NoeudIA  {
 
     public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
         this.plateau = p;
-        this.joueurAcc=joueurAcc;
-        this.joueurAdv=joueurAdv;
+        this.joueurAcc = joueurAcc;
+        this.joueurAdv = joueurAdv;
     }
 
     public NoeudIA (NoeudIA n, Plateau p) throws CloneNotSupportedException {

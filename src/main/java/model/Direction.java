@@ -13,10 +13,10 @@ public enum Direction {
 
 	final static String[] dirName = {"NORTH","WEST","SOUTH","EAST","INVALID"};
 
-	int dirX() {
+	public int dirX() {
 		return dirX[this.ordinal()];
 	}
-	int dirY() {
+	public int dirY() {
 		return dirY[this.ordinal()];
 	}
 	

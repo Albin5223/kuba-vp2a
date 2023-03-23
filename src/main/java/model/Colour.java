@@ -10,4 +10,10 @@ public enum Colour {
 		else if (this.ordinal() == 0) return "B";
 		else return "R";
 	}
+
+	static String[] name={"NOIR","BLANC","ROUGE"};
+
+	public String getName(){
+		return name[this.ordinal()];
+	}
 }

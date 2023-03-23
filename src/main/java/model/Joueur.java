@@ -4,9 +4,11 @@ public class Joueur {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
-	public Position[] tabBilles;
+	private int n;
+	protected Position[] tabBilles;
 
 	public Joueur(Colour c, int n) {
+		this.n = n;
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.billesRougesCapturees = 0;
@@ -39,6 +41,11 @@ public class Joueur {
 
 	public int getBillesRougesCapturees() {
 		return billesRougesCapturees;
+	}
+
+	public void resetData(){
+		nBilles = 2*(n*n);
+		billesRougesCapturees=0;
 	}
 
 	public void initTabBilles (int n, Colour c) {
@@ -75,5 +82,11 @@ public class Joueur {
 		}
 
 		this.tabBilles = tab;
+	}
+
+	public void afficheTab () {
+		for (int i = 0; i<tabBilles.length; i++) {
+			System.out.println("(pos " + i + " :" + tabBilles[i].i + "," + tabBilles[i].j + ")");
+		}
 	}
 }

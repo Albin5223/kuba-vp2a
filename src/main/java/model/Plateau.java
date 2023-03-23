@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Plateau implements Cloneable{
 	private Colour[][] board;
 	private int lengthN;
-	protected int billesRouges;
-	protected ArrayList<String> ancienPlateau = new ArrayList<String>();
+	private int billesRouges;
+	private ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
 	protected Joueur j1;//j1 sera toujours les blancs parce que les blancs commencent toujours la partie
 	protected Joueur j2;//donc j2 sera toujours les noirs
@@ -33,6 +33,8 @@ public class Plateau implements Cloneable{
 		this.longueur = tmp.length;
 		this.board = tmp;
 		this.lengthN = (this.longueur+1)/4;
+
+
 	}
 
 	public int getLongueur() {
@@ -47,7 +49,7 @@ public class Plateau implements Cloneable{
 		return board[pos.i][pos.j];
 	}
 
-	public static void fillUpTo(int ligne, int debut, int fin, Colour[][] board) {
+	public void fillUpTo(int ligne, int debut, int fin) {
 		for (int i = debut;i<=fin;i++) {
 			board[ligne][i] = Colour.RED;
 		}
@@ -58,18 +60,18 @@ public class Plateau implements Cloneable{
 	}
 
 	public void initialiseBille() {
-		for(int i = 0; i<this.lengthN; i++) {
-			for (int j = 0; j<this.lengthN ;j++) {
-				this.board[i][j] = Colour.WHITE;
-				this.board[i][this.longueur-1-j] = Colour.BLACK;
-				this.board[this.longueur-1-i][this.longueur-1-j] = Colour.WHITE;
-				this.board[this.longueur-1-i][j] = Colour.BLACK;
+		for(int i = 0; i<lengthN; i++) {
+			for (int j = 0; j<lengthN ;j++) {
+				board[i][j] = Colour.WHITE;
+				board[i][longueur-1-j] = Colour.BLACK;
+				board[longueur-1-i][longueur-1-j] = Colour.WHITE;
+				board[longueur-1-i][j] = Colour.BLACK;
 			}
 		}
-		int milieu=this.longueur/2;
+		int milieu=longueur/2;
 		int l = 0;
-		for(int k = 1; k<this.longueur-1 ;k++) {
-			Plateau.fillUpTo(k, milieu-l, milieu+l,this.board);
+		for(int k = 1; k<longueur-1 ;k++) {
+			fillUpTo(k, milieu-l, milieu+l);
 			if(k >= milieu) {
 				l--;
 			}
@@ -79,7 +81,7 @@ public class Plateau implements Cloneable{
 		}
 
 		String s = this.toString();
-		this.ancienPlateau.add(s);
+		ancienPlateau.add(s);
 	}
 
 
@@ -144,6 +146,7 @@ public class Plateau implements Cloneable{
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
+
 		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
 			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
 				return State.TILEBEFORENOTEMPTY;
@@ -186,11 +189,24 @@ public class Plateau implements Cloneable{
 		return null;
 	}
 
+	public void resetAll(){
+		resetHistorique();
+		resetPlateau();
+
+	}
+
+
+	public void resetPlateau(){
+		for (int i = 0;i<longueur;i++){
+			for (int j = 0;j<longueur;j++){
+				board[i][j]=null;
+			}
+		}
+	}
+
 	public boolean configurationDejaExistante() {
 		String s = this.toString();
-		//System.out.println("Plateau courant : "+s);
 		for (String tmp : ancienPlateau) {
-			//System.out.println("Plateau existant : "+tmp);
 			if (s.equals(tmp)) {
 				return true;
 			}
