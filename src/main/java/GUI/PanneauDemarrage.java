@@ -32,6 +32,7 @@ public class PanneauDemarrage extends JPanel{
         this.setLayout(new BorderLayout());
        
         container = new JPanel();
+
         fenetre = fen;
         JlabelLettres =new JLabel[4];
         container.setOpaque(false);
@@ -45,8 +46,10 @@ public class PanneauDemarrage extends JPanel{
         
 
         play=new JLabel("Play");
-        play.setSize(100,100);
-        play.setFont(new Font("Impact",Font.PLAIN,50));
+        play.setSize(100,200);
+        play.setFont(new Font("Impact",Font.PLAIN,70));
+
+        play.setHorizontalAlignment(SwingConstants.CENTER);
         play.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -72,8 +75,11 @@ public class PanneauDemarrage extends JPanel{
 
 
         option=new JLabel("Options");
+
         option.setSize(100,100);
         option.setFont(new Font("Impact",Font.PLAIN,30));
+        option.setHorizontalAlignment(SwingConstants.CENTER);
+
         option.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -102,10 +108,15 @@ public class PanneauDemarrage extends JPanel{
 
         containerButton = new JPanel();
         containerButton.setOpaque(false);
-        containerButton.setLayout(new BorderLayout(100,200));
-        containerButton.add(play,BorderLayout.CENTER);
-        containerButton.add(option,BorderLayout.CENTER);
-        this.add(containerButton);
+        containerButton.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.insets=new Insets(0,0,60,0);
+        containerButton.add(play,gbc);
+        containerButton.add(option,gbc);
+        this.add(containerButton,BorderLayout.CENTER);
 
        
     }
