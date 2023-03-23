@@ -1,10 +1,10 @@
 package Model;
 
 public class Move {
-    public Pos pos;
+    public Position pos;
     public Direction dir;
 
-    public Move (Pos pos, Direction dir) {
+    public Move (Position pos, Direction dir) {
         this.pos=pos;
         this.dir=dir;
     }

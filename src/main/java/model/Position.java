@@ -1,16 +1,16 @@
 package Model;
 
-public class Pos {
+public class Position {
 	public int i;
 	public int j;
 
-	public Pos (int i, int j) {
+	public Position (int i, int j) {
 		this.i = i;
 		this.j = j;
 	}
 
-	public Pos goTo(Direction direction) {
-		Pos pos = new Pos(this.i,this.j);
+	public Position goTo(Direction direction) {
+		Position pos = new Position(this.i,this.j);
 		pos.i+= direction.dirX();
 		pos.j+= direction.dirY();
 		return pos;

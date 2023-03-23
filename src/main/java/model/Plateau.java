@@ -7,10 +7,10 @@ public class Plateau implements Cloneable{
 	private Colour[][] board;
 	private int lengthN;
 	protected int billesRouges;
-	private ArrayList<String> ancienPlateau = new ArrayList<String>();
+	protected ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
-	protected Joueur j1;
-	protected Joueur j2;
+	protected Joueur j1;//j1 sera toujours les blancs parce que les blancs commencent toujours la partie
+	protected Joueur j2;//donc j2 sera toujours les noirs
 
 	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -33,8 +33,6 @@ public class Plateau implements Cloneable{
 		this.longueur = tmp.length;
 		this.board = tmp;
 		this.lengthN = (this.longueur+1)/4;
-
-
 	}
 
 	public int getLongueur() {
@@ -45,7 +43,7 @@ public class Plateau implements Cloneable{
 		return this.board;
 	}
 
-	public Colour getTile(Pos pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
+	public Colour getTile(Position pos) {//en admettant bien sur que l'arguement currentMarble de pos n'est pas a jour
 		return board[pos.i][pos.j];
 	}
 
@@ -55,19 +53,23 @@ public class Plateau implements Cloneable{
 		}
 	}
 
-	public static void initialiseBille(Plateau plat) {
-		for(int i = 0; i<plat.lengthN; i++) {
-			for (int j = 0; j<plat.lengthN ;j++) {
-				plat.board[i][j] = Colour.WHITE;
-				plat.board[i][plat.longueur-1-j] = Colour.BLACK;
-				plat.board[plat.longueur-1-i][plat.longueur-1-j] = Colour.WHITE;
-				plat.board[plat.longueur-1-i][j] = Colour.BLACK;
+	public void resetHistorique(){
+		ancienPlateau.clear();
+	}
+
+	public void initialiseBille() {
+		for(int i = 0; i<this.lengthN; i++) {
+			for (int j = 0; j<this.lengthN ;j++) {
+				this.board[i][j] = Colour.WHITE;
+				this.board[i][this.longueur-1-j] = Colour.BLACK;
+				this.board[this.longueur-1-i][this.longueur-1-j] = Colour.WHITE;
+				this.board[this.longueur-1-i][j] = Colour.BLACK;
 			}
 		}
-		int milieu=plat.longueur/2;
+		int milieu=this.longueur/2;
 		int l = 0;
-		for(int k = 1; k<plat.longueur-1 ;k++) {
-			Plateau.fillUpTo(k, milieu-l, milieu+l,plat.board);
+		for(int k = 1; k<this.longueur-1 ;k++) {
+			Plateau.fillUpTo(k, milieu-l, milieu+l,this.board);
 			if(k >= milieu) {
 				l--;
 			}
@@ -76,8 +78,8 @@ public class Plateau implements Cloneable{
 			}
 		}
 
-		String s = plat.toString();
-		plat.ancienPlateau.add(s);
+		String s = this.toString();
+		this.ancienPlateau.add(s);
 	}
 
 
@@ -85,7 +87,7 @@ public class Plateau implements Cloneable{
 		return board[i][j];
 	}
 
-	public Colour getColor(Pos p){
+	public Colour getColor(Position p){
 		return board[p.getI()][p.getJ()];
 	}
 
@@ -94,7 +96,7 @@ public class Plateau implements Cloneable{
 		ancienPlateau.remove(ancienPlateau.size()-1);
 	}
 
-	private State push_rec (Pos pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
+	private State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
 		if (pos.i >= board.length || pos.j >= board.length || pos.i < 0 || pos.j < 0) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			if (colour == Colour.RED) {
 				billesRouges--;
@@ -111,7 +113,7 @@ public class Plateau implements Cloneable{
 		}
 		if (board[pos.i][pos.j] == null) {
 			board[pos.i][pos.j] = colour;
-			Pos pos2 = pos.goTo(direction.dirInverse());
+			Position pos2 = pos.goTo(direction.dirInverse());
 			for (int i = 0; i < j1.tabBilles.length; i++) {
 				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
 					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
@@ -122,7 +124,7 @@ public class Plateau implements Cloneable{
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
 			board[pos.i][pos.j] = colour;
-			Pos pos2 = pos.goTo(direction.dirInverse());
+			Position pos2 = pos.goTo(direction.dirInverse());
 			for (int i = 0; i < j1.tabBilles.length; i++) {
 				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
 					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
@@ -132,7 +134,7 @@ public class Plateau implements Cloneable{
 		return state;
 	}
 
-	public State push (Pos pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
+	public State push (Position pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
 		if (direction == Direction.INVALID) {
 			return State.WRONGDIRECTION;
 		}
