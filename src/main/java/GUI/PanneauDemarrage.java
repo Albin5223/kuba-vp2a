@@ -4,7 +4,7 @@ package GUI;
 import javax.swing.*;
 
 import Controleur.Controleur;
-import Model.*;
+import Model.Model;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -59,12 +59,13 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,true);
+                    Model m = new Model(n,false);
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.setView(v);
                     v.addCtrl(ctrl);
                 }
+                
             }
         });
         play.setVisible(false);
@@ -85,7 +86,7 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,true);
+                    Model m = new Model(n,false);
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.setView(v);

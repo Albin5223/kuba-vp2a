@@ -69,7 +69,6 @@ public class Model implements Observe<Data>,Data{
     }
 
     public void push(Position p,Direction d){
-        State state;
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
@@ -80,10 +79,10 @@ public class Model implements Observe<Data>,Data{
             }
             state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
             plat.affiche();
-            System.out.println(move.pos.i+","+move.pos.j+","+move.dir+","+state);
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+            System.out.println(state);
         }
 
         if(plat.isOver(joueurs[0],joueurs[1])==null){
