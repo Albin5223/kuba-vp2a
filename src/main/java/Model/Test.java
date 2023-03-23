@@ -1,12 +1,13 @@
 package Model;
 
+
 import Controleur.Controleur;
 import GUI.View;
 
 public class Test {
 	
 	public static void main(String[] args) {
-		
+		//----------------------TEST PLATEAU--------------------
 		//Joueur j1 = new Joueur(Colour.BLACK,3);
 		//Joueur j2 = new Joueur(Colour.WHITE,3);
 		/* 
@@ -30,11 +31,30 @@ public class Test {
 		//p.affiche();
 
 
-		Model m = new Model(7);
-		View v = new View(7);
+		//----------------------TEST GRAPHIQUE-----------------------
+		/*
+		Joueur j1 = new Joueur(Colour.WHITE,3);
+        Joueur j2 = new Joueur(Colour.BLACK,3);
+        Plateau p = new Plateau(3,j1,j2);
+        try {
+            NoeudIA ia = new NoeudIA(p,j1,j2);
+            p.initialiseBille();
+            Move move = NoeudIA.determineBestMove(p,5,j2,j1);
+            System.out.println(p.push(move.pos,move.dir,j1,j2));
+            System.out.println(move.pos.i + " " + move.pos.j);
+            System.out.println(move.dir);
+            p.affiche();
+        }
+        catch (CloneNotSupportedException e) {
+            System.out.println(e);
+        }
+		*/
+
+		int n = 1;
+		Model m = new Model(n,true);
+		View v = new View(n,null);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.setView(v);
 		v.addCtrl(ctrl);
-
 	}
 }

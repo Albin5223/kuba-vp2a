@@ -3,14 +3,16 @@ package Model;
 import java.util.ArrayList;
 
 
-public class Plateau {
+public class Plateau implements Cloneable{
 	private Colour[][] board;
 	private int lengthN;
 	private int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
 	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	protected Joueur j1;//j1 sera toujours les blancs parce que les blancs commencent toujours la partie
+	protected Joueur j2;//donc j2 sera toujours les noirs
 
-	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
+	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
 		this.lengthN = n;
 		this.board = new Colour[longueur][longueur];
@@ -20,6 +22,10 @@ public class Plateau {
 			}
 		}
 		this.billesRouges = 8*(n*n)-12*n+5;
+		this.j1 = j1;
+		this.j2 = j2;
+		this.j1.initTabBilles(n, j1.getColor());
+		this.j2.initTabBilles(n, j2.getColor());
 	}
 
 	public Plateau(String strPlateau) {
@@ -88,7 +94,8 @@ public class Plateau {
 	}
 
 	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
-		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
+		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-2));
+		ancienPlateau.remove(ancienPlateau.size()-1);
 	}
 
 	private State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
@@ -102,23 +109,34 @@ public class Plateau {
 				if (j1.getColor() == colour) {
 					return null;//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
-				j2.loseMarble();//alors on enleve une bille au joueur
+				j2.loseMarble(pos);//alors on enleve une bille au joueur
 				return State.PUSHOPPMARBLE;
 			}
 		}
 		if (board[pos.i][pos.j] == null) {
 			board[pos.i][pos.j] = colour;
+			Position pos2 = pos.goTo(direction.dirInverse());
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
+					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+				}
+			}
 			return State.SUCCESS;
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
 			board[pos.i][pos.j] = colour;
+			Position pos2 = pos.goTo(direction.dirInverse());
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
+					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+				}
+			}
 		}
 		return state;
 	}
 
 	public State push (Position pos, Direction direction, Joueur j1, Joueur j2) {//le joueur j1 pousse la bille du joueur j2
-
 		if (direction == Direction.INVALID) {
 			return State.WRONGDIRECTION;
 		}
@@ -128,11 +146,9 @@ public class Plateau {
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
-		//Mauvaise gestion 
+
 		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
 			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
-				System.out.println(pos.j+direction.dirInverse().dirX());
-				System.out.println(pos.i+direction.dirInverse().dirY());
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
@@ -153,8 +169,12 @@ public class Plateau {
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 			return State.REPEATINGBOARD;
 		}
-		if(state == State.PUSHREDMARBLE || state == State.PUSHOPPMARBLE){
-			resetHistorique();
+		if (state == State.PUSHOPPMARBLE) {
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (j1.tabBilles[i].i == pos.i && j1.tabBilles[i].j == pos.j) {
+					j1.tabBilles[i].i = -1;
+				}
+			}
 		}
 		return state;
 	}
@@ -167,6 +187,21 @@ public class Plateau {
 			return j1;
 		}
 		return null;
+	}
+
+	public void resetAll(){
+		resetHistorique();
+		resetPlateau();
+
+	}
+
+
+	public void resetPlateau(){
+		for (int i = 0;i<longueur;i++){
+			for (int j = 0;j<longueur;j++){
+				board[i][j]=null;
+			}
+		}
 	}
 
 	public boolean configurationDejaExistante() {
@@ -309,4 +344,16 @@ public class Plateau {
 			return 1 + nbChiffre(n/10);
 		}
 	}
+
+	@Override
+    protected Plateau clone() throws CloneNotSupportedException {
+		Plateau clonedPlat = new Plateau(this.lengthN,this.j1,this.j2);
+		clonedPlat.board = this.getBoard();
+		clonedPlat.ancienPlateau = new ArrayList<String>();
+		clonedPlat.billesRouges = this.billesRouges;
+		for (int i = 0; i<this.ancienPlateau.size(); i++) {
+			clonedPlat.ancienPlateau.add(this.ancienPlateau.get(i));
+		}
+        return clonedPlat;
+    }
 }
