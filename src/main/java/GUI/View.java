@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -22,6 +24,8 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
+
+	JLabel abandonner;
 
 	Image imageBackground;
 
@@ -49,9 +53,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
+			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
 			for (int i = 0;i<3;i++){
-				String s="src/ressource/Balle"+i+".png";
+				String s="ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;
@@ -105,11 +109,36 @@ public class View extends JFrame implements Observeur<Data>{
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
+		abandonner = new JLabel("Abandonner");
+		abandonner.setFont(new Font("Impact",Font.PLAIN,30));
+		abandonner.setBounds(jv2.getWidth()/2+jv2.getX(),jv2.getY()+jv2.getHeight()+20, 160, 30);
+		abandonner.setForeground(Color.GRAY);
+		abandonner.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+				View.this.dispose();
+				launcher.setVisible(true);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e){
+				View.this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				abandonner.setForeground(Color.RED);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e){
+				View.this.setCursor(Cursor.getDefaultCursor());
+				abandonner.setForeground(Color.GRAY);
+			}
+        });
+
 		this.setContentPane(conteneur);
 
 		conteneur.add(jv1);
 		conteneur.add(jv2);
 		conteneur.add(plateau);
+		conteneur.add(abandonner);
 
 	}
 
@@ -165,11 +194,13 @@ public class View extends JFrame implements Observeur<Data>{
 		Colour c = data.getVainqueur().getColor();
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
-			int time = 80;
+			int time = 200;
 			
     		public void run() {
 
-				bougerPlateau(Direction.EAST);
+				if(time<=80){
+					bougerPlateau(Direction.EAST);
+				}
 
 				if(time == 0){
 					cancel();
@@ -265,7 +296,7 @@ public class View extends JFrame implements Observeur<Data>{
 	@Override
 	public void update(Data obj) {
 		if(plateau==null){
-		start(obj);
+			start(obj);
 		}
 		else {
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {

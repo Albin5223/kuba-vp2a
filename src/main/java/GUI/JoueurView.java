@@ -35,7 +35,7 @@ public class JoueurView extends JPanel{
             default : titre.setText("Erreur");break;
         }
         try {
-			imageBackground = ImageIO.read(new File("ressource/Basic_image1.PNG"));
+			imageBackground = ImageIO.read(new File("ressource/end_screen.png"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouvé");
 			e1.printStackTrace();
