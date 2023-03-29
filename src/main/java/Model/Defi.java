@@ -1,9 +1,8 @@
 package Model;
 
 import Model.*;
-import java.util.ArrayList;
 
-public class Defi extends Model {
+public class Defi extends Plateau {
 
 	private int numero;
 	private int prog = 0;
@@ -16,11 +15,11 @@ public class Defi extends Model {
 	private Direction [][] coups ;
 
 	public Defi(int n){
+
 		super(3);
-
-        initialiseDefi(0);
-
+        initialiseDefi(n);
         numero = n;
+		this.defi = true;
 
     }
 
@@ -35,41 +34,49 @@ public class Defi extends Model {
         plateau[0][9] = Colour.BLACK;
         plateau[0][10] = Colour.BLACK;
 
-
-        plat.setBoard(plateau);
-
     }
-    public void push(Position p,Direction d){        
-    	State state2 = coupValide(p,d);
 
-        state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+	@override
+    public State push(Position p,Direction d,Joueur j1,Joueur j2){ 
+
+    	State state = coupValide(p,d);
 
     
-        if(state2 == State.SUCCESS && plat.isOver(joueurs[0],joueurs[1])==null){
-            if(State.SUCCESS == state){
-            joueurSuivant();
+        if(state == State.SUCCESS && this.isOver(j1,j2)==null){
+			state = push_rec(p,d,null,j1,j2);
             }
-        }
         
-        noticeObserveurs(this);
+        return state;
     }
 
     public State coupValide (Position position, Direction direction){
 
-    	if(position.i == solpos[prog].i && position.j == solpos[prog].j && direction == solcoups[progression]){
-    			pos[prog] = position;
-    			coups[prog] = direction;
+    	if(position.i == solpos[numero][prog].i && position.j == solpos[numero][prog].j && direction == solcoups[numero][prog]){
+    			pos[numero][prog] = position;
+    			coups[numero][prog] = direction;
     			prog++;
-    			if (prog = solpos.length()){
-    				partieFinie = true;
-    			}
     			return State.SUCCESS;
     	}
-    	else {
-    		return State.WRONGDIRECTION;
-    	}
 
-
+		if (direction == Direction.INVALID) {
+			return State.WRONGDIRECTION;
+		}
+		if (board[position.i][position.j] ==  null) {
+			return State.EMPTYTILE;
+		}
+		if ( Colour.WHITE != board[position.i][position.j]) {
+			return State.MARBLEOWNERSHIPERROR;
+		}
+		//Mauvaise gestion 
+		if (position.j+direction.dirInverse().dirY() != -1 && position.j+direction.dirInverse().dirY() != this.longueur && position.i+direction.dirInverse().dirX() != -1 && position.i+direction.dirInverse().dirX() != this.longueur) {
+			if (this.board[position.i+direction.dirInverse().dirX()][position.j+direction.dirInverse().dirY()] != null) {
+				System.out.println(position.j+direction.dirInverse().dirX());
+				System.out.println(position.i+direction.dirInverse().dirY());
+				return State.TILEBEFORENOTEMPTY;
+			}
+		}
+    
+    	return State.WRONGDIRECTION;
     }
 	
 
