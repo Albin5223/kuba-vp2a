@@ -22,7 +22,7 @@ public class PanneauDemarrage extends JPanel{
     Menu menu;
 
     JLabel play;
-    JLabel option;
+    JCheckBox isIA;
 
     boolean menuActivated;
 
@@ -43,7 +43,14 @@ public class PanneauDemarrage extends JPanel{
             container.add(JlabelLettres[i]);
         }
         menu = new Menu();
-        
+        isIA=new JCheckBox("IA");
+
+        isIA.setSize(100,100);
+        isIA.setFont(new Font("Impact",Font.PLAIN,30));
+        isIA.setHorizontalAlignment(SwingConstants.CENTER);
+
+       
+        isIA.setVisible(false);
 
         play=new JLabel("Play");
         play.setSize(100,200);
@@ -58,11 +65,12 @@ public class PanneauDemarrage extends JPanel{
                     container.add(menu);
                     fenetre.revalidate();
                     menuActivated=!menuActivated;
+                    isIA.setVisible(true);
                 }
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,false);
+                    Model m = new Model(n,isIA.hasFocus());
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.setView(v);
@@ -72,36 +80,6 @@ public class PanneauDemarrage extends JPanel{
             }
         });
         play.setVisible(false);
-
-
-        option=new JLabel("Options");
-
-        option.setSize(100,100);
-        option.setFont(new Font("Impact",Font.PLAIN,30));
-        option.setHorizontalAlignment(SwingConstants.CENTER);
-
-        option.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(!menuActivated){
-                    container.removeAll();
-                    container.add(menu);
-                    fenetre.revalidate();
-                    menuActivated=!menuActivated;
-                }
-                else{
-                    fenetre.setVisible(false);
-                    int n = menu.getN();
-                    Model m = new Model(n,false);
-                    View v = new View(n,fenetre);
-                    Controleur ctrl= new Controleur(m,v.getTaille_case());
-                    m.setView(v);
-                    v.addCtrl(ctrl);
-                }
-                
-            }
-        });
-        option.setVisible(false);
 
 
         this.add(container,BorderLayout.NORTH);
@@ -115,7 +93,7 @@ public class PanneauDemarrage extends JPanel{
         gbc.fill=GridBagConstraints.HORIZONTAL;
         gbc.insets=new Insets(0,0,60,0);
         containerButton.add(play,gbc);
-        containerButton.add(option,gbc);
+        containerButton.add(isIA,gbc);
         this.add(containerButton,BorderLayout.CENTER);
 
        
@@ -137,7 +115,6 @@ public class PanneauDemarrage extends JPanel{
                 if(time == -6){
 					cancel();
                     play.setVisible(true);
-                    option.setVisible(true);
                     fenetre.repaint();	
 				}
 				

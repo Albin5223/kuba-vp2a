@@ -10,11 +10,8 @@ import javax.swing.*;
 
 public class Menu extends JPanel {
     JLabel taille;
-    JButton launch;
-
     JPanel container;
     JPanel containerButton;
-    JPanel containerText;
 
     JLabel[] fleches;
     int n;
@@ -24,8 +21,6 @@ public class Menu extends JPanel {
     
     
     public Menu() {
-        containerText = new JPanel();
-        containerText.setOpaque(false);
         container = new JPanel();
         container.setLayout(new GridLayout(1,2));
         container.setOpaque(false);
@@ -75,7 +70,6 @@ public class Menu extends JPanel {
 
 
 
-        container.add(containerText);
         container.add(containerButton);
         this.add(container);
 

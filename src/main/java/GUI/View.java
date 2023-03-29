@@ -18,14 +18,15 @@ public class View extends JFrame implements Observeur<Data>{
     
 	int longueur;
 	int n;
+	boolean isOver;
+	boolean isReloading;
 	int taille_case;
 	JPanel plateau;
 	JPanel conteneur;
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
-
-	JLabel abandonner;
+	OptionView optView;
 
 	Image imageBackground;
 
@@ -80,7 +81,27 @@ public class View extends JFrame implements Observeur<Data>{
 		conteneur.setLayout(null);
     }
 
+	public void deployerPanneau(boolean ouverture){
+		Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			int time = 26;
+			public void run() {
+				if(ouverture){
+					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
+				}
+				else{
+					optView.setBounds(optView.getX()+10,optView.getY(), optView.getWidth(), optView.getHeight());
+				}
+				
 
+				if(time == 0){
+					cancel();
+					
+				}
+				time--;
+			}
+		},0,10);
+	}
 
 	public void start(Data obj){
 		plateau = new JPanel(){
@@ -109,37 +130,54 @@ public class View extends JFrame implements Observeur<Data>{
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
-		abandonner = new JLabel("Abandonner");
-		abandonner.setFont(new Font("Impact",Font.PLAIN,30));
-		abandonner.setBounds(jv2.getWidth()/2+jv2.getX(),jv2.getY()+jv2.getHeight()+20, 160, 30);
-		abandonner.setForeground(Color.GRAY);
-		abandonner.addMouseListener(new MouseAdapter() {
+		
+
+		optView = new OptionView(this,launcher);
+		optView.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-300,50, 300,200);
+		deployerPanneau(false);
+
+		optView.getReplayLabel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-				View.this.dispose();
-				launcher.setVisible(true);
-			}
+				if(!isOver && !isReloading){
+					isReloading = true;
+					Timer vibe = new Timer();
+					vibe.schedule(new TimerTask() {
+					int time = 80;
+    				public void run() {
+
+						View.this.bougerPlateau(Direction.EAST);
+
+						if(time == 0){
+							cancel();
+							View.this.rejouerJeu(obj);
+						}
+						time--;
+    				}
+				},0,10);
+				}
+            }
 
 			@Override
 			public void mouseEntered(MouseEvent e){
 				View.this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				abandonner.setForeground(Color.RED);
+				optView.getReplayLabel().setForeground(Color.RED);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e){
 				View.this.setCursor(Cursor.getDefaultCursor());
-				abandonner.setForeground(Color.GRAY);
+				optView.getReplayLabel().setForeground(Color.GRAY);
 			}
         });
+
 
 		this.setContentPane(conteneur);
 
 		conteneur.add(jv1);
 		conteneur.add(jv2);
 		conteneur.add(plateau);
-		conteneur.add(abandonner);
-
+		conteneur.add(optView);
 	}
 
 	public void addCtrl(Controleur ctrl){
@@ -231,8 +269,9 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 
 
+
 	public void rejouerJeu(Data obj){
-		
+		isOver=false;
 		obj.reset();
 		jv1.resetData();
 		jv2.resetData();
@@ -245,11 +284,13 @@ public class View extends JFrame implements Observeur<Data>{
 				bougerPlateau(Direction.WEST);
 
 				if(time == 0){
-					cancel();	
+					cancel();
+					isReloading = false;
 				}
 				time--;
     		}
 		},0,10);
+		
 	}
 
 
@@ -318,6 +359,7 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 			this.repaint();
 			if(obj.getVainqueur()!=null){
+				isOver=true;
 				plateauMove(obj);
 			}
 		}
