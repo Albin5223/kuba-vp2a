@@ -34,7 +34,7 @@ public class PanneauFinDeJeu extends JPanel{
     @Override
     public void paintComponent(Graphics g){
         try{
-            background = ImageIO.read(new File("src/ressource/end_screen.png"));
+            background = ImageIO.read(new File("ressource/end_screen.png"));
         }
         catch(Exception e){
             System.out.println("Image fond Panneau de Fin non trouve");

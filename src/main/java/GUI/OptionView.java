@@ -37,7 +37,7 @@ public class OptionView extends JPanel {
 		this.setOpaque(false);
 		Image iconImage;
 		try {
-			iconImage = ImageIO.read(new File("src/ressource/iconDerouler.png"));
+			iconImage = ImageIO.read(new File("ressource/iconDerouler.png"));
 			icWidth = iconImage.getWidth(this)/3;
 			icHeight = iconImage.getHeight(this)/3;
 			iconImage = iconImage.getScaledInstance(icWidth, icHeight, Image.SCALE_FAST);

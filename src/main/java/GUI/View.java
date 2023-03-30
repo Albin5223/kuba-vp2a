@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
-import javax.swing.border.EmptyBorder;
 
 import Controleur.Controleur;
 import Model.*;
@@ -55,9 +54,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
+			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
 			for (int i = 0;i<3;i++){
-				String s="src/ressource/Balle"+i+".png";
+				String s="ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;
@@ -78,7 +77,6 @@ public class View extends JFrame implements Observeur<Data>{
 				
 			}
 		};
-
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
     }
@@ -130,10 +128,9 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 			}
 		};
-		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2+100,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
-
+		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
 		jv1 = new JoueurView(Colour.WHITE);
-		int taille_Jv = plateau.getX()-40;
+		int taille_Jv = plateau.getX()-20;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();

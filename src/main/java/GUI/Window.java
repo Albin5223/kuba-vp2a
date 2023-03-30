@@ -14,7 +14,7 @@ public class Window extends JFrame {
         pd = new PanneauDemarrage(this);
         this.setSize(1020,600);
         this.setVisible(true);
-        this.content=new JLabel(new ImageIcon("src/ressource/ezgif.com-gif-maker.gif"));
+        this.content=new JLabel(new ImageIcon("ressource/ezgif.com-gif-maker.gif"));
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(content);
