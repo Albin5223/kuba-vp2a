@@ -82,13 +82,17 @@ public class View extends JFrame implements Observeur<Data>{
     }
 
 	public void deployerPanneau(boolean ouverture){
+		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+
+		int taskBarWidth = scrnSize.width - winSize.width;
 		Timer vibe = new Timer();
 		if(ouverture){
 			optView.visibility(true);
 		}
-		System.out.println((optView.getWidth()-optView.icWidth)/10);
+		System.out.println(27-taskBarWidth/10);
 		vibe.schedule(new TimerTask() {
-			int time = (optView.getWidth()-optView.icWidth)/11;
+			int time = 27-taskBarWidth/10;
 			public void run() {
 				if(ouverture){
 					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
