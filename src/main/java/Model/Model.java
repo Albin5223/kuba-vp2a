@@ -13,17 +13,24 @@ public class Model implements Observe<Data>,Data{
     State state;
     LinkedList<Observeur<Data>> observeurs;
     boolean isIA;
+    boolean estDefi;
 
-    public Model(int n, boolean b){
+    public Model(int n, boolean b,boolean x){
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
         Joueur j1 = new Joueur(Colour.WHITE,n);
         Joueur j2 = new Joueur(Colour.BLACK,n);
-        plat = new Plateau(n,j1,j2);
+        if(x){
+            plat = new Defi(n,j1,j2);
+        }
+        else{
+            plat = new Plateau(n,j1,j2);
+        }
         state=State.SUCCESS;
         joueurs[0] = j1;
         joueurs[1] = j2;
         this.n = n;
+        this.estDefi = x;
         this.isIA = b;
     }
 
@@ -76,10 +83,9 @@ public class Model implements Observe<Data>,Data{
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-            System.out.println(state);
         }
 
-        if(plat.isOver(joueurs[0],joueurs[1])==null){
+        if(plat.isOver(joueurs[0],joueurs[1])==null ){
             if(State.SUCCESS == state){
                 joueurSuivant();
             }

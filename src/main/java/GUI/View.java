@@ -65,11 +65,11 @@ public class View extends JFrame implements Observeur<Data>{
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;
 			}
-
-		} catch (IOException e1) {
-			System.out.println("Image non trouvé");
-			e1.printStackTrace();
+		}catch (IOException e) {
+			System.out.println("Image des billes non touve");
 		}
+
+
 
 		imageBackgroundScale=imageBackground.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_FAST);
 
@@ -347,6 +347,7 @@ public class View extends JFrame implements Observeur<Data>{
 	public int getTaille_case(){
 		return taille_case;
 	}
+
 	@Override
 	public void update(Data obj) {
 		if(plateau==null){
@@ -378,4 +379,7 @@ public class View extends JFrame implements Observeur<Data>{
 		}
 		
 	}
+
 }
+
+

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Plateau implements Cloneable{
-	private Colour[][] board;
+	protected Colour[][] board;
 	private int lengthN;
 	private int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
-	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	protected int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
 	protected Joueur j1;//j1 sera toujours les blancs parce que les blancs commencent toujours la partie
 	protected Joueur j2;//donc j2 sera toujours les noirs
 	public LinkedList<Position> lastMarblesPushed = new LinkedList<Position>();//pour simplifier la fonction push, undoLastMove et l'IA
-
+	public boolean defi = false;
 
 	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -30,13 +30,16 @@ public class Plateau implements Cloneable{
 		this.j2.initTabBilles(n, j2.getColor());
 	}
 
+
 	public Plateau(String strPlateau) {
 		Colour[][] tmp = stringToList(strPlateau);
 		this.longueur = tmp.length;
 		this.board = tmp;
 		this.lengthN = (this.longueur+1)/4;
+	}
 
-
+	public void setBoard( Colour [][] tab){
+		this.board = tab;
 	}
 
 	public int getLongueur() {
@@ -144,7 +147,7 @@ public class Plateau implements Cloneable{
 		}
 	}
 
-	private State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
+	protected State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
 		if (!this.isInBoard(pos)) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			this.lastMarblesPushed.add(pos.goTo(direction.dirInverse()));
 			if (colour == Colour.RED) {
