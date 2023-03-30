@@ -26,6 +26,10 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
+	//Doublon d'information
+	//Ici le currentJoueur doit être gérer par le Model
+	//Utiliser obj.getJoueur()
+	//Plus tard simplifier jv1 et jv2 en un seul tableau
 	OptionView optView;
 
 	Image imageBackground;

@@ -68,6 +68,7 @@ public class Controleur extends MouseAdapter{
 			
 		move(p1,p2);
     	resetPosition();
+		//Ici il faut gérer si le deuxième joueur est une IA.
     }
 
 	@Override
