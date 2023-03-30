@@ -54,9 +54,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
+			imageBackground = ImageIO.read(new File("src/ressource/background.jpg"));
 			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
+				String s="src/ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;
@@ -83,8 +83,12 @@ public class View extends JFrame implements Observeur<Data>{
 
 	public void deployerPanneau(boolean ouverture){
 		Timer vibe = new Timer();
+		if(ouverture){
+			optView.visibility(true);
+		}
+		System.out.println((optView.getWidth()-optView.icWidth)/10);
 		vibe.schedule(new TimerTask() {
-			int time = 26;
+			int time = (optView.getWidth()-optView.icWidth)/11;
 			public void run() {
 				if(ouverture){
 					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
@@ -101,6 +105,7 @@ public class View extends JFrame implements Observeur<Data>{
 				time--;
 			}
 		},0,10);
+		if(!ouverture) optView.visibility(false);
 	}
 
 	public void start(Data obj){
