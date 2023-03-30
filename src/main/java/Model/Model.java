@@ -6,23 +6,31 @@ import java.util.LinkedList;
 
 
 public class Model implements Observe<Data>,Data{
-    Plateau plat;
-    Joueur[] joueurs;
-    int joueurCurrent = 0; //L'entier indique le joueur courant
-    boolean partieFinie;
-    int n;
-    State state;
-    LinkedList<Observeur<Data>> observeurs;
-    public Model(int n){
+    public Plateau plat;
+    public Joueur[] joueurs;
+    public int joueurCurrent = 0; //L'entier indique le joueur courant
+    public boolean partieFinie;
+    public int n;
+    public State state;
+    public LinkedList<Observeur<Data>> observeurs;
+    private boolean estDefi ;
+
+
+    public Model(int n, boolean x){
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
-        plat = new Plateau(n);
+        estDefi = x;
+
+        if (x)  plat = new Defi(n);
+        else plat = new Plateau(n);
+
         Joueur j1 = new Joueur(Colour.WHITE,n);
         Joueur j2 = new Joueur(Colour.BLACK,n);
         state=State.SUCCESS;
         joueurs[0] = j1;
         joueurs[1] = j2;
         this.n = n;
+        
     }
 
     public void initialiseBille(){
@@ -33,6 +41,11 @@ public class Model implements Observe<Data>,Data{
     public void setView(View v){
         addObserveur(v);
         plat.initialiseBille();
+        noticeObserveurs(this);
+    }
+
+    public void setView2(View v){
+        addObserveur(v);
         noticeObserveurs(this);
     }
 

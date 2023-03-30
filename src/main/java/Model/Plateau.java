@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 
 public class Plateau implements Cloneable{
-	private Colour[][] board;
+	protected Colour[][] board;
 	private int lengthN;
 	private int billesRouges;
 	private ArrayList<String> ancienPlateau = new ArrayList<String>();
-	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	protected int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	public boolean defi = false;
 
 	public Plateau(int n) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -27,8 +28,10 @@ public class Plateau implements Cloneable{
 		this.longueur = tmp.length;
 		this.board = tmp;
 		this.lengthN = (this.longueur+1)/4;
+	}
 
-
+	public void setBoard( Colour [][] tab){
+		this.board = tab;
 	}
 
 	public int getLongueur() {
@@ -91,7 +94,7 @@ public class Plateau implements Cloneable{
 		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-1));
 	}
 
-	private State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
+	protected State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
 		if (pos.i >= board.length || pos.j >= board.length || pos.i < 0 || pos.j < 0) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			if (colour == Colour.RED) {
 				billesRouges--;

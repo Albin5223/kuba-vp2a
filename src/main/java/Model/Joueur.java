@@ -1,4 +1,4 @@
-package Model;
+             package Model;
 
 public class Joueur {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
@@ -9,6 +9,7 @@ public class Joueur {
 
 	public Joueur(Colour c, int n) {
 		this.n = n;
+
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.billesRougesCapturees = 0;
