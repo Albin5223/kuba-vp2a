@@ -90,9 +90,8 @@ public class View extends JFrame implements Observeur<Data>{
 		if(ouverture){
 			optView.visibility(true);
 		}
-		System.out.println(27-taskBarWidth/10);
 		vibe.schedule(new TimerTask() {
-			int time = 27-taskBarWidth/10;
+			int time = 27-taskBarWidth/9;
 			public void run() {
 				if(ouverture){
 					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
@@ -110,6 +109,7 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 		},0,10);
 		if(!ouverture) optView.visibility(false);
+		optView.repaint();
 	}
 
 	public void start(Data obj){

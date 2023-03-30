@@ -53,7 +53,7 @@ public class Menu extends JPanel {
                 if(n==10){
                     n=0;
                 }
-                n+=1;
+                n-=1;
                 taille.setText(n+"");
                 container.repaint();
                 
@@ -66,7 +66,7 @@ public class Menu extends JPanel {
                 if (n==1){
                     n=11;
                 }
-                n-=1;
+                n+=1;
                 taille.setText(n+"");
                 container.repaint();   
             }

@@ -1,11 +1,7 @@
 package GUI;
 
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -36,9 +32,9 @@ public class OptionView extends JPanel {
     public OptionView(View view, JFrame launcher){
         this.setLayout(null);
 		this.setOpaque(true);
-		this.setBorder(new MyBorder());
         this.view = view;
         this.launcher = launcher;
+		this.setOpaque(false);
 		Image iconImage;
 		try {
 			iconImage = ImageIO.read(new File("src/ressource/iconDerouler.png"));
@@ -58,7 +54,7 @@ public class OptionView extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 view.deployerPanneau(deployer);
 				deployer = !deployer;
-				OptionView.this.setOpaque(deployer);
+				//OptionView.this.setOpaque(deployer);
 				
             }
 		});
@@ -112,6 +108,23 @@ public class OptionView extends JPanel {
 
 	public JLabel getReplayLabel(){
 		return replay;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Dimension arcs = new Dimension(15,15);
+		int width = getWidth();
+		int height = getHeight();
+		Graphics2D graphics = (Graphics2D) g;
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+		//Draws the rounded opaque panel with borders.
+		graphics.setColor(getBackground());
+		graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);//paint background
+		graphics.setColor(getForeground());
+		graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);//paint border
 	}
 
 	public void visibility(boolean b){
