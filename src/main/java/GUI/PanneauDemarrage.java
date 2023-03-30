@@ -73,7 +73,9 @@ public class PanneauDemarrage extends JPanel{
                     Model m = new Model(n,isIA.hasFocus());
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
-                    m.setView(v);
+                    m.addObserveur(v);
+                    m.getPlateau().initialiseBille();
+                    m.noticeObserveurs(m);
                     v.addCtrl(ctrl);
                 }
                 

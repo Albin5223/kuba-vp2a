@@ -32,11 +32,6 @@ public class Model implements Observe<Data>,Data{
         plat.initialiseBille();
     }
 
-    public void setView(View v){
-        addObserveur(v);
-        plat.initialiseBille();
-        noticeObserveurs(this);
-    }
 
     public int getN(){
         return n;

@@ -54,7 +54,6 @@ public class Test {
 		Model m = new Model(n,true);
 		View v = new View(n,null);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
-		m.setView(v);
 		v.addCtrl(ctrl);
 	}
 }

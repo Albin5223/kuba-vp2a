@@ -50,21 +50,21 @@ public class Menu extends JPanel {
         fleches[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(n==10){
-                    n=0;
+                if (n==1){
+                    n=11;
                 }
                 n-=1;
                 taille.setText(n+"");
                 container.repaint();
-                
+
             }
         });
 
         fleches[1].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (n==1){
-                    n=11;
+                if(n==10){
+                    n=0;
                 }
                 n+=1;
                 taille.setText(n+"");

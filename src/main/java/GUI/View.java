@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
+import javax.swing.border.EmptyBorder;
 
 import Controleur.Controleur;
 import Model.*;
@@ -77,6 +78,7 @@ public class View extends JFrame implements Observeur<Data>{
 				
 			}
 		};
+
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
     }
@@ -128,9 +130,10 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 			}
 		};
-		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
+		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2+100,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
+
 		jv1 = new JoueurView(Colour.WHITE);
-		int taille_Jv = plateau.getX()-20;
+		int taille_Jv = plateau.getX()-40;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();
