@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+<<<<<<< src/main/java/Model/Plateau.java
 public class Plateau implements Cloneable{
 	protected Colour[][] board;
 	private int lengthN;
@@ -13,6 +14,17 @@ public class Plateau implements Cloneable{
 	protected Joueur j2;//donc j2 sera toujours les noirs
 	public LinkedList<Position> lastMarblesPushed = new LinkedList<Position>();//pour simplifier la fonction push, undoLastMove et l'IA
 	public boolean defi = false;
+=======
+
+public class Plateau implements Cloneable{
+	private Colour[][] board;
+	private int lengthN;
+	private int billesRouges;
+	private ArrayList<String> ancienPlateau = new ArrayList<String>();
+	private int longueur;//la longueur du plateau qui est stocke pour ne plus avoir a la calculer par la suite
+	protected Joueur j1;//j1 sera toujours les blancs parce que les blancs commencent toujours la partie
+	protected Joueur j2;//donc j2 sera toujours les noirs
+>>>>>>> src/main/java/Model/Plateau.java
 
 	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -102,6 +114,7 @@ public class Plateau implements Cloneable{
 	public void undoLastMove() {//uniquement pour l'IA qui doit calculer toutes les probalités
 		this.board = Plateau.stringToList(ancienPlateau.get(ancienPlateau.size()-2));
 		ancienPlateau.remove(ancienPlateau.size()-1);
+<<<<<<< src/main/java/Model/Plateau.java
 	}
 
 	public void undoLastMove(Direction direction, State s, Joueur j1, Joueur j2) {//uniquement pour l'IA qui doit calculer toutes les probalités
@@ -145,6 +158,8 @@ public class Plateau implements Cloneable{
 				j2.tabBilles[i] = j2.tabBilles[i].goTo(direction);
 			}
 		}
+=======
+>>>>>>> src/main/java/Model/Plateau.java
 	}
 
 	protected State push_rec (Position pos, Direction direction, Colour colour, Joueur j1, Joueur j2) {
@@ -166,14 +181,32 @@ public class Plateau implements Cloneable{
 		}
 		if (board[pos.i][pos.j] == null) {
 			board[pos.i][pos.j] = colour;
+<<<<<<< src/main/java/Model/Plateau.java
 			this.lastMarblesPushed.add(pos);
 			updateTabBilles(pos, direction, j1, j2);
+=======
+			Position pos2 = pos.goTo(direction.dirInverse());
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
+					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+				}
+			}
+>>>>>>> src/main/java/Model/Plateau.java
 			return State.SUCCESS;
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
 			board[pos.i][pos.j] = colour;
+<<<<<<< src/main/java/Model/Plateau.java
 			updateTabBilles(pos, direction, j1, j2);
+=======
+			Position pos2 = pos.goTo(direction.dirInverse());
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
+					j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+				}
+			}
+>>>>>>> src/main/java/Model/Plateau.java
 		}
 		return state;
 	}
@@ -188,7 +221,12 @@ public class Plateau implements Cloneable{
 		if (j1.getColor() != board[pos.i][pos.j]) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
+<<<<<<< src/main/java/Model/Plateau.java
 		if (this.isInBoard(pos.goTo(direction.dirInverse()))) {
+=======
+
+		if (pos.j+direction.dirInverse().dirY() != -1 && pos.j+direction.dirInverse().dirY() != this.longueur && pos.i+direction.dirInverse().dirX() != -1 && pos.i+direction.dirInverse().dirX() != this.longueur) {
+>>>>>>> src/main/java/Model/Plateau.java
 			if (this.board[pos.i+direction.dirInverse().dirX()][pos.j+direction.dirInverse().dirY()] != null) {
 				return State.TILEBEFORENOTEMPTY;
 			}
@@ -201,6 +239,16 @@ public class Plateau implements Cloneable{
 			undoLastMove(direction, state, j1, j2);
 			return State.REPEATINGBOARD;
 		}
+<<<<<<< src/main/java/Model/Plateau.java
+=======
+		if (state == State.PUSHOPPMARBLE) {
+			for (int i = 0; i < j1.tabBilles.length; i++) {
+				if (j1.tabBilles[i].i == pos.i && j1.tabBilles[i].j == pos.j) {
+					j1.tabBilles[i].i = -1;
+				}
+			}
+		}
+>>>>>>> src/main/java/Model/Plateau.java
 		return state;
 	}
 
@@ -217,6 +265,10 @@ public class Plateau implements Cloneable{
 	public void resetAll(){
 		resetHistorique();
 		resetPlateau();
+<<<<<<< src/main/java/Model/Plateau.java
+=======
+
+>>>>>>> src/main/java/Model/Plateau.java
 	}
 
 
