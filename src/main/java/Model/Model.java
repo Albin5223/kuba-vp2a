@@ -1,6 +1,5 @@
 package Model;
 
-import GUI.View;
 
 import java.util.LinkedList;
 
@@ -67,7 +66,7 @@ public class Model implements Observe<Data>,Data{
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat, 3, getOtherPlayer(), getCurrentPlayer());
+                move = NoeudIA.determineBestMove(plat, 5, getOtherPlayer(), getCurrentPlayer());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;

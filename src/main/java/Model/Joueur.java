@@ -39,6 +39,10 @@ public class Joueur {
 		this.billesRougesCapturees ++;
 	}
 
+	public void undoWinRedMarble() {
+		this.billesRougesCapturees ++;
+	}
+
 	public int getBillesRougesCapturees() {
 		return billesRougesCapturees;
 	}
@@ -90,3 +94,4 @@ public class Joueur {
 		}
 	}
 }
+

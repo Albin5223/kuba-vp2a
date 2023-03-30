@@ -1,7 +1,9 @@
 package GUI;
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -12,7 +14,6 @@ public class Menu extends JPanel {
     JLabel selection;
     JLabel taille;
     JPanel container;
-    JPanel containerButton;
 
     JLabel[] fleches;
     int n;
@@ -43,13 +44,11 @@ public class Menu extends JPanel {
         container.add(taille);
         container.add(fleches[1]);
 
-
-
-
-
+        
         fleches[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                
                 if (n==1){
                     n=11;
                 }

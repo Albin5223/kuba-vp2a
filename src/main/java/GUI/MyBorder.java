@@ -21,7 +21,6 @@ public class MyBorder implements Border{
 
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
         g.setColor(Color.BLACK);//ou une autre couleur que tu peux rendre paramétrable
-        int arc = 25;//tu peux aussi le rendre configurable
         int adjustXY = 0;//pour ajuster le dessin en x et y
         int adjustWH = 1;//idem pour width et height
         //pour eviter les escalier sur l'arrondi
