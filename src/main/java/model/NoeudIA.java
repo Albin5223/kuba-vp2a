@@ -12,13 +12,13 @@ public class NoeudIA  {
     protected LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
 
     public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        this.plateau = p;
+        this.plateau = p.clone();
         this.joueurAcc = joueurAcc;
         this.joueurAdv = joueurAdv;
     }
 
-    public NoeudIA (NoeudIA n, Plateau p) throws CloneNotSupportedException {
-        plateau = n.plateau.clone();
+    public NoeudIA (NoeudIA n) throws CloneNotSupportedException {
+        plateau = n.plateau;
         joueurAcc = n.joueurAdv;//on fait jouer l'adversaire
         joueurAdv = n.joueurAcc;
     }
@@ -31,20 +31,33 @@ public class NoeudIA  {
         for (int i = 0; i < joueurAdv.tabBilles.length ; i++) {
             for (int j = 0; j < 4; j++) {
                 Direction dir = Direction.values()[j];
-                if (this.plateau.isOver(joueurAcc,joueurAdv) != null) {
-                    return;
-                }
-                if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],dir,joueurAdv,joueurAcc))) {
-                    NoeudIA newNode = new NoeudIA(this,this.plateau);
-                    newNode.value=newNode.rateValue();
-                    newNode.dir=dir;
-                    newNode.pos=joueurAdv.tabBilles[i];
+                Position pos = joueurAdv.tabBilles[i];
+                State state = plateau.push(pos,dir,joueurAdv,joueurAcc);
+                Joueur isOver = this.plateau.isOver(joueurAdv,joueurAcc);
+                if (isOver != null) {
+                    NoeudIA newNode = new NoeudIA(this);
+                    if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
+                        newNode.value = 999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
+                    }
+                    else {
+                        newNode.value = -999999999;//puisque l'IA a perdu c'est forcement le pire coup
+                    }
+                    newNode.dir = dir;
+                    newNode.pos = pos;
                     fils.add(newNode);
-                    plateau.undoLastMove();
+                }
+                else if (pos.i != -1 && validState(state)) {
+                    NoeudIA newNode = new NoeudIA(this);
+                    newNode.value=newNode.rateValue();
+                    newNode.dir = dir;
+                    newNode.pos = pos;
+                    this.fils.add(newNode);
+                    plateau.undoLastMove(dir,state,joueurAdv,joueurAcc);
                 }
             }
         }
     }
+
 
     public static Move determineBestMove (Plateau p, int depth, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
         NoeudIA arbre = createTree(p, depth, joueurAcc, joueurAdv);

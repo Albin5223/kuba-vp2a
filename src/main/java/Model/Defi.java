@@ -12,9 +12,9 @@ public class Defi extends Plateau {
 	private Position [][] pos =  {{null,null,null}};
 	private Direction [][] coups = {{null,null,null}} ;
 
-	public Defi(int n){
+	public Defi(int n,Joueur j1, Joueur j2){
 		
-		super(3);
+		super(3,j1,j2);
         initialiseDefi(n);
         numero = n;
 		this.defi = true;

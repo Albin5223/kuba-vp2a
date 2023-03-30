@@ -1,4 +1,4 @@
-             package Model;
+package Model;
 
 public class Joueur {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
@@ -9,13 +9,17 @@ public class Joueur {
 
 	public Joueur(Colour c, int n) {
 		this.n = n;
-
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.billesRougesCapturees = 0;
 	}
 
-	public void loseMarble() {
+	public void loseMarble(Position pos) {
+		for (int i = 0; i < tabBilles.length; i++) {
+			if (tabBilles[i].i == pos.i && tabBilles[i].j == pos.j) {
+				tabBilles[i].i = -1;
+			}
+		}
 		nBilles --;
 	}
 
@@ -32,6 +36,10 @@ public class Joueur {
 	}
 
 	public void winRedMarble() {
+		this.billesRougesCapturees ++;
+	}
+
+	public void undoWinRedMarble() {
 		this.billesRougesCapturees ++;
 	}
 
@@ -86,3 +94,4 @@ public class Joueur {
 		}
 	}
 }
+

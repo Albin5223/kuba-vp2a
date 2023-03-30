@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -16,24 +18,34 @@ public class View extends JFrame implements Observeur<Data>{
     
 	int longueur;
 	int n;
+	boolean isOver;
+	boolean isReloading;
 	int taille_case;
 	JPanel plateau;
 	JPanel conteneur;
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
+	//Doublon d'information
+	//Ici le currentJoueur doit être gérer par le Model
+	//Utiliser obj.getJoueur()
+	//Plus tard simplifier jv1 et jv2 en un seul tableau
+	OptionView optView;
 
 	Image imageBackground;
 
-
+	JFrame launcher;
 
 	Image[] banqueMarblImages;
 	Image imageBackgroundScale;
-    public View(int nb) {
-
+    public View(int nb,JFrame l) {
+		launcher = l;
+		this.setTitle("Plateau KUBA");
 		banqueMarblImages = new Image[3];
 
-    	this.setVisible(true);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
+		this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
@@ -73,7 +85,36 @@ public class View extends JFrame implements Observeur<Data>{
 		conteneur.setLayout(null);
     }
 
+	public void deployerPanneau(boolean ouverture){
+		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
+		int taskBarWidth = scrnSize.width - winSize.width;
+		Timer vibe = new Timer();
+		if(ouverture){
+			optView.visibility(true);
+		}
+		vibe.schedule(new TimerTask() {
+			int time = 27-taskBarWidth/9;
+			public void run() {
+				if(ouverture){
+					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
+				}
+				else{
+					optView.setBounds(optView.getX()+10,optView.getY(), optView.getWidth(), optView.getHeight());
+				}
+				
+
+				if(time == 0){
+					cancel();
+					
+				}
+				time--;
+			}
+		},0,10);
+		if(!ouverture) optView.visibility(false);
+		optView.repaint();
+	}
 
 	public void start(Data obj){
 		plateau = new JPanel(){
@@ -102,12 +143,54 @@ public class View extends JFrame implements Observeur<Data>{
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
+		
+
+		optView = new OptionView(this,launcher);
+		optView.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-300,50, 300,200);
+		deployerPanneau(false);
+
+		optView.getReplayLabel().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+				if(!isOver && !isReloading){
+					isReloading = true;
+					Timer vibe = new Timer();
+					vibe.schedule(new TimerTask() {
+					int time = 80;
+    				public void run() {
+
+						View.this.bougerPlateau(Direction.EAST);
+
+						if(time == 0){
+							cancel();
+							View.this.rejouerJeu(obj);
+						}
+						time--;
+    				}
+				},0,10);
+				}
+            }
+
+			@Override
+			public void mouseEntered(MouseEvent e){
+				View.this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				optView.getReplayLabel().setForeground(Color.RED);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e){
+				View.this.setCursor(Cursor.getDefaultCursor());
+				optView.getReplayLabel().setForeground(Color.GRAY);
+			}
+        });
+
+
 		this.setContentPane(conteneur);
 
 		conteneur.add(jv1);
 		conteneur.add(jv2);
 		conteneur.add(plateau);
-
+		conteneur.add(optView);
 	}
 
 	public void addCtrl(Controleur ctrl){
@@ -120,39 +203,17 @@ public class View extends JFrame implements Observeur<Data>{
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i);
 				if (c != null){
-					switch(c){
-						case RED :
-							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
-							break;
-						case WHITE :
-							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
-							break;
-						case BLACK :
-							g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
-							break;
-						default : break;
-					}
+					g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
+							
 				}
 			}
 		}
 	}
 
-
-	public void bougerRight(){
-		plateau.setBounds(plateau.getX()+20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+	public void bougerPlateau(Direction d){
+		plateau.setBounds(plateau.getX()+d.dirX()*20,plateau.getY()+d.dirY()*10, plateau.getWidth(), plateau.getHeight());
 	}
 
-	public void bougerLeft(){
-		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
-	}
-
-	public void bougerDown(){
-		plateau.setBounds(plateau.getX(),plateau.getY()+10, plateau.getWidth(), plateau.getHeight());
-	}
-
-	public void bougerUp(){
-		plateau.setBounds(plateau.getX(),plateau.getY()-10, plateau.getWidth(), plateau.getHeight());
-	}
 
 	public void vibrer(State state){
 		Timer vibe = new Timer();
@@ -163,10 +224,10 @@ public class View extends JFrame implements Observeur<Data>{
 
     		public void run() {
 				if(i){
-					bougerLeft();
+					bougerPlateau(Direction.NORTH);
 				}
 				else{
-					bougerRight();
+					bougerPlateau(Direction.SOUTH);
 				}
 				i=!i;
 				if(time == 0){
@@ -184,11 +245,13 @@ public class View extends JFrame implements Observeur<Data>{
 		Colour c = data.getVainqueur().getColor();
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
-			int time = 80;
+			int time = 200;
 			
     		public void run() {
 
-				bougerDown();
+				if(time<=80){
+					bougerPlateau(Direction.EAST);
+				}
 
 				if(time == 0){
 					cancel();
@@ -205,6 +268,11 @@ public class View extends JFrame implements Observeur<Data>{
 						rejouerJeu(data);
 					});
 
+					panneauFinDeJeu.getButtonQuitter().addActionListener(e ->{
+						View.this.dispose();
+						launcher.setVisible(true);
+					});
+
 					
 					
 				}
@@ -214,8 +282,9 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 
 
+
 	public void rejouerJeu(Data obj){
-		
+		isOver=false;
 		obj.reset();
 		jv1.resetData();
 		jv2.resetData();
@@ -225,14 +294,16 @@ public class View extends JFrame implements Observeur<Data>{
 			int time = 80;
     		public void run() {
 
-				bougerUp();
+				bougerPlateau(Direction.WEST);
 
 				if(time == 0){
-					cancel();	
+					cancel();
+					isReloading = false;
 				}
 				time--;
     		}
 		},0,10);
+		
 	}
 
 
@@ -280,7 +351,7 @@ public class View extends JFrame implements Observeur<Data>{
 	@Override
 	public void update(Data obj) {
 		if(plateau==null){
-		start(obj);
+			start(obj);
 		}
 		else {
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
@@ -302,6 +373,7 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 			this.repaint();
 			if(obj.getVainqueur()!=null){
+				isOver=true;
 				plateauMove(obj);
 			}
 		}
