@@ -1,43 +1,90 @@
 package GUI;
 
-import javax.imageio.ImageIO;
+
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Menu extends JPanel {
-    JTextField taille;
-
+    JLabel taille;
     JButton launch;
 
-    Image background;
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    JPanel container;
+    JPanel containerButton;
+    JPanel containerText;
 
-        // Draw the background image.
-        g.drawImage(background, 0, 0, this);
+    JLabel[] fleches;
+    int n;
+
+    //fleche[0] = haut;
+    //fleche[1] = bas;
+    
+    
+    public Menu() {
+        containerText = new JPanel();
+        containerText.setOpaque(false);
+        container = new JPanel();
+        container.setLayout(new GridLayout(1,2));
+        container.setOpaque(false);
+        this.setOpaque(false);
+        n=3;
+        taille=new JLabel(""+n);
+        taille.setFont(new Font("Impact",Font.PLAIN,50));
+        container.add(taille);
+
+
+
+        containerButton = new JPanel();
+        containerButton.setLayout(new GridLayout(2, 1));
+        containerButton.setOpaque(false);
+        fleches = new JLabel[2];
+
+        for(int i = 0;i<2;i++){
+            fleches[i] = new JLabel(new ImageIcon("src/ressource/fleche"+i+".png"));
+            containerButton.add(fleches[i]);
+        }
+
+        fleches[0].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(n==10){
+                    n=0;
+                }
+                n+=1;
+                taille.setText(n+"");
+                container.repaint();
+                
+            }
+        });
+
+        fleches[1].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (n==1){
+                    n=11;
+                }
+                n-=1;
+                taille.setText(n+"");
+                container.repaint();   
+            }
+        });
+
+
+
+
+        container.add(containerText);
+        container.add(containerButton);
+        this.add(container);
+
+        this.setVisible(true);
+        this.repaint();
     }
 
-    public Menu() throws IOException {
-        super();
-        background =ImageIO.read(new File("src/ressource/ezgif.com-gif-maker.gif"));
-
-        JPanel grid=new JPanel();
-        grid.setLayout(new BoxLayout(grid,BoxLayout.Y_AXIS));
-        this.setSize(1020,600);
-        taille=new JTextField("8");
-
-        launch=new JButton("Play");
-
-
-
-        grid.add(taille);
-        grid.add(launch);
-        this.add(grid);
-        this.setVisible(true);
-        revalidate();
+    public int getN(){
+        return n;
     }
 
 }

@@ -12,15 +12,15 @@ public class NoeudIA  {
     protected LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
 
     public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        this.plateau = p;
+        this.plateau = p.clone();
         this.joueurAcc = joueurAcc;
         this.joueurAdv = joueurAdv;
     }
 
-    public NoeudIA (NoeudIA n, Plateau p) throws CloneNotSupportedException {
-        plateau = n.plateau.clone();
-        joueurAcc = n.joueurAdv;//on fait jouer l'adversaire
-        joueurAdv = n.joueurAcc;
+    public NoeudIA (NoeudIA n) throws CloneNotSupportedException {
+        this.plateau = n.plateau;
+        this.joueurAcc = n.joueurAdv;//on fait jouer l'adversaire
+        this.joueurAdv = n.joueurAcc;
     }
 
     public static boolean validState(State s) {
@@ -31,16 +31,27 @@ public class NoeudIA  {
         for (int i = 0; i < joueurAdv.tabBilles.length ; i++) {
             for (int j = 0; j < 4; j++) {
                 Direction dir = Direction.values()[j];
-                if (this.plateau.isOver(joueurAcc,joueurAdv) != null) {
-                    return;
-                }
-                if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],dir,joueurAdv,joueurAcc))) {
-                    NoeudIA newNode = new NoeudIA(this,this.plateau);
-                    newNode.value=newNode.rateValue();
-                    newNode.dir=dir;
-                    newNode.pos=joueurAdv.tabBilles[i];
+                Position pos = joueurAdv.tabBilles[i];
+                State state = plateau.push(pos,dir,joueurAdv,joueurAcc);
+                if (this.plateau.isOver(joueurAdv,joueurAcc) != null) {
+                    NoeudIA newNode = new NoeudIA(this);
+                    if (this.plateau.isOver(joueurAdv,joueurAcc) == joueurAdv) {//ATTENTION CE N'EST PEUT ETRE PAS joueurAdv car joueurAdv et joueurAcc sont alterne il faut donc peut etre changer la conditon en fonction de la parite de la profondeur
+                        newNode.value = -999999999;//puisque l'IA a perdu c'est forcement le pire coup
+                    }
+                    else {
+                        newNode.value = 999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
+                    }
+                    newNode.dir = dir;
+                    newNode.pos = pos;
                     fils.add(newNode);
-                    plateau.undoLastMove();
+                }
+                else if (pos.i != -1 && validState(state)) {
+                    NoeudIA newNode = new NoeudIA(this);
+                    newNode.value=newNode.rateValue();
+                    newNode.dir = dir;
+                    newNode.pos = pos;
+                    this.fils.add(newNode);
+                    plateau.undoLastMove(dir,state,joueurAdv,joueurAcc);
                 }
             }
         }
@@ -52,7 +63,7 @@ public class NoeudIA  {
         NoeudIA bestNode = arbre.fils.getFirst();
         for (NoeudIA node : arbre.fils) {
             int minm = node.minimax(depth);
-            if (bestValue < minm ) {
+            if (bestValue < minm) {
                 bestValue = minm;
                 bestNode = node;
             }
@@ -97,6 +108,6 @@ public class NoeudIA  {
 
     public int rateValue () { //A FAIRE
         return this.joueurAcc.getBilles()-this.joueurAdv.getBilles()
-        + this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees();
+        + (this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees() * 2);
     }
 }

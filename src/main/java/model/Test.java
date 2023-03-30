@@ -32,15 +32,19 @@ public class Test {
 
 
 		//----------------------TEST GRAPHIQUE-----------------------
-		/*
+
 		Joueur j1 = new Joueur(Colour.WHITE,3);
         Joueur j2 = new Joueur(Colour.BLACK,3);
         Plateau p = new Plateau(3,j1,j2);
-        try {
+		p.initialiseBille();
+		try {
             NoeudIA ia = new NoeudIA(p,j1,j2);
-            p.initialiseBille();
-            Move move = NoeudIA.determineBestMove(p,5,j2,j1);
-            System.out.println(p.push(move.pos,move.dir,j1,j2));
+
+			p.push(new Position(0,2),Direction.SOUTH,j1,j2);
+			p.affiche();
+
+			Move move = NoeudIA.determineBestMove(p,3,j1,j2);
+			System.out.println(p.push(move.pos,move.dir,j2,j1));
             System.out.println(move.pos.i + " " + move.pos.j);
             System.out.println(move.dir);
             p.affiche();
@@ -48,13 +52,13 @@ public class Test {
         catch (CloneNotSupportedException e) {
             System.out.println(e);
         }
-		*/
-
+		/*
 		int n = 1;
 		Model m = new Model(n,true);
 		View v = new View(n,null);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.setView(v);
 		v.addCtrl(ctrl);
+		*/
 	}
 }

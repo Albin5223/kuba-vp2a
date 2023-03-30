@@ -4,7 +4,6 @@ import GUI.View;
 
 import java.util.LinkedList;
 
-
 public class Model implements Observe<Data>,Data{
     Plateau plat;
     Joueur[] joueurs;
@@ -69,18 +68,15 @@ public class Model implements Observe<Data>,Data{
     }
 
     public void push(Position p,Direction d){
-        State state;
-        if (isIA && joueurCurrent == 1) {
+        if (isIA && joueurCurrent == 0) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat, 3, getOtherPlayer(), getCurrentPlayer());
+                move = NoeudIA.determineBestMove(plat, 7, getOtherPlayer(), getCurrentPlayer());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;
             }
             state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
-            plat.affiche();
-            System.out.println(move.pos.i+","+move.pos.j+","+move.dir+","+state);
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
