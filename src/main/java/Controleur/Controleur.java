@@ -15,11 +15,14 @@ public class Controleur extends MouseAdapter{
     
     int SIZE;
 
+    public boolean defi = false;
+
 
     public Controleur(Model m,int n){
         this.model = m;
         SIZE = n;
     }
+
     
     public void setModel(Model m){
         model = m;
@@ -68,6 +71,7 @@ public class Controleur extends MouseAdapter{
 			
 		move(p1,p2);
     	resetPosition();
+		//Ici il faut gérer si le deuxième joueur est une IA.
     }
 
 	@Override

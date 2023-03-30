@@ -1,2 +1,4 @@
 *.class
 .idea
+/kuba-vp2a.iml
+.vscode

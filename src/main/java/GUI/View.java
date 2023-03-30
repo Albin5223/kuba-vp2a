@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -14,24 +16,39 @@ import Model.*;
 public class View extends JFrame implements Observeur<Data>{
     
     
-   	//Model m;
 	int longueur;
 	int n;
+	boolean isOver;
+	boolean isReloading;
 	int taille_case;
 	JPanel plateau;
 	JPanel conteneur;
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
+	//Doublon d'information
+	//Ici le currentJoueur doit être gérer par le Model
+	//Utiliser obj.getJoueur()
+	//Plus tard simplifier jv1 et jv2 en un seul tableau
+	OptionView optView;
 
 	Image imageBackground;
-    
-    public View(int nb) {
-    	this.setVisible(true);
+
+	JFrame launcher;
+
+	Image[] banqueMarblImages;
+	Image imageBackgroundScale;
+    public View(int nb,JFrame l) {
+		launcher = l;
+		this.setTitle("Plateau KUBA");
+		banqueMarblImages = new Image[3];
+
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
+		this.setVisible(true);
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
-		//this.m = m;
 
  		n = nb;
 
@@ -39,44 +56,80 @@ public class View extends JFrame implements Observeur<Data>{
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
 
-
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("src/ressource/Basic_image1.PNG"));
-		} catch (IOException e1) {
-			System.out.println("Image non trouvé");
-			e1.printStackTrace();
+			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
+			for (int i = 0;i<3;i++){
+				String s="ressource/Balle"+i+".png";
+				Image marble = ImageIO.read(new File(s));
+				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+				banqueMarblImages[i] = marbleScaled;
+			}
+		}catch (IOException e) {
+			System.out.println("Image des billes non touve");
 		}
+
+
+
+		imageBackgroundScale=imageBackground.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_FAST);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				//g.drawImage(imageBackground,0,0,null);
+				g.drawImage(imageBackgroundScale,0,0,null);
 				this.repaint();
 				
 			}
 		};
 		conteneur.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		conteneur.setLayout(null);
-
-
-		//update(m);
-
-    	
     }
 
+	public void deployerPanneau(boolean ouverture){
+		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
+		int taskBarWidth = scrnSize.width - winSize.width;
+		Timer vibe = new Timer();
+		if(ouverture){
+			optView.visibility(true);
+		}
+		vibe.schedule(new TimerTask() {
+			int time = 27-taskBarWidth/9;
+			public void run() {
+				if(ouverture){
+					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
+				}
+				else{
+					optView.setBounds(optView.getX()+10,optView.getY(), optView.getWidth(), optView.getHeight());
+				}
+				
+
+				if(time == 0){
+					cancel();
+					
+				}
+				time--;
+			}
+		},0,10);
+		if(!ouverture) optView.visibility(false);
+		optView.repaint();
+	}
 
 	public void start(Data obj){
 		plateau = new JPanel(){
 			public void paintComponent(Graphics g){
 				g.setColor(Color.black);
-				for (int i = 0;i<longueur;i++){
-					for (int j = 0;j<longueur;j++){
-						g.drawRect(i*taille_case,j*taille_case,taille_case,taille_case);
+				for (int i = 0;i<longueur-1;i++){
+					for (int j = 0;j<longueur-1;j++){
+						g.drawRect(taille_case/2+i*taille_case,taille_case/2+j*taille_case,taille_case,taille_case);
 					}
 				}
-				updatePlateau(g,obj);
+				try {
+					updatePlateau(g,obj);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
@@ -90,12 +143,54 @@ public class View extends JFrame implements Observeur<Data>{
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
+		
+
+		optView = new OptionView(this,launcher);
+		optView.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-300,50, 300,200);
+		deployerPanneau(false);
+
+		optView.getReplayLabel().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+				if(!isOver && !isReloading){
+					isReloading = true;
+					Timer vibe = new Timer();
+					vibe.schedule(new TimerTask() {
+					int time = 80;
+    				public void run() {
+
+						View.this.bougerPlateau(Direction.EAST);
+
+						if(time == 0){
+							cancel();
+							View.this.rejouerJeu(obj);
+						}
+						time--;
+    				}
+				},0,10);
+				}
+            }
+
+			@Override
+			public void mouseEntered(MouseEvent e){
+				View.this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				optView.getReplayLabel().setForeground(Color.RED);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e){
+				View.this.setCursor(Cursor.getDefaultCursor());
+				optView.getReplayLabel().setForeground(Color.GRAY);
+			}
+        });
+
+
 		this.setContentPane(conteneur);
 
 		conteneur.add(jv1);
 		conteneur.add(jv2);
 		conteneur.add(plateau);
-
+		conteneur.add(optView);
 	}
 
 	public void addCtrl(Controleur ctrl){
@@ -103,59 +198,36 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.addMouseListener(ctrl);
 	}
 
-	public void updatePlateau(Graphics g,Data plateau){
+	public void updatePlateau(Graphics g,Data plateau) throws IOException {
 		for (int i = 0;i<longueur;i++){
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i);
 				if (c != null){
-					switch(c){
-						case RED : g.setColor(Color.red);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
-						case WHITE : g.setColor(new Color(144, 144, 144));g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
-						case BLACK : g.setColor(Color.black);g.fillOval(i*taille_case,j*taille_case,taille_case, taille_case);break;
-					}
+					g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
+							
 				}
 			}
 		}
 	}
 
-//	public void update(State state){
-//		if(state != State.PUSHOPPMARBLE && state != State.PUSHREDMARBLE && state != State.SUCCESS){
-//			vibrer(state);
-//		}
-//		if (state == State.PUSHOPPMARBLE){
-//			currentJoueur.addOpponentMarble();
-//			currentJoueur.repaint();
-//		}
-//		else{
-//			if(state == State.PUSHREDMARBLE){
-//				currentJoueur.addRedMarble();
-//				currentJoueur.repaint();
-//			}
-//		}
-//		this.repaint();
-//	}
-
-	public void bougerRight(){
-		plateau.setBounds(plateau.getX()+20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
+	public void bougerPlateau(Direction d){
+		plateau.setBounds(plateau.getX()+d.dirX()*20,plateau.getY()+d.dirY()*10, plateau.getWidth(), plateau.getHeight());
 	}
 
-	public void bougerLeft(){
-		plateau.setBounds(plateau.getX()-20,plateau.getY(), plateau.getWidth(), plateau.getHeight());
-	}
 
 	public void vibrer(State state){
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
-			int time = 8;
+			int time = 4;
 			boolean i = false;
 			int posX = plateau.getX();
 
     		public void run() {
 				if(i){
-					bougerLeft();
+					bougerPlateau(Direction.NORTH);
 				}
 				else{
-					bougerRight();
+					bougerPlateau(Direction.SOUTH);
 				}
 				i=!i;
 				if(time == 0){
@@ -166,14 +238,79 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 				time--;
     		}
-		},0, 50);
+		},0,100);
+	}
+
+	public void plateauMove(Data data){
+		Colour c = data.getVainqueur().getColor();
+		Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			int time = 200;
+			
+    		public void run() {
+
+				if(time<=80){
+					bougerPlateau(Direction.EAST);
+				}
+
+				if(time == 0){
+					cancel();
+					
+					PanneauFinDeJeu panneauFinDeJeu = new PanneauFinDeJeu(c);
+					panneauFinDeJeu.setBounds(View.this.getWidth()/2-150, View.this.getHeight()/2-100, 300, 200);
+					panneauFinDeJeu.initialise();
+
+					conteneur.add(panneauFinDeJeu);
+					conteneur.repaint();
+
+					panneauFinDeJeu.getButtonRejouer().addActionListener( e->{
+						conteneur.remove(panneauFinDeJeu);
+						rejouerJeu(data);
+					});
+
+					panneauFinDeJeu.getButtonQuitter().addActionListener(e ->{
+						View.this.dispose();
+						launcher.setVisible(true);
+					});
+
+					
+					
+				}
+				time--;
+    		}
+		},0,10);
+	}
+
+
+
+	public void rejouerJeu(Data obj){
+		isOver=false;
+		obj.reset();
+		jv1.resetData();
+		jv2.resetData();
+		conteneur.repaint();
+		Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			int time = 80;
+    		public void run() {
+
+				bougerPlateau(Direction.WEST);
+
+				if(time == 0){
+					cancel();
+					isReloading = false;
+				}
+				time--;
+    		}
+		},0,10);
+		
 	}
 
 
 	public void afficherPopUp(State state){
 		PopUpError popUp = new PopUpError(state);
 		
-		popUp.setBounds(plateau.getWidth()/2-250,plateau.getHeight()/2-250,500,500);
+		popUp.setBounds(plateau.getWidth()/2-100,plateau.getHeight()/2-50,250,100);
 		plateau.add(popUp);
 		plateau.repaint();
 		Timer affiche = new Timer();
@@ -210,6 +347,7 @@ public class View extends JFrame implements Observeur<Data>{
 	public int getTaille_case(){
 		return taille_case;
 	}
+
 	@Override
 	public void update(Data obj) {
 		if(plateau==null){
@@ -220,11 +358,11 @@ public class View extends JFrame implements Observeur<Data>{
 				vibrer(obj.getState());
 			} else {
 				if (obj.getState() == State.PUSHOPPMARBLE) {
-					currentJoueur.addOpponentMarble();
+					currentJoueur.addMarble(1);
 					currentJoueur.repaint();
 				} else {
 					if (obj.getState() == State.PUSHREDMARBLE) {
-						currentJoueur.addRedMarble();
+						currentJoueur.addMarble(0);
 						currentJoueur.repaint();
 					}
 				}
@@ -234,6 +372,14 @@ public class View extends JFrame implements Observeur<Data>{
 
 			}
 			this.repaint();
+			if(obj.getVainqueur()!=null){
+				isOver=true;
+				plateauMove(obj);
+			}
 		}
+		
 	}
+
 }
+
+
