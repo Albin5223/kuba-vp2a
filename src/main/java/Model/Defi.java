@@ -9,15 +9,16 @@ public class Defi extends Plateau {
 	private Direction [][] solcoups = {{Direction.EAST,Direction.EAST,Direction.EAST}} ;
 
 
-	private Position [][] pos;
-	private Direction [][] coups ;
+	private Position [][] pos =  {{null,null,null}};
+	private Direction [][] coups = {{null,null,null}} ;
 
 	public Defi(int n){
-
+		
 		super(3);
         initialiseDefi(n);
         numero = n;
 		this.defi = true;
+		
 
     }
 
@@ -76,6 +77,15 @@ public class Defi extends Plateau {
     
     	return State.WRONGDIRECTION;
     }
+
+	@Override 
+	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
+		if (prog == solcoups[numero].length) {
+			return j1;
+		}
+
+		return null;
+	}
 	
 
 

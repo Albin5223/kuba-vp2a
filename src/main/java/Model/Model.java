@@ -82,7 +82,7 @@ public class Model implements Observe<Data>,Data{
     public void push(Position p,Direction d){
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
 
-        if(plat.isOver(joueurs[0],joueurs[1])==null){
+        if(plat.isOver(joueurs[0],joueurs[1])==null ){
             if(State.SUCCESS == state){
                 joueurSuivant();
             }
