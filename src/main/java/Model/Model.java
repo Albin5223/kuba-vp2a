@@ -14,8 +14,9 @@ public class Model implements Observe<Data>,Data{
     LinkedList<Observeur<Data>> observeurs;
     boolean isIA;
     boolean estDefi;
+    boolean estEditeur;
 
-    public Model(int n, boolean b,boolean x){
+    public Model(int n, boolean b,boolean x,boolean y){
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
         Joueur j1 = new Joueur(Colour.WHITE,n);
@@ -32,6 +33,10 @@ public class Model implements Observe<Data>,Data{
         this.n = n;
         this.estDefi = x;
         this.isIA = b;
+        this.estEditeur = y;
+        if (estEditeur){
+            plat.crerPlatVide();
+        }
     }
 
     public void initialiseBille(){
@@ -102,6 +107,7 @@ public class Model implements Observe<Data>,Data{
     }
 
 
+
     @Override
     public void addObserveur(Observeur<Data> obs) {
         if(!observeurs.contains(obs)){
@@ -144,6 +150,11 @@ public class Model implements Observe<Data>,Data{
             joueurs[i].resetData();
         }
 
+        noticeObserveurs(this);
+    }
+
+    public void changeCouleur(Position p){
+        plat.changeCouleur(p);
         noticeObserveurs(this);
     }
 }
