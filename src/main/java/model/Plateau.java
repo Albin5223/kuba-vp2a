@@ -94,7 +94,7 @@ public class Plateau implements Cloneable{
 		return board[p.getI()][p.getJ()];
 	}
 
-	public void undoLastMove(Direction direction, State s, Joueur j1, Joueur j2) {//uniquement pour l'IA qui doit calculer toutes les probalités
+	public void undoLastMove(Direction direction, State s, Joueur j1, Joueur j2, boolean rptboard) {//uniquement pour l'IA qui doit calculer toutes les probalités
 		Position pos = lastMarblesPushed.get(lastMarblesPushed.size()-1);
 		if (s == State.PUSHOPPMARBLE) {
 			j2.undoLoseMarble();
@@ -113,12 +113,11 @@ public class Plateau implements Cloneable{
 		else if (s == State.SUCCESS) {
 			push_rec(pos,direction.dirInverse(),null,j1,j2);
 		}
-		else {
-			return;
+		if (!rptboard) {
+			ancienPlateau.remove(ancienPlateau.size()-1);
 		}
-		ancienPlateau.remove(ancienPlateau.size()-1);
 		lastMarblesPushed.remove(lastMarblesPushed.size()-1);
-		lastMarblesPushed.remove(lastMarblesPushed.size()-1);//deux fois car dans le push_rec nous ajoutons encore un la dernière position poussé
+		lastMarblesPushed.remove(lastMarblesPushed.size()-1);//deux fois car dans le push_rec nous ajoutons encore la dernière position poussé
 	}
 
 	private boolean isInBoard(Position pos) {
@@ -189,7 +188,7 @@ public class Plateau implements Cloneable{
 			return State.PUSHINGOWNMARBLE;
 		}
 		else if (configurationDejaExistante()) {
-			undoLastMove(direction, state, j1, j2);
+			undoLastMove(direction, state, j1, j2,true);
 			return State.REPEATINGBOARD;
 		}
 		return state;

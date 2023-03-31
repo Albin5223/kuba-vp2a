@@ -33,13 +33,14 @@ public class NoeudIA  {
                 Direction dir = Direction.values()[j];
                 Position pos = joueurAdv.tabBilles[i];
                 State state = plateau.push(pos,dir,joueurAdv,joueurAcc);
-                if (this.plateau.isOver(joueurAdv,joueurAcc) != null) {
+                Joueur isOver = this.plateau.isOver(joueurAdv,joueurAcc);
+                if (isOver != null) {
                     NoeudIA newNode = new NoeudIA(this);
-                    if (this.plateau.isOver(joueurAdv,joueurAcc) == joueurAdv) {//ATTENTION CE N'EST PEUT ETRE PAS joueurAdv car joueurAdv et joueurAcc sont alterne il faut donc peut etre changer la conditon en fonction de la parite de la profondeur
-                        newNode.value = -999999999;//puisque l'IA a perdu c'est forcement le pire coup
+                    if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
+                        newNode.value = 999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
                     }
                     else {
-                        newNode.value = 999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
+                        newNode.value = -999999999;//puisque l'IA a perdu c'est forcement le pire coup
                     }
                     newNode.dir = dir;
                     newNode.pos = pos;
@@ -51,7 +52,7 @@ public class NoeudIA  {
                     newNode.dir = dir;
                     newNode.pos = pos;
                     this.fils.add(newNode);
-                    plateau.undoLastMove(dir,state,joueurAdv,joueurAcc);
+                    plateau.undoLastMove(dir,state,joueurAdv,joueurAcc,false);
                 }
             }
         }
@@ -106,7 +107,7 @@ public class NoeudIA  {
         }
     }
 
-    public int rateValue () { //A FAIRE
+    public int rateValue () {
         return this.joueurAcc.getBilles()-this.joueurAdv.getBilles()
         + (this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees() * 2);
     }

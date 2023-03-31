@@ -68,10 +68,10 @@ public class Model implements Observe<Data>,Data{
     }
 
     public void push(Position p,Direction d){
-        if (isIA && joueurCurrent == 0) {
+        if (isIA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat, 7, getOtherPlayer(), getCurrentPlayer());
+                move = NoeudIA.determineBestMove(plat, 5, getOtherPlayer(), getCurrentPlayer());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;

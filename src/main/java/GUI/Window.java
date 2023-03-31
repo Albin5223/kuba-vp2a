@@ -15,7 +15,7 @@ public class Window extends JFrame {
         this.setSize(1020,600);
         this.setVisible(true);
         this.content=new JLabel(new ImageIcon("src/ressource/ezgif.com-gif-maker.gif"));
-        
+
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(content);
         this.setLayout(new BorderLayout());
