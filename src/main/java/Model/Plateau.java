@@ -380,4 +380,19 @@ public class Plateau implements Cloneable{
 		}
         return clonedPlat;
     }
+
+	public void crerPlatVide(){
+		board = new Colour[longueur][longueur];
+	}
+
+	public void changeCouleur(Position p){
+		Colour c = board[p.i][p.j] ;
+		if (c == null){
+			c = Colour.BLACK;
+		}
+		else{
+			c=c.next();
+		}
+		board[p.i][p.j] = c;
+	}
 }
