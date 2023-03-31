@@ -43,6 +43,10 @@ public class Model implements Observe<Data>,Data{
         return n;
     }
 
+    public boolean isIa(){
+        return isIA;
+    }
+
     public Joueur getCurrentPlayer(){
         return joueurs[joueurCurrent];
     }
@@ -69,17 +73,16 @@ public class Model implements Observe<Data>,Data{
         return plat;
     }
 
-    public void push(Position p,Direction d){
+    public State push(Position p,Direction d){
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
                 move = NoeudIA.determineBestMove(plat, 5, getOtherPlayer(), getCurrentPlayer());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
-                return;
+                return State.WRONGDIRECTION;
             }
             state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
-            plat.affiche();
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
@@ -95,6 +98,7 @@ public class Model implements Observe<Data>,Data{
         }
 
         noticeObserveurs(this);
+        return state;
     }
 
 

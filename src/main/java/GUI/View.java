@@ -26,6 +26,7 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView jv1;
 	JoueurView jv2;
 	JoueurView currentJoueur;
+	boolean isViber;
 	//Doublon d'information
 	//Ici le currentJoueur doit être gérer par le Model
 	//Utiliser obj.getJoueur()
@@ -216,11 +217,13 @@ public class View extends JFrame implements Observeur<Data>{
 
 
 	public void vibrer(State state){
+		afficherPopUp(state);
 		Timer vibe = new Timer();
+		int posX = plateau.getX();
 		vibe.schedule(new TimerTask() {
 			int time = 4;
 			boolean i = false;
-			int posX = plateau.getX();
+			
 
     		public void run() {
 				if(i){
@@ -233,8 +236,8 @@ public class View extends JFrame implements Observeur<Data>{
 				if(time == 0){
 					cancel();
 					plateau.setBounds(posX,plateau.getY(), plateau.getWidth(), plateau.getHeight());
-					afficherPopUp(state);
-
+					conteneur.repaint();
+					
 				}
 				time--;
     		}
@@ -315,13 +318,14 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.repaint();
 		Timer affiche = new Timer();
 		affiche.schedule(new TimerTask() {
-			int time = 8;
+			int time = 5;
 
     		public void run() {
 				if(time == 0){
 					cancel();
 					plateau.remove(popUp);
 					conteneur.repaint();
+					isViber=false;
 				}
 				time--;
     		}
@@ -355,7 +359,10 @@ public class View extends JFrame implements Observeur<Data>{
 		}
 		else {
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
-				vibrer(obj.getState());
+				if(!isViber){
+					isViber=true;
+					vibrer(obj.getState());
+				}	
 			} else {
 				if (obj.getState() == State.PUSHOPPMARBLE) {
 					currentJoueur.addMarble(1);

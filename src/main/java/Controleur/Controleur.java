@@ -56,12 +56,13 @@ public class Controleur extends MouseAdapter{
     }
 
     
-    public void move(Position depart, Position arrive){
+    public State move(Position depart, Position arrive){
         Direction direction = determineDirection(depart,arrive);
-
+		State retour = State.SUCCESS;
         if(!model.isEnd()){
-        	model.push(new Position(depart.getJ(), depart.getI()),direction);
+        	retour = model.push(new Position(depart.getJ(), depart.getI()),direction);
 		}
+		return retour;
     }
     
     @Override
@@ -69,9 +70,12 @@ public class Controleur extends MouseAdapter{
     	Position p1 = new Position(positionDepartX,positionDepartY);
 		Position p2 = new Position(positionArriveX,positionArriveY);
 			
-		move(p1,p2);
+		State retour = move(p1,p2);
     	resetPosition();
-		//Ici il faut gérer si le deuxième joueur est une IA.
+		
+		if(model.isIa() && retour != State.PUSHOPPMARBLE && retour != State.PUSHREDMARBLE ){
+			move(p1,p2);
+		}
     }
 
 	@Override
