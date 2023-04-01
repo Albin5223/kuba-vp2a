@@ -3,7 +3,7 @@ package GUI;
 
 import javax.swing.*;
 
-import Controleur.Controleur;
+import Controleur.*;
 import Model.Model;
 
 import java.awt.*;
@@ -22,6 +22,7 @@ public class PanneauDemarrage extends JPanel{
     Menu menu;
 
     JLabel play;
+    JLabel modeEdition;
     JCheckBox isIA;
 
     boolean menuActivated;
@@ -70,7 +71,7 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,isIA.isSelected(),false);
+                    Model m = new Model(n,isIA.isSelected(),false,false);
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.addObserveur(v);
@@ -82,6 +83,26 @@ public class PanneauDemarrage extends JPanel{
             }
         });
         play.setVisible(false);
+
+        modeEdition=new JLabel("Mode Edition");
+        modeEdition.setSize(100,200);
+        modeEdition.setFont(new Font("Impact",Font.PLAIN,40));
+
+        modeEdition.setHorizontalAlignment(SwingConstants.CENTER);
+        modeEdition.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Model m = new Model(3,false,false,true);
+                View v = new View(3,fenetre);
+                ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
+
+                m.addObserveur(v);
+                
+                m.noticeObserveurs(m);
+                v.addCtrlEditeur(ctrl);
+            }
+        });
+        modeEdition.setVisible(false);
 
 
         this.add(container,BorderLayout.NORTH);
@@ -96,6 +117,7 @@ public class PanneauDemarrage extends JPanel{
         gbc.insets=new Insets(0,0,60,0);
         containerButton.add(play,gbc);
         containerButton.add(isIA,gbc);
+        containerButton.add(modeEdition,gbc);
         this.add(containerButton,BorderLayout.CENTER);
 
        
@@ -117,6 +139,7 @@ public class PanneauDemarrage extends JPanel{
                 if(time == -6){
 					cancel();
                     play.setVisible(true);
+                    modeEdition.setVisible(true);
                     fenetre.repaint();	
 				}
 				

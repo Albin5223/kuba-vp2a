@@ -25,21 +25,22 @@ public class View extends JFrame implements Observeur<Data>{
 	JPanel conteneur;
 	JoueurView jv1;
 	JoueurView jv2;
-	JoueurView currentJoueur;
+	JoueurView[] joueurs; 
 	boolean isViber;
-	//Doublon d'information
-	//Ici le currentJoueur doit être gérer par le Model
-	//Utiliser obj.getJoueur()
-	//Plus tard simplifier jv1 et jv2 en un seul tableau
+	
 	OptionView optView;
+	PanneauFinDeJeu panneauFinDeJeu;
 
 	Image imageBackground;
+	Image imagePanneauFinDeJeu;
 
 	JFrame launcher;
 
 	Image[] banqueMarblImages;
 	Image imageBackgroundScale;
     public View(int nb,JFrame l) {
+
+		joueurs = new JoueurView[2];
 		launcher = l;
 		this.setTitle("Plateau KUBA");
 		banqueMarblImages = new Image[3];
@@ -53,13 +54,14 @@ public class View extends JFrame implements Observeur<Data>{
 
  		n = nb;
 
-
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
 
 		//Trouver une boone image de fond
 		try {
 			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
+			imagePanneauFinDeJeu = ImageIO.read(new File("ressource/end_screen.png"));
+			imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(300,200,Image.SCALE_FAST);
 			for (int i = 0;i<3;i++){
 				String s="ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
@@ -139,7 +141,6 @@ public class View extends JFrame implements Observeur<Data>{
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();
-		currentJoueur = jv1;
 		jv2 = new JoueurView(Colour.BLACK);
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
@@ -185,7 +186,8 @@ public class View extends JFrame implements Observeur<Data>{
 			}
         });
 
-
+		joueurs[0] = jv1;
+		joueurs[1] = jv2;
 		this.setContentPane(conteneur);
 
 		conteneur.add(jv1);
@@ -263,7 +265,7 @@ public class View extends JFrame implements Observeur<Data>{
 				if(time == 0){
 					cancel();
 					
-					PanneauFinDeJeu panneauFinDeJeu = new PanneauFinDeJeu(c);
+					panneauFinDeJeu = new PanneauFinDeJeu(c,imagePanneauFinDeJeu);
 					panneauFinDeJeu.setBounds(View.this.getWidth()/2-150, View.this.getHeight()/2-100, 300, 200);
 					panneauFinDeJeu.initialise();
 
@@ -343,12 +345,10 @@ public class View extends JFrame implements Observeur<Data>{
 		if (obj.getJoueur().getColor()==Colour.WHITE){
 			jv1.mettreBarre();
 			jv2.enleverBarre();
-			currentJoueur = jv1;
 		}
 		else{
 			jv2.mettreBarre();
 			jv1.enleverBarre();
-			currentJoueur = jv2;
 		}
 	}
 
@@ -368,22 +368,31 @@ public class View extends JFrame implements Observeur<Data>{
 					vibrer(obj.getState());
 				}	
 			} else {
-				if (obj.getState() == State.PUSHOPPMARBLE) {
-					currentJoueur.addMarble(1);
-					currentJoueur.repaint();
-				} else {
-					if (obj.getState() == State.PUSHREDMARBLE) {
-						currentJoueur.addMarble(0);
-						currentJoueur.repaint();
+				switch(obj.getState()){
+					case PUSHOPPMARBLE : joueurs[obj.getJoueurCurrent()].addMarble(1);break;
+					case PUSHREDMARBLE : joueurs[obj.getJoueurCurrent()].addMarble(0);break;
+					default : break;
 					}
-				}
-				if (currentJoueur != null) {
+				joueurs[obj.getJoueurCurrent()].repaint();
+
+				if (joueurs[obj.getJoueurCurrent()] != null) {
 					joueurSuivant(obj);
 				}
 
 			}
 			this.repaint();
 			if(obj.getVainqueur()!=null){
+				AnimationVicory[] av = new AnimationVicory[2];
+				double[] angles = {0,180};
+				for (int i =0;i<av.length;i++){
+					av[i] = new AnimationVicory(plateau.getX()+plateau.getWidth()/2, plateau.getY()+plateau.getHeight()/2, plateau.getWidth()/2, 0, conteneur);
+					av[i].setAngle(angles[i]);
+					av[i].setBounds(av[i].posX, av[i].posY, 100, 100);
+					conteneur.add(av[i]);
+					conteneur.repaint();
+					av[i].anime();
+				}
+
 				isOver=true;
 				plateauMove(obj);
 			}

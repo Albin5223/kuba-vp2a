@@ -106,6 +106,14 @@ public class Model implements Observe<Data>,Data{
         return state;
     }
 
+    public int getJoueurCurrent(){
+        return joueurCurrent;
+    }
+
+    public boolean estEditeur(){
+        return estEditeur;
+    }
+
 
 
     @Override

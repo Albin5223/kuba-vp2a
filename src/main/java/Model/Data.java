@@ -12,7 +12,9 @@ public interface Data {
 
     public void reset();
 
+    public int getJoueurCurrent();
 
+    public boolean estEditeur();
 
 
 }
