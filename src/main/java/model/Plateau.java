@@ -106,8 +106,8 @@ public class Plateau implements Cloneable{
 			j2.undoLoseMarble();
 			push_rec(pos,direction.dirInverse(),j2.getColor(),j1,j2);//puisque j1 vient de push sur j2
 			for (int i = 0; i < j2.tabBilles.length; i++) {
-				if (j1.tabBilles[i].i == pos.i && j1.tabBilles[i].j == pos.j) {//si une bille est au dernier emplacement et qu'on a push la bille de l'opposant alors cette bille avait comme coordonnee -1
-					j1.tabBilles[i].i = pos.i;//j n'a pas ete modifie
+				if (j2.tabBilles[i].i == -1 && j2.tabBilles[i].j == pos.j) {//si une bille est au dernier emplacement et qu'on a push la bille de l'opposant alors cette bille avait comme coordonnee -1
+					j2.tabBilles[i].i = pos.i;//j n'a pas ete modifie
 				}
 			}
 		}
@@ -131,8 +131,6 @@ public class Plateau implements Cloneable{
 	}
 
 	private void updateTabBilles(Position pos, Direction direction, Joueur j1, Joueur j2) {
-		//Position pos2 = pos.goTo(direction.dirInverse());
-		System.out.println("Atteint");
 		for (int i = 0; i < j1.tabBilles.length; i++) {
 			if (this.isInBoard(pos) && board[pos.i][pos.j] == j1.getColor() && pos.i == j1.tabBilles[i].i && pos.j == j1.tabBilles[i].j) {
 				if (!this.isInBoard(pos.goTo(direction))) {
@@ -166,7 +164,7 @@ public class Plateau implements Cloneable{
 					lastMarblesPushed.remove(lastMarblesPushed.size()-1);
 					return null;//si la derniere case pousse (en dehors du plateau puisque nous avons deja un if qui l'a teste juste au dessus) est de la meme couleur que le joueur qui a pousse la bille
 				}
-				j2.loseMarble(pos);//alors on enleve une bille au joueur
+				j2.loseMarble();//alors on enleve une bille au joueur
 				return State.PUSHOPPMARBLE;
 			}
 		}

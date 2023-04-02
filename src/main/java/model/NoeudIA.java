@@ -138,8 +138,6 @@ public class NoeudIA  {
                 bestNode = node;
             }
         }
-        joueurAcc.afficheTab();
-        joueurAdv.afficheTab();
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
         return bestMove;
     }

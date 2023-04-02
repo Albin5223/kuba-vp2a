@@ -18,12 +18,7 @@ public class Joueur {
 		this.initTabBilles(n, c);
 	}
 
-	public void loseMarble(Position pos) {
-		for (int i = 0; i < tabBilles.length; i++) {
-			if (tabBilles[i].i == pos.i && tabBilles[i].j == pos.j) {
-				tabBilles[i].i = -1;
-			}
-		}
+	public void loseMarble() {
 		nBilles --;
 	}
 
