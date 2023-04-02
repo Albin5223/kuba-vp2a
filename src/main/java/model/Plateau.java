@@ -132,6 +132,7 @@ public class Plateau implements Cloneable{
 
 	private void updateTabBilles(Position pos, Direction direction, Joueur j1, Joueur j2) {
 		//Position pos2 = pos.goTo(direction.dirInverse());
+		System.out.println("Atteint");
 		for (int i = 0; i < j1.tabBilles.length; i++) {
 			if (this.isInBoard(pos) && board[pos.i][pos.j] == j1.getColor() && pos.i == j1.tabBilles[i].i && pos.j == j1.tabBilles[i].j) {
 				if (!this.isInBoard(pos.goTo(direction))) {
@@ -177,8 +178,9 @@ public class Plateau implements Cloneable{
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
-			board[pos.i][pos.j] = colour;
 			updateTabBilles(pos, direction, j1, j2);
+			board[pos.i][pos.j] = colour;
+			
 		}
 		return state;
 	}

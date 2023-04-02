@@ -84,6 +84,8 @@ public class Model implements Observe<Data>,Data{
             System.out.println();
             //IA.refreshBoard(new Move(p,d)); POUR PLUS TARD
         }
+        this.joueurs[0].afficheTab();
+        this.joueurs[1].afficheTab();
 
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
