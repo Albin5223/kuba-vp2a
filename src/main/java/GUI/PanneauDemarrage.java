@@ -27,7 +27,7 @@ public class PanneauDemarrage extends JPanel{
     boolean menuActivated;
 
 
-    public PanneauDemarrage(JFrame fen){
+    public PanneauDemarrage(JFrame fen) {
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
        
@@ -62,7 +62,13 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,true);
+                    Model m;
+                    try {
+                        m = new Model(n,false);
+                    } catch (CloneNotSupportedException except) {
+                        System.out.println(except);
+                        return;
+                    }
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.setView(v);
@@ -92,7 +98,13 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,false);
+                    Model m;
+                    try {
+                        m = new Model(n,true);
+                    } catch (CloneNotSupportedException except) {
+                        System.out.println(except);
+                        return;
+                    }
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.setView(v);

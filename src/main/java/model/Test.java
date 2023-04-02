@@ -33,25 +33,30 @@ public class Test {
 
 		//----------------------TEST GRAPHIQUE-----------------------
 
-		Joueur j1 = new Joueur(Colour.WHITE,3);
-        Joueur j2 = new Joueur(Colour.BLACK,3);
+		Joueur j1 = new Joueur(Colour.WHITE,3,"Test1");
+        Joueur j2 = new Joueur(Colour.BLACK,3,"Test2");
         Plateau p = new Plateau(3,j1,j2);
 		p.initialiseBille();
-		try {
-            NoeudIA ia = new NoeudIA(p,j1,j2);
-
-			p.push(new Position(0,2),Direction.SOUTH,j1,j2);
-			p.affiche();
-
-			Move move = NoeudIA.determineBestMove(p,3,j1,j2);
-			System.out.println(p.push(move.pos,move.dir,j2,j1));
-            System.out.println(move.pos.i + " " + move.pos.j);
-            System.out.println(move.dir);
-            p.affiche();
-        }
-        catch (CloneNotSupportedException e) {
-            System.out.println(e);
-        }
+		State state1 = p.push(new Position(0, 1),Direction.SOUTH,j1,j2);
+		State state2 = p.push(new Position(1, 1),Direction.SOUTH,j1,j2);
+		State state3 = p.push(new Position(2, 1),Direction.SOUTH,j1,j2);
+		State state4 = p.push(new Position(3, 1),Direction.SOUTH,j1,j2);
+		State state5 = p.push(new Position(4, 1),Direction.SOUTH,j1,j2);
+		State state6 = p.push(new Position(5, 1),Direction.SOUTH,j1,j2);
+		State state7 = p.push(new Position(6, 1),Direction.SOUTH,j1,j2);
+		State state8 = p.push(new Position(7, 1),Direction.SOUTH,j1,j2);
+		State state9 = p.push(new Position(8, 1),Direction.SOUTH,j1,j2);
+		p.affiche();
+		p.undoLastMove(Direction.SOUTH, state9, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state8, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state7, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state6, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state5, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state4, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state3, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state2, j1, j2, false);
+		p.undoLastMove(Direction.SOUTH, state1, j1, j2, false);
+		p.affiche();
 		/*
 		int n = 1;
 		Model m = new Model(n,true);

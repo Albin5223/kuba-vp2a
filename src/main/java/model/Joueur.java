@@ -6,12 +6,16 @@ public class Joueur {
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
 	private int n;
 	protected Position[] tabBilles;
+	public String name;
 
-	public Joueur(Colour c, int n) {
+	public Joueur(Colour c, int n, String name) {
 		this.n = n;
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.billesRougesCapturees = 0;
+		this.name = name;
+		this.tabBilles = new Position[n*n*2];
+		this.initTabBilles(n, c);
 	}
 
 	public void loseMarble(Position pos) {

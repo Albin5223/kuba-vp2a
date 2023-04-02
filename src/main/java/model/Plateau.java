@@ -25,8 +25,6 @@ public class Plateau implements Cloneable{
 		this.billesRouges = 8*(n*n)-12*n+5;
 		this.j1 = j1;
 		this.j2 = j2;
-		this.j1.initTabBilles(n, j1.getColor());
-		this.j2.initTabBilles(n, j2.getColor());
 	}
 
 	public Plateau(String strPlateau) {
@@ -42,7 +40,7 @@ public class Plateau implements Cloneable{
 		return this.longueur;
 	}
 
-	public Colour[][] getBoard() {//attention aux effets de bords en utilisant cette fonction car la liste originale est retourne
+	public Colour[][] getBoard() {//ATTENTION : effets de bords en utilisant cette fonction car la liste originale est retourne
 		return this.board;
 	}
 
@@ -94,6 +92,14 @@ public class Plateau implements Cloneable{
 		return board[p.getI()][p.getJ()];
 	}
 
+	public Joueur getJoueur1() {
+		return this.j1;
+	}
+
+	public Joueur getJoueur2() {
+		return this.j2;
+	}
+
 	public void undoLastMove(Direction direction, State s, Joueur j1, Joueur j2, boolean rptboard) {//uniquement pour l'IA qui doit calculer toutes les probalités
 		Position pos = lastMarblesPushed.get(lastMarblesPushed.size()-1);
 		if (s == State.PUSHOPPMARBLE) {
@@ -125,13 +131,23 @@ public class Plateau implements Cloneable{
 	}
 
 	private void updateTabBilles(Position pos, Direction direction, Joueur j1, Joueur j2) {
-		Position pos2 = pos.goTo(direction.dirInverse());
+		//Position pos2 = pos.goTo(direction.dirInverse());
 		for (int i = 0; i < j1.tabBilles.length; i++) {
-			if (this.isInBoard(pos2) && board[pos2.i][pos2.j] == j1.getColor() && pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
-				j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+			if (this.isInBoard(pos) && board[pos.i][pos.j] == j1.getColor() && pos.i == j1.tabBilles[i].i && pos.j == j1.tabBilles[i].j) {
+				if (!this.isInBoard(pos.goTo(direction))) {
+					j1.tabBilles[i].i = -1;
+				}
+				else {
+					j1.tabBilles[i] = pos.goTo(direction);
+				}
 			}
-			else if (this.isInBoard(pos2) && board[pos2.i][pos2.j] == j2.getColor() && pos2.i == j2.tabBilles[i].i && pos2.j == j2.tabBilles[i].j) {
-				j2.tabBilles[i] = j2.tabBilles[i].goTo(direction);
+			else if (this.isInBoard(pos) && board[pos.i][pos.j] == j2.getColor() && pos.i == j2.tabBilles[i].i && pos.j == j2.tabBilles[i].j) {
+				if (!this.isInBoard(pos.goTo(direction))) {
+					j2.tabBilles[i].i = -1;
+				}
+				else {
+					j2.tabBilles[i] = pos.goTo(direction);
+				}
 			}
 		}
 	}
@@ -156,7 +172,7 @@ public class Plateau implements Cloneable{
 		if (board[pos.i][pos.j] == null) {
 			board[pos.i][pos.j] = colour;
 			this.lastMarblesPushed.add(pos);
-			updateTabBilles(pos, direction, j1, j2);
+			//updateTabBilles(pos, direction, j1, j2);
 			return State.SUCCESS;
 		}
 		State state = push_rec(pos.goTo(direction),direction,board[pos.i][pos.j],j1,j2);//et on avance dans la direction direc
@@ -360,8 +376,12 @@ public class Plateau implements Cloneable{
 
 	@Override
     protected Plateau clone() throws CloneNotSupportedException {
-		Plateau clonedPlat = new Plateau(this.lengthN,this.j1,this.j2);
-		clonedPlat.board = this.getBoard();
+		Plateau clonedPlat = new Plateau(lengthN,j1,j2);
+		for (int i = 0; i < this.longueur; i++) {
+			for (int j = 0; j < this.longueur; j++) {
+				clonedPlat.board[i][j] = this.board[i][j];
+			}
+		}
 		clonedPlat.ancienPlateau = new ArrayList<String>();
 		clonedPlat.billesRouges = this.billesRouges;
 		for (int i = 0; i<this.ancienPlateau.size(); i++) {

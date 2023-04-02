@@ -14,11 +14,11 @@ public class Model implements Observe<Data>,Data{
     LinkedList<Observeur<Data>> observeurs;
     boolean isIA;
 
-    public Model(int n, boolean b){
+    public Model(int n, boolean b) throws CloneNotSupportedException {
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
-        Joueur j1 = new Joueur(Colour.WHITE,n);
-        Joueur j2 = new Joueur(Colour.BLACK,n);
+        Joueur j1 = new Joueur(Colour.WHITE,n,"Nico");
+        Joueur j2 = new Joueur(Colour.BLACK,n,"IA");
         plat = new Plateau(n,j1,j2);
         state=State.SUCCESS;
         joueurs[0] = j1;
@@ -45,14 +45,14 @@ public class Model implements Observe<Data>,Data{
         return joueurs[joueurCurrent];
     }
 
-    public Joueur getOtherPlayer(){
+    public Joueur getOtherPlayer() {
         if (joueurCurrent==0){
             return joueurs[1];
         }
         return joueurs[0];
     }
 
-    public void joueurSuivant(){
+    public void joueurSuivant() {
         joueurCurrent ++;
         if (joueurCurrent>=2){
             joueurCurrent = 0;
@@ -71,7 +71,8 @@ public class Model implements Observe<Data>,Data{
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat, 5, getOtherPlayer(), getCurrentPlayer());
+                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 3);//peut etre depth pair ou impaire obligatoire
+                System.out.println("final value : "+move.dir+"/"+move.pos.i+","+move.pos.j);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;
@@ -80,6 +81,8 @@ public class Model implements Observe<Data>,Data{
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+            System.out.println();
+            //IA.refreshBoard(new Move(p,d)); POUR PLUS TARD
         }
 
         if(plat.isOver(joueurs[0],joueurs[1])==null){
