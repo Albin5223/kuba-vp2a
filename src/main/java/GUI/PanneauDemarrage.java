@@ -64,7 +64,7 @@ public class PanneauDemarrage extends JPanel{
                     int n = menu.getN();
                     Model m;
                     try {
-                        m = new Model(n,false);
+                        m = new Model(n,true);
                     } catch (CloneNotSupportedException except) {
                         System.out.println(except);
                         return;
