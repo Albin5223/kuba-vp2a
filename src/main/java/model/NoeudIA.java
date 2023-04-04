@@ -111,11 +111,11 @@ public class NoeudIA  {
 
     public static Move determineBestMove (Plateau p,Joueur joueurAcc, Joueur joueurAdv, int depth) throws CloneNotSupportedException {
         NoeudIA arbre = createTree(p, depth);
-        int bestValue = -999999999;
+        int bestValue = 999999999;
         NoeudIA bestNode = arbre.fils.getFirst();
         for (NoeudIA node : arbre.fils) {
             int minm = node.minimax(depth);
-            System.out.println(node.value+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
+            System.out.println(minm+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
             if (bestValue > minm) {
                 bestValue = minm;
                 bestNode = node;
@@ -123,8 +123,8 @@ public class NoeudIA  {
         }
         System.out.println("move choisi : " + bestNode.value+" = "+bestNode.dir+"/"+bestNode.pos.i+","+bestNode.pos.j);
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
-        joueurAcc.afficheTab();
-        joueurAdv.afficheTab();
+        //joueurAcc.afficheTab();
+        //joueurAdv.afficheTab();
         return bestMove;
     }
 
@@ -152,14 +152,14 @@ public class NoeudIA  {
             return this.value;
         }
         if (this.joueurAcc.getColor()==Colour.BLACK) {
-            int m = 999999999;
+            int m = -999999999;
             for (NoeudIA node : fils) {
                 m = Math.max(m, node.minimax(depth - 1));
             }
             return m;
         }
         else {
-            int m = -999999999;
+            int m = 999999999;
             for (NoeudIA node : fils) {
                 m = Math.min(m, node.minimax(depth - 1));
             }
