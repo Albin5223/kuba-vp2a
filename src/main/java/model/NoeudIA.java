@@ -19,7 +19,7 @@ public class NoeudIA  {
     }
 
     public NoeudIA (NoeudIA n, Joueur joueurAcc, Joueur joueurAdv, Move replay) throws CloneNotSupportedException {
-        this.plateau = n.plateau;
+        this.plateau = n.plateau.clone();
         if (replay == null) {//donc si on ne rejoue pas
             Joueur tmp = joueurAcc;
             this.joueurAcc = joueurAdv;
@@ -79,7 +79,6 @@ public class NoeudIA  {
                 }
                 Joueur isOver = this.plateau.isOver(joueurAcc,joueurAdv);
                 if (isOver != null) {
-                    plateau.affiche();
                     NoeudIA newNode = new NoeudIA(this,joueurAcc,joueurAdv, null);
                     if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
                         newNode.value = -999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
@@ -104,21 +103,6 @@ public class NoeudIA  {
                     newNode.dir = dir;
                     newNode.pos = pos;
                     this.fils.add(newNode);
-                    if (state != State.SUCCESS) {
-                        System.out.println("joueurAcc ("+this.joueurAcc.name+") : "+this.joueurAcc.getBilles());
-                        System.out.println("joueurAdv ("+this.joueurAdv.name+") : "+this.joueurAdv.getBilles());
-                        System.out.println(state);
-                        System.out.println(newNode.value);
-                    }
-                    /*
-                    if (depth == 1) {
-                        System.out.println("joueurAcc :"+this.joueurAcc.getBilles());
-                        System.out.println("joueurAdv :"+this.joueurAdv.getBilles());
-                        System.out.println("joueurAccRouges :"+this.joueurAcc.getBillesRougesCapturees());
-                        System.out.println("joueurAdvRouges :"+this.joueurAcc.getBillesRougesCapturees());
-                        System.out.println("value= "+newNode.value+" dir= "+dir+" pos= "+pos.i+","+pos.j);
-                    }
-                    */
                     plateau.undoLastMove(dir,state,joueurAcc,joueurAdv,false);
                 }
             }
@@ -131,14 +115,16 @@ public class NoeudIA  {
         NoeudIA bestNode = arbre.fils.getFirst();
         for (NoeudIA node : arbre.fils) {
             int minm = node.minimax(depth);
-            //System.out.println(node.value);
-            if (bestValue < minm) {
-                //System.out.println("bestNode for now :"+node.dir+"/"+node.pos.i+","+node.pos.j);
+            System.out.println(node.value+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
+            if (bestValue > minm) {
                 bestValue = minm;
                 bestNode = node;
             }
         }
+        System.out.println("move choisi : " + bestNode.value+" = "+bestNode.dir+"/"+bestNode.pos.i+","+bestNode.pos.j);
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
+        joueurAcc.afficheTab();
+        joueurAdv.afficheTab();
         return bestMove;
     }
 
@@ -183,12 +169,12 @@ public class NoeudIA  {
 
     public int rateValue () {
         if (this.joueurAcc.getColor() == Colour.WHITE) {//ATTENTION PEUT ETRE A INVERSER
-            return this.joueurAcc.getBilles()-this.joueurAdv.getBilles() + 
-            (this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees()) * 2;
+            return (this.joueurAcc.getBilles()-this.joueurAdv.getBilles()) * 2 + 
+            (this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees());
         }
         else {
-            return this.joueurAdv.getBilles()-this.joueurAcc.getBilles() + 
-            (this.joueurAdv.getBillesRougesCapturees() - this.joueurAcc.getBillesRougesCapturees()) * 2;
+            return (this.joueurAdv.getBilles()-this.joueurAcc.getBilles()) * 2 + 
+            (this.joueurAdv.getBillesRougesCapturees() - this.joueurAcc.getBillesRougesCapturees());
         }
     }
 }
