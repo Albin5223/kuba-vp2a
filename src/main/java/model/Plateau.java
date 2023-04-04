@@ -375,11 +375,14 @@ public class Plateau implements Cloneable{
 
 	@Override
     protected Plateau clone() throws CloneNotSupportedException {
-		Plateau clonedPlat = new Plateau(lengthN,j1,j2);
+		Plateau clonedPlat = new Plateau(lengthN,j1.clone(),j2.clone());
 		for (int i = 0; i < this.longueur; i++) {
 			for (int j = 0; j < this.longueur; j++) {
 				clonedPlat.board[i][j] = this.board[i][j];
 			}
+		}
+		for (int i = 0; i < this.lastMarblesPushed.size(); i++) {
+			clonedPlat.lastMarblesPushed.add(this.lastMarblesPushed.get(i));
 		}
 		clonedPlat.ancienPlateau = new ArrayList<String>();
 		clonedPlat.billesRouges = this.billesRouges;

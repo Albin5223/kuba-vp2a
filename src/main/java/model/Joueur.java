@@ -39,7 +39,7 @@ public class Joueur {
 	}
 
 	public void undoWinRedMarble() {
-		this.billesRougesCapturees ++;
+		this.billesRougesCapturees --;
 	}
 
 	public int getBillesRougesCapturees() {
@@ -91,5 +91,14 @@ public class Joueur {
 		for (int i = 0; i<tabBilles.length; i++) {
 			System.out.println("(pos " + i + " :" + tabBilles[i].i + "," + tabBilles[i].j + ")");
 		}
+	}
+
+	@Override
+    protected Joueur clone() throws CloneNotSupportedException {
+		Joueur jCloned = new Joueur(this.color,this.n,this.name);
+		for (int i = 0; i < tabBilles.length; i++) {
+			jCloned.tabBilles[i] = this.tabBilles[i];
+		}
+		return jCloned;
 	}
 }

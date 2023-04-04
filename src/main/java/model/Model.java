@@ -72,14 +72,11 @@ public class Model implements Observe<Data>,Data{
             Move move;
             try {
                 move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 5);//peut etre depth pair ou impaire obligatoire
-                System.out.println("final value : "+move.dir+"/"+move.pos.i+","+move.pos.j);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;
             }
             state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
-            joueurs[1].afficheTab();
-            joueurs[0].afficheTab();
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
