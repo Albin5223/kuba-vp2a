@@ -65,7 +65,6 @@ public class AnimationVicory extends JPanel {
         
     }
 
-
     public void miseAJourPosition(){
         double angleR = angle * Math.PI/180;
         posX = (int) (centreX + rayon*Math.cos(angleR));

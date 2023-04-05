@@ -38,6 +38,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 	Image[] banqueMarblImages;
 	Image imageBackgroundScale;
+
     public View(int nb,JFrame l) {
 
 		joueurs = new JoueurView[2];
@@ -59,7 +60,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource/background.jpg"));
+			imageBackground = ImageIO.read(new File("ressource/background3.jpg"));
 			imagePanneauFinDeJeu = ImageIO.read(new File("ressource/end_screen.png"));
 			imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(300,200,Image.SCALE_FAST);
 			for (int i = 0;i<3;i++){
@@ -88,44 +89,18 @@ public class View extends JFrame implements Observeur<Data>{
 		conteneur.setLayout(null);
     }
 
-	public void deployerPanneau(boolean ouverture){
-		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-
-		int taskBarWidth = scrnSize.width - winSize.width;
-		Timer vibe = new Timer();
-		if(ouverture){
-			optView.visibility(true);
-		}
-		vibe.schedule(new TimerTask() {
-			int time = 27-taskBarWidth/9;
-			public void run() {
-				if(ouverture){
-					optView.setBounds(optView.getX()-10,optView.getY(), optView.getWidth(), optView.getHeight());
-				}
-				else{
-					optView.setBounds(optView.getX()+10,optView.getY(), optView.getWidth(), optView.getHeight());
-				}
-				
-
-				if(time == 0){
-					cancel();
-					
-				}
-				time--;
-			}
-		},0,10);
-		if(!ouverture) optView.visibility(false);
-		optView.repaint();
-	}
+	
 
 	public void start(Data obj){
 		plateau = new JPanel(){
 			public void paintComponent(Graphics g){
-				g.setColor(Color.black);
+				Graphics2D g1 = (Graphics2D) g;
+				BasicStroke line = new BasicStroke(4.0f);
+				g1.setStroke(line);
+				g1.setColor(Color.black);
 				for (int i = 0;i<longueur-1;i++){
 					for (int j = 0;j<longueur-1;j++){
-						g.drawRect(taille_case/2+i*taille_case,taille_case/2+j*taille_case,taille_case,taille_case);
+						g1.drawRect(taille_case/2+i*taille_case,taille_case/2+j*taille_case,taille_case,taille_case);
 					}
 				}
 				try {
@@ -136,12 +111,12 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
-		jv1 = new JoueurView(Colour.WHITE);
+		jv1 = new JoueurView(Colour.WHITE,banqueMarblImages);
 		int taille_Jv = plateau.getX()-20;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();
-		jv2 = new JoueurView(Colour.BLACK);
+		jv2 = new JoueurView(Colour.BLACK,banqueMarblImages);
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
@@ -149,7 +124,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 		optView = new OptionView(this,launcher);
 		optView.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-300,50, 300,200);
-		deployerPanneau(false);
+		optView.deployerPanneau(false);
 
 		optView.getReplayLabel().addMouseListener(new MouseAdapter() {
             @Override
@@ -169,7 +144,7 @@ public class View extends JFrame implements Observeur<Data>{
 						}
 						time--;
     				}
-				},0,10);
+					},0,10);
 				}
             }
 
@@ -252,6 +227,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 	public void plateauMove(Data data){
 		Colour c = data.getVainqueur().getColor();
+
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
 			int time = 200;
@@ -382,8 +358,8 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 			this.repaint();
 			if(obj.getVainqueur()!=null){
-				AnimationVicory[] av = new AnimationVicory[2];
-				double[] angles = {0,180};
+				AnimationVicory[] av = new AnimationVicory[4];
+				double[] angles = {0,180,90,270};
 				for (int i =0;i<av.length;i++){
 					av[i] = new AnimationVicory(plateau.getX()+plateau.getWidth()/2, plateau.getY()+plateau.getHeight()/2, plateau.getWidth()/2, 0, conteneur);
 					av[i].setAngle(angles[i]);

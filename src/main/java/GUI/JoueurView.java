@@ -20,9 +20,13 @@ public class JoueurView extends JPanel{
     //Indice 1 : Opp
     JPanel[] paneMarble;
     Image imageBackground;
+    Image[] banqueMarblImages;
 
-    public JoueurView(Colour c){
-        paneMarble = new JPanel[2];
+
+    public JoueurView(Colour c,Image[] img){
+        banqueMarblImages = img;
+
+        paneMarble = new JPanel[2]; 
         nbMarble = new int[2];
         this.setLayout(null);
         titre = new JLabel("");
@@ -101,7 +105,7 @@ public class JoueurView extends JPanel{
                 MarbleY+=25;
                 MarbleX = 5;
             }
-            g.fillOval(MarbleX,MarbleY,15, 15);
+            g.fillOval(MarbleX,MarbleY,15,15);
             MarbleX+=25;
         }
     }

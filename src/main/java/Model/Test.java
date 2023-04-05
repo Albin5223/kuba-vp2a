@@ -1,26 +1,24 @@
 package Model;
 
-
-import Controleur.Controleur;
-import GUI.View;
-
 public class Test {
 	
 	public static void main(String[] args) {
 		//----------------------TEST PLATEAU--------------------
-		//Joueur j1 = new Joueur(Colour.BLACK,3);
-		//Joueur j2 = new Joueur(Colour.WHITE,3);
 		/* 
-		Plateau p = new Plateau(3);
+		Joueur j1 = new Joueur(Colour.BLACK,3);
+		Joueur j2 = new Joueur(Colour.WHITE,3);
+		 
+		Plateau p = new Plateau(3,j1,j2);
 		p.initialiseBille();
 		p.push(new Position(0,0),Direction.SOUTH,j1,j2);
 		p.affiche();
 		State test = p.push(new Position(3,0),Direction.NORTH,j1,j2);
 		p.affiche();
-		System.out.println(test);
+		System.out.println(p.toString());
+		*/
 		//p.push(new Position(0,0),Direction.SOUTH,j1,j2)
 		//IA ia = new IA(Color.BLACK,3);
-		*/
+		
 
 
 		//--------------------------TEST MVC-----------------
@@ -50,10 +48,12 @@ public class Test {
         }
 		*/
 
+		/* 
 		int n = 1;
-		Model m = new Model(n,true,false);
+		Model m = new Model(n,true,false,false);
 		View v = new View(n,null);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		v.addCtrl(ctrl);
+		*/
 	}
 }

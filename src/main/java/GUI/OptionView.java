@@ -4,9 +4,11 @@ package GUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -28,6 +30,8 @@ public class OptionView extends JPanel {
     JLabel abandonner;
     JLabel replay;
     JLabel quitter;
+	Image iconImage;	
+	BufferedImage iconIm;
 
     public OptionView(View view, JFrame launcher){
         this.setLayout(null);
@@ -35,8 +39,9 @@ public class OptionView extends JPanel {
         this.view = view;
         this.launcher = launcher;
 		this.setOpaque(false);
-		Image iconImage;
+		
 		try {
+			iconIm = ImageIO.read(new File("ressource/iconDerouler.png"));
 			iconImage = ImageIO.read(new File("ressource/iconDerouler.png"));
 			icWidth = iconImage.getWidth(this)/3;
 			icHeight = iconImage.getHeight(this)/3;
@@ -52,14 +57,11 @@ public class OptionView extends JPanel {
 		icon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                view.deployerPanneau(deployer);
+                deployerPanneau(deployer);
 				deployer = !deployer;
-				//OptionView.this.setOpaque(deployer);
-				
             }
 		});
 
-		
 		container = new JPanel();
 		container.setLayout(new GridLayout(2,1));
 		container.setBounds(icWidth, 0, 300- icWidth, 200);
@@ -100,10 +102,10 @@ public class OptionView extends JPanel {
 		replay.setVisible(false);
 		container.setVisible(true);
 		icon.setVisible(true);
-       container.add(abandonner);
-       container.add(replay);
-	   this.add(icon);
-	   this.add(container);
+        container.add(abandonner);
+        container.add(replay);
+	    this.add(icon);
+	    this.add(container);
     }
 
 	public JLabel getReplayLabel(){
@@ -130,5 +132,36 @@ public class OptionView extends JPanel {
 	public void visibility(boolean b){
 		this.replay.setVisible(b);
 		this.abandonner.setVisible(b);
+	}
+
+	public void deployerPanneau(boolean ouverture){
+		Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+
+		int taskBarWidth = scrnSize.width - winSize.width;
+		Timer vibe = new Timer();
+		if(ouverture){
+			this.visibility(true);
+		}
+		vibe.schedule(new TimerTask() {
+			int time = 27-taskBarWidth/9;
+			public void run() {
+				if(ouverture){
+					OptionView.this.setBounds(OptionView.this.getX()-10,OptionView.this.getY(), OptionView.this.getWidth(), OptionView.this.getHeight());
+				}
+				else{
+					OptionView.this.setBounds(OptionView.this.getX()+10,OptionView.this.getY(), OptionView.this.getWidth(), OptionView.this.getHeight());
+				}
+				
+
+				if(time == 0){
+					cancel();
+					
+				}
+				time--;
+			}
+		},0,10);
+		if(!ouverture) OptionView.this.visibility(false);
+		OptionView.this.repaint();
 	}
 }
