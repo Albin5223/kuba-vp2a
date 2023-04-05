@@ -23,7 +23,7 @@ public class Interrupteur extends JPanel {
         banqueImage = new Image[2];
         nom = new JLabel("IA");
         nom.setOpaque(false);
-        nom.setFont(new Font("Impact",Font.PLAIN,40));
+        nom.setFont(new Font("Impact",Font.PLAIN,35));
         this.add(nom);
 
         try {

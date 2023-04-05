@@ -58,10 +58,10 @@ public class PanneauDemarrage extends JPanel{
         button = new JLabel[3];
         for (int i = 0;i<button.length;i++){
             button[i]=new JLabel(nom[i]);
-            button[i].setFont(new Font("Impact",Font.PLAIN,50-(5*i)));
+            button[i].setFont(new Font("Dyuthi",Font.PLAIN,50-(5*i)));
             button[i].setVisible(false);
             button[i].setHorizontalAlignment(SwingConstants.CENTER);
-            button[i].setBounds(550, 75+55*i, 300, 100);
+            button[i].setBounds(550, 76+53*i, 300, 100);
             containerButton.add(button[i]);
             
         }
@@ -72,8 +72,23 @@ public class PanneauDemarrage extends JPanel{
         button[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                    quitter();
-                }
+                quitter();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                button[0].setFont(new Font("Dyuthi",Font.BOLD,button[0].getFont().getSize()));
+                button[0].setForeground(new Color(50,200,255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                button[0].setFont(new Font("Dyuthi",Font.PLAIN,button[0].getFont().getSize()));
+
+                button[0].setForeground(new Color(38, 38, 38));
+            }
         });
         
         
@@ -90,6 +105,18 @@ public class PanneauDemarrage extends JPanel{
                 m.noticeObserveurs(m);
                 v.addCtrlEditeur(ctrl);
             }
+
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                button[1].setFont(new Font("Dyuthi",Font.BOLD,button[1].getFont().getSize()));
+                button[1].setForeground(new Color(50,200,255));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                button[1].setFont(new Font("Dyuthi",Font.PLAIN,button[1].getFont().getSize()));
+                button[1].setForeground(new Color(38, 38, 38));
+            }
         });
 
         button[2].addMouseListener(new MouseAdapter() {
@@ -97,6 +124,19 @@ public class PanneauDemarrage extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 fenetre.dispose();
                 System.exit(0);
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                button[2].setFont(new Font("Dyuthi",Font.BOLD,button[2].getFont().getSize()));
+                button[2].setForeground(new Color(50,200,255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                button[2].setFont(new Font("Dyuthi",Font.PLAIN,button[1].getFont().getSize()));
+                button[2].setForeground(new Color(38, 38, 38));
             }
         });
         
@@ -148,7 +188,7 @@ public class PanneauDemarrage extends JPanel{
 			
             int size = 10;
     		public void run() {
-                if(size<300){
+                if(size<200){
                     tp.billeMontante();
                     size+=10;
                 }

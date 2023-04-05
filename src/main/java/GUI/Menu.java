@@ -92,12 +92,12 @@ public class Menu extends JPanel {
 
 
         isIA=new Interrupteur();
-        isIA.setBounds(550, 100+55*1, 300, 100);
+        isIA.setBounds(550, 120+60*1, 300, 50);
         isIA.initialise();
 
         play=new JLabel("Play");
         play.setVisible(true);
-        play.setBounds(650, 100, 300, 70);
+        play.setBounds(650, 115, 300, 60);
         play.setFont(new Font("Impact",Font.PLAIN,50));
 
         play.addMouseListener(new MouseAdapter() {
@@ -116,7 +116,7 @@ public class Menu extends JPanel {
         });
 
         retour=new JLabel("Retour");
-        retour.setBounds(650, 100+55*2, 300, 100);
+        retour.setBounds(650, 100+50*2, 300, 100);
         retour.setFont(new Font("Impact",Font.PLAIN,30));
 
         retour.addMouseListener(new MouseAdapter() {
