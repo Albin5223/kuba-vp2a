@@ -17,10 +17,10 @@ public class NoeudIA  {
         this.joueurAdv = joueurAdv;
     }
 
-    public NoeudIA (NoeudIA n) throws CloneNotSupportedException {
-        plateau = n.plateau;
-        joueurAcc = n.joueurAdv;//on fait jouer l'adversaire
-        joueurAdv = n.joueurAcc;
+    public NoeudIA (NoeudIA noeud) throws CloneNotSupportedException {
+        plateau = noeud.plateau;
+        joueurAcc = noeud.joueurAdv;//on fait jouer l'adversaire
+        joueurAdv = noeud.joueurAcc;
     }
 
     public static boolean validState(State s) {
