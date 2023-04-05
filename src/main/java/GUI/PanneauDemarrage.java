@@ -18,7 +18,7 @@ public class PanneauDemarrage extends JPanel{
     JPanel containerButton;
     JLabel[] JlabelLettres;
 
-    String[] lettres = {"K","U","B","A"};
+    String[] lettres = {"C","U","B","A"};
     JFrame fenetre;
     Menu menu;
 
@@ -61,7 +61,7 @@ public class PanneauDemarrage extends JPanel{
             button[i].setFont(new Font("Dyuthi",Font.PLAIN,50-(5*i)));
             button[i].setVisible(false);
             button[i].setHorizontalAlignment(SwingConstants.CENTER);
-            button[i].setBounds(550, 82+53*i, 300, 100);
+            button[i].setBounds(550, 76+53*i, 300, 100);
             containerButton.add(button[i]);
             
         }
@@ -188,7 +188,7 @@ public class PanneauDemarrage extends JPanel{
 			
             int size = 10;
     		public void run() {
-                if(size<300){
+                if(size<200){
                     tp.billeMontante();
                     size+=10;
                 }

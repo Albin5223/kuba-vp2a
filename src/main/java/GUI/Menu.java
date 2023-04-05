@@ -17,15 +17,15 @@ public class Menu extends JPanel {
 
     JLabel selection;
     JLabel taille;
-    JLabel retour;
+    
     JPanel container;
     JPanel containerButton;
     JLabel[] fleches;
     int n;
 
     JLabel play;
-    
-    JSlider isIA;
+    Interrupteur isIA;
+    JLabel retour;
 
     //fleche[0] = gauche;
     //fleche[1] = droite;
@@ -33,11 +33,19 @@ public class Menu extends JPanel {
     
     public Menu(JFrame fen) {
         this.setLayout(new BorderLayout());
+        this.setOpaque(false);
+
         fenetre = fen;
         container = new JPanel();
         container.setLayout(new GridLayout(1,3));
         container.setOpaque(false);
-        this.setOpaque(false);
+        
+
+        containerButton = new JPanel();
+        containerButton.setOpaque(false);
+        containerButton.setLayout(null);
+
+
         n=3;
 
         taille=new JLabel(""+n);
@@ -47,7 +55,7 @@ public class Menu extends JPanel {
         fleches = new JLabel[2];
 
         for(int i = 0;i<2;i++){
-            fleches[i] = new JLabel(new ImageIcon("src/ressource/fleche"+i+".png"));
+            fleches[i] = new JLabel(new ImageIcon("ressource/fleche"+i+".png"));
             fleches[i].setOpaque(false);
             fleches[i].setForeground(new Color(0,0,0,150));
         }
@@ -82,23 +90,22 @@ public class Menu extends JPanel {
             }
         });
 
-        isIA=new JSlider(0,1);
-        isIA.setPaintTrack(true);
-        isIA.setOpaque(false);
-        isIA.setBounds(550, 75+55*1, 300, 100);
-       
+
+        isIA=new Interrupteur();
+        isIA.setBounds(550, 120+60*1, 300, 50);
+        isIA.initialise();
 
         play=new JLabel("Play");
-        play.setBounds(0, 0, 300, 100);
-        play.setFont(new Font("Impact",Font.PLAIN,70));
+        play.setVisible(true);
+        play.setBounds(650, 115, 300, 60);
+        play.setFont(new Font("Impact",Font.PLAIN,50));
 
-        play.setHorizontalAlignment(SwingConstants.CENTER);
         play.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                     fenetre.setVisible(false);
                     int n = getN();
-                    Model m = new Model(n,isIA.getValue()==0,false,false);
+                    Model m = new Model(n,isIA.getValue()==1,false,false);
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.addObserveur(v);
@@ -109,10 +116,9 @@ public class Menu extends JPanel {
         });
 
         retour=new JLabel("Retour");
-        retour.setBounds(550, 75+55*2, 300, 100);
+        retour.setBounds(650, 100+50*2, 300, 100);
         retour.setFont(new Font("Impact",Font.PLAIN,30));
 
-        retour.setHorizontalAlignment(SwingConstants.CENTER);
         retour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -124,20 +130,13 @@ public class Menu extends JPanel {
             }
         });
 
-        this.add(container,BorderLayout.NORTH);
-
-        containerButton = new JPanel();
-        containerButton.setOpaque(false);
-        containerButton.setLayout(null);
-        
         containerButton.add(play);
         containerButton.add(isIA);
         containerButton.add(retour);
-        this.add(containerButton,BorderLayout.SOUTH);
-        
-        
 
-        this.setVisible(true);
+        this.add(container,BorderLayout.NORTH);
+        this.add(containerButton,BorderLayout.CENTER);
+        
         this.repaint();
     }
 
