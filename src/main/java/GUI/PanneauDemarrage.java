@@ -18,7 +18,7 @@ public class PanneauDemarrage extends JPanel{
     JPanel containerButton;
     JLabel[] JlabelLettres;
 
-    String[] lettres = {"K","U","B","A"};
+    String[] lettres = {"C","U","B","A"};
     JFrame fenetre;
     Menu menu;
 

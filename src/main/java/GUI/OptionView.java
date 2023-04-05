@@ -4,7 +4,6 @@ package GUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -31,7 +30,6 @@ public class OptionView extends JPanel {
     JLabel replay;
     JLabel quitter;
 	Image iconImage;	
-	BufferedImage iconIm;
 
     public OptionView(View view, JFrame launcher){
         this.setLayout(null);
@@ -41,7 +39,6 @@ public class OptionView extends JPanel {
 		this.setOpaque(false);
 		
 		try {
-			iconIm = ImageIO.read(new File("ressource/iconDerouler.png"));
 			iconImage = ImageIO.read(new File("ressource/iconDerouler.png"));
 			icWidth = iconImage.getWidth(this)/3;
 			icHeight = iconImage.getHeight(this)/3;
