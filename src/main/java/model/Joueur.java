@@ -1,6 +1,6 @@
 package Model;
 
-public class Joueur {
+public class Joueur implements Cloneable {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
@@ -97,8 +97,10 @@ public class Joueur {
     protected Joueur clone() throws CloneNotSupportedException {
 		Joueur jCloned = new Joueur(this.color,this.n,this.name);
 		for (int i = 0; i < tabBilles.length; i++) {
-			jCloned.tabBilles[i] = this.tabBilles[i];
+			jCloned.tabBilles[i] = this.tabBilles[i].clone();
 		}
+		jCloned.nBilles = this.nBilles;
+		jCloned.billesRougesCapturees = this.billesRougesCapturees;
 		return jCloned;
 	}
 }

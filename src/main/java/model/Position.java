@@ -1,6 +1,6 @@
 package  Model;
 
-public class Position {
+public class Position implements Cloneable {
 	public int i;
 	public int j;
 
@@ -22,5 +22,11 @@ public class Position {
 
 	public int getJ(){
 		return this.j;
+	}
+
+	@Override
+	public Position clone() throws CloneNotSupportedException {
+		Position posCloned = new Position(this.i,this.j);
+		return posCloned;
 	}
 }

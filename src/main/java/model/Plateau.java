@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Plateau implements Cloneable{
+public class Plateau implements Cloneable {
 	private Colour[][] board;
 	private int lengthN;
 	private int billesRouges;

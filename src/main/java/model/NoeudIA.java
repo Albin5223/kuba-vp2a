@@ -18,16 +18,16 @@ public class NoeudIA  {
         this.joueurAdv = this.plateau.getJoueur1();
     }
 
-    public NoeudIA (NoeudIA n, Joueur joueurAcc, Joueur joueurAdv, Move replay) throws CloneNotSupportedException {
+    public NoeudIA (NoeudIA n, Move replay) throws CloneNotSupportedException {
         this.plateau = n.plateau.clone();
         if (replay == null) {//donc si on ne rejoue pas
-            Joueur tmp = joueurAcc;
-            this.joueurAcc = joueurAdv;
+            Joueur tmp = n.joueurAcc.clone();
+            this.joueurAcc = n.joueurAdv.clone();
             this.joueurAdv = tmp;
         }
         else {
-            this.joueurAcc = joueurAcc;
-            this.joueurAdv = joueurAdv;
+            this.joueurAcc = n.joueurAcc.clone();
+            this.joueurAdv = n.joueurAdv.clone();
         }
         this.replay = replay;
     }
@@ -37,38 +37,6 @@ public class NoeudIA  {
     }
 
     public void createNextNodes (int depth) throws CloneNotSupportedException {
-        if (this.replay != null) {
-            State state = plateau.push(replay.pos,replay.dir,joueurAcc,joueurAdv);
-            Joueur isOver = this.plateau.isOver(joueurAcc,joueurAdv);
-            if (isOver != null) {
-                NoeudIA newNode = new NoeudIA(this,joueurAcc,joueurAdv, null);
-                if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
-                    newNode.value = -999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
-                }
-                else {
-                    newNode.value = 99999999;//puisque l'IA a perdu c'est forcement le pire coup
-                }
-                newNode.dir = replay.dir;
-                newNode.pos = replay.pos;
-                this.fils.add(newNode);
-                plateau.undoLastMove(replay.dir,state,joueurAcc,joueurAdv,false);
-            }
-            else if (replay.pos.i != -1 && validState(state)) {
-                NoeudIA newNode = null;//initialier uniquement pour prevenir les warnings de creation de la variable
-                if (state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE) {//si on pousse une bille alors on rejoue
-                    newNode = new NoeudIA(this,joueurAcc,joueurAdv, new Move(replay.pos.goTo(dir),replay.dir));
-                }
-                else {
-                    newNode = new NoeudIA(this,joueurAcc,joueurAdv, null);
-                }
-                newNode.value=newNode.rateValue();
-                newNode.dir = replay.dir;
-                newNode.pos = replay.pos;
-                this.fils.add(newNode);
-                plateau.undoLastMove(replay.dir,state,joueurAcc,joueurAdv,false);
-            }
-            return;
-        }
         for (int i = 0; i < joueurAcc.tabBilles.length ; i++) {
             for (int j = 0; j < 4; j++) {
                 Direction dir = Direction.values()[j];
@@ -79,7 +47,7 @@ public class NoeudIA  {
                 }
                 Joueur isOver = this.plateau.isOver(joueurAcc,joueurAdv);
                 if (isOver != null) {
-                    NoeudIA newNode = new NoeudIA(this,joueurAcc,joueurAdv, null);
+                    NoeudIA newNode = new NoeudIA(this, null);
                     if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
                         newNode.value = -999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
                     }
@@ -94,12 +62,17 @@ public class NoeudIA  {
                 else if (validState(state)) {
                     NoeudIA newNode = null;//initialier uniquement pour prevenir les warnings de creation de la variable
                     if (state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE) {//si on pousse une bille alors on rejoue
-                        newNode = new NoeudIA(this,joueurAcc,joueurAdv, new Move(pos.goTo(dir),dir));
+                        newNode = new NoeudIA(this, new Move(pos.goTo(dir),dir));
                     }
                     else {
-                        newNode = new NoeudIA(this,joueurAcc,joueurAdv, null);
+                        newNode = new NoeudIA(this, null);
                     }
-                    newNode.value = this.rateValue();//anciennement newNode.rateValue
+                    if (depth == 1) {
+                        newNode.value = this.rateValue();//ATTENTION PEUT-ETRE newNode.rateValue
+                    }
+                    else {
+                        //newNode.value = this.minimax(depth);
+                    }
                     newNode.dir = dir;
                     newNode.pos = pos;
                     this.fils.add(newNode);
@@ -113,18 +86,16 @@ public class NoeudIA  {
         NoeudIA arbre = createTree(p, depth);
         int bestValue = 999999999;
         NoeudIA bestNode = arbre.fils.getFirst();
+        System.out.println();
         for (NoeudIA node : arbre.fils) {
-            int minm = node.minimax(depth);
-            System.out.println(minm+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
-            if (bestValue > minm) {
-                bestValue = minm;
+            System.out.println(node.value+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
+            if (node.value < bestValue) {
+                bestValue = node.value;
                 bestNode = node;
             }
         }
         System.out.println("move choisi : " + bestNode.value+" = "+bestNode.dir+"/"+bestNode.pos.i+","+bestNode.pos.j);
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
-        //joueurAcc.afficheTab();
-        //joueurAdv.afficheTab();
         return bestMove;
     }
 
@@ -135,33 +106,33 @@ public class NoeudIA  {
     }
 
     public static void createTreeRec (NoeudIA n,int depth) throws CloneNotSupportedException {
-        if (depth == 0) { return; }
+        if (depth == 0) {
+            return;
+        }
         n.createNextNodes(depth);
         for (NoeudIA node : n.fils) {
-            if (node.replay != null) {//si on ne rejoue pas
-                createTreeRec(node, depth);
-            }
-            else {
-                createTreeRec(node, depth - 1);
+            createTreeRec(node, depth - 1);
+            if (node.value != -999999999 && node.value != 99999999) {//si le jeu est fini on a pas besoin de remplacer la valeur
+                node.value = node.minimax();
             }
         }
     }
 
-    public int minimax (int depth) {
-        if (depth == 0 || this.fils.isEmpty()) {
+    public int minimax () {
+        if (this.fils.isEmpty()) {
             return this.value;
         }
-        if (this.joueurAcc.getColor()==Colour.BLACK) {
-            int m = -999999999;
+        if (this.joueurAcc.getColor() == Colour.BLACK) {
+            int m = 999999999;
             for (NoeudIA node : fils) {
-                m = Math.max(m, node.minimax(depth - 1));
+                m = Math.min(m, node.minimax());
             }
             return m;
         }
         else {
-            int m = 999999999;
+            int m = -999999999;
             for (NoeudIA node : fils) {
-                m = Math.min(m, node.minimax(depth - 1));
+                m = Math.max(m, node.minimax());
             }
             return m;
         }
