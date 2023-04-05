@@ -33,7 +33,7 @@ public class TransitionPane extends JPanel {
         this.fin =  width-50;
         try {
 			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
+				String s="src/ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(50,50,Image.SCALE_FAST);
 				banqueMarblImages[i] = marbleScaled;

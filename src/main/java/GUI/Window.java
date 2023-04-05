@@ -22,7 +22,7 @@ public class Window extends JFrame {
 
         Image iconImage = null;
         try {
-            iconImage = ImageIO.read(new File("ressource/background4.jpg"));
+            iconImage = ImageIO.read(new File("src/ressource/background4.jpg"));
         } catch (IOException e) {
            System.out.println("Image non trouve dans Window");
         }
