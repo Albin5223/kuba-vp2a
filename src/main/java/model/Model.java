@@ -71,10 +71,7 @@ public class Model implements Observe<Data>,Data{
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 5);//peut etre depth pair ou impaire obligatoire
-                //for (int i = 0; i < plat.lastMarblesPushed.size(); i ++) {
-                    //System.out.println(plat.lastMarblesPushed.get(i).i+","+plat.lastMarblesPushed.get(i).j);
-                //}
+                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 5);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;
@@ -84,9 +81,6 @@ public class Model implements Observe<Data>,Data{
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         }
-        //this.joueurs[0].afficheTab();
-        //this.joueurs[1].afficheTab();
-
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
                 joueurSuivant();

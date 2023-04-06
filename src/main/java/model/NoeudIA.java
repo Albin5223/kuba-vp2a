@@ -10,7 +10,6 @@ public class NoeudIA  {
     private Direction dir;
     private Position pos;
     private LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
-    private Move replay;
 
     public NoeudIA (Plateau p) throws CloneNotSupportedException {
         this.plateau = p.clone();
@@ -18,9 +17,9 @@ public class NoeudIA  {
         this.joueurAdv = this.plateau.getJoueur1();
     }
 
-    public NoeudIA (NoeudIA n, Move replay) throws CloneNotSupportedException {
+    public NoeudIA (NoeudIA n, boolean replay) throws CloneNotSupportedException {
         this.plateau = n.plateau.clone();
-        if (replay == null) {//donc si on ne rejoue pas
+        if (!replay) {//donc si on ne rejoue pas
             Joueur tmp = n.joueurAcc.clone();
             this.joueurAcc = n.joueurAdv.clone();
             this.joueurAdv = tmp;
@@ -29,7 +28,6 @@ public class NoeudIA  {
             this.joueurAcc = n.joueurAcc.clone();
             this.joueurAdv = n.joueurAdv.clone();
         }
-        this.replay = replay;
     }
 
     public static boolean validState(State s) {
@@ -47,13 +45,12 @@ public class NoeudIA  {
                 }
                 Joueur isOver = this.plateau.isOver(joueurAcc,joueurAdv);
                 if (isOver != null && validState(state)) {
-                    System.out.println("ATTENTION FINI !");
                     NoeudIA newNode = null;
                     if (state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE) {//si on pousse une bille alors on rejoue
-                        newNode = new NoeudIA(this, new Move(pos.goTo(dir),dir));
+                        newNode = new NoeudIA(this,true);
                     }
                     else {
-                        newNode = new NoeudIA(this, null);
+                        newNode = new NoeudIA(this, false);
                     }
                     //on ne change la valeur de la node pas que en depth 1 car si c'est la fin du jeu qui est atteinte
                     //on doit le savoir avant
@@ -71,16 +68,13 @@ public class NoeudIA  {
                 else if (validState(state)) {
                     NoeudIA newNode = null;//initialier uniquement pour prevenir les warnings de creation de la variable
                     if (state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE) {//si on pousse une bille alors on rejoue
-                        newNode = new NoeudIA(this, new Move(pos.goTo(dir),dir));
+                        newNode = new NoeudIA(this,true);
                     }
                     else {
-                        newNode = new NoeudIA(this, null);
+                        newNode = new NoeudIA(this, false);
                     }
                     if (depth == 1) {
-                        newNode.value = this.rateValue();//ATTENTION PEUT-ETRE newNode.rateValue
-                    }
-                    else {
-                        //newNode.value = this.minimax(depth);
+                        newNode.value = this.rateValue();
                     }
                     newNode.dir = dir;
                     newNode.pos = pos;
