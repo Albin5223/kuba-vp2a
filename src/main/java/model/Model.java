@@ -72,6 +72,9 @@ public class Model implements Observe<Data>,Data{
             Move move;
             try {
                 move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 4);//peut etre depth pair ou impaire obligatoire
+                //for (int i = 0; i < plat.lastMarblesPushed.size(); i ++) {
+                    //System.out.println(plat.lastMarblesPushed.get(i).i+","+plat.lastMarblesPushed.get(i).j);
+                //}
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;

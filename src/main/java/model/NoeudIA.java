@@ -46,8 +46,17 @@ public class NoeudIA  {
                     state = plateau.push(pos,dir,joueurAcc,joueurAdv);
                 }
                 Joueur isOver = this.plateau.isOver(joueurAcc,joueurAdv);
-                if (isOver != null) {
-                    NoeudIA newNode = new NoeudIA(this, null);
+                if (isOver != null && validState(state)) {
+                    System.out.println("ATTENTION FINI !");
+                    NoeudIA newNode = null;
+                    if (state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE) {//si on pousse une bille alors on rejoue
+                        newNode = new NoeudIA(this, new Move(pos.goTo(dir),dir));
+                    }
+                    else {
+                        newNode = new NoeudIA(this, null);
+                    }
+                    //on ne change la valeur de la node pas que en depth 1 car si c'est la fin du jeu qui est atteinte
+                    //on doit le savoir avant
                     if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
                         newNode.value = -999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
                     }
