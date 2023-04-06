@@ -71,7 +71,7 @@ public class Model implements Observe<Data>,Data{
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 4);//peut etre depth pair ou impaire obligatoire
+                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 5);//peut etre depth pair ou impaire obligatoire
                 //for (int i = 0; i < plat.lastMarblesPushed.size(); i ++) {
                     //System.out.println(plat.lastMarblesPushed.get(i).i+","+plat.lastMarblesPushed.get(i).j);
                 //}
