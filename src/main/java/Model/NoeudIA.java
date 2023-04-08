@@ -2,114 +2,151 @@ package Model;
 
 import java.util.LinkedList;
 
+
 public class NoeudIA  {
     private Plateau plateau;
-    protected Joueur joueurAcc;
-    protected Joueur joueurAdv;
-    protected int value;
-    protected Direction dir;
-    protected Position pos;
-    protected LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
+    private Joueur joueurAcc;
+    private Joueur joueurAdv;
+    private int value;
+    private Direction dir;
+    private Position pos;
+    private LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
+    private Move replay;
 
-    public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
+    public NoeudIA (Plateau p) throws CloneNotSupportedException {
         this.plateau = p.clone();
-        this.joueurAcc = joueurAcc;
-        this.joueurAdv = joueurAdv;
+        this.joueurAcc = this.plateau.getJoueur2();
+        this.joueurAdv = this.plateau.getJoueur1();
     }
 
-    public NoeudIA (NoeudIA noeud) throws CloneNotSupportedException {
-        plateau = noeud.plateau;
-        joueurAcc = noeud.joueurAdv;//on fait jouer l'adversaire
-        joueurAdv = noeud.joueurAcc;
+    public NoeudIA (NoeudIA n, Move replay) throws CloneNotSupportedException {
+        this.plateau = n.plateau.clone();
+        if (replay == null) {//donc si on ne rejoue pas
+            Joueur tmp = n.joueurAcc.clone();
+            this.joueurAcc = n.joueurAdv.clone();
+            this.joueurAdv = tmp;
+        }
+        else {
+            this.joueurAcc = n.joueurAcc.clone();
+            this.joueurAdv = n.joueurAdv.clone();
+        }
+        this.replay = replay;
     }
 
     public static boolean validState(State s) {
         return s == State.SUCCESS || s == State.PUSHOPPMARBLE || s == State.PUSHREDMARBLE;
     }
 
-    public void createNextNodes () throws CloneNotSupportedException {
-        for (int i = 0; i < joueurAdv.tabBilles.length ; i++) {
+    public void createNextNodes (int depth) throws CloneNotSupportedException {
+        for (int i = 0; i < joueurAcc.tabBilles.length ; i++) {
             for (int j = 0; j < 4; j++) {
                 Direction dir = Direction.values()[j];
-                Position pos = joueurAdv.tabBilles[i];
-                State state = plateau.push(pos,dir,joueurAdv,joueurAcc);
-                Joueur isOver = this.plateau.isOver(joueurAdv,joueurAcc);
+                Position pos = joueurAcc.tabBilles[i];
+                State state = State.WRONGDIRECTION;
+                if (pos.i != -1) {
+                    state = plateau.push(pos,dir,joueurAcc,joueurAdv);
+                }
+                Joueur isOver = this.plateau.isOver(joueurAcc,joueurAdv);
                 if (isOver != null) {
-                    NoeudIA newNode = new NoeudIA(this);
+                    NoeudIA newNode = new NoeudIA(this, null);
                     if (isOver.getColor() == Colour.BLACK) {//L'IA doit toujours etre noir
-                        newNode.value = 999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
+                        newNode.value = -999999999;//puisque l'IA a gagne c'est forcement le meilleur coup
                     }
                     else {
-                        newNode.value = -999999999;//puisque l'IA a perdu c'est forcement le pire coup
+                        newNode.value = 99999999;//puisque l'IA a perdu c'est forcement le pire coup
                     }
-                    newNode.dir = dir;
-                    newNode.pos = pos;
-                    fils.add(newNode);
-                }
-                else if (pos.i != -1 && validState(state)) {
-                    NoeudIA newNode = new NoeudIA(this);
-                    newNode.value=newNode.rateValue();
                     newNode.dir = dir;
                     newNode.pos = pos;
                     this.fils.add(newNode);
-                    plateau.undoLastMove(dir,state,joueurAdv,joueurAcc);
+                    plateau.undoLastMove(dir,state,joueurAcc,joueurAdv,false);
+                }
+                else if (validState(state)) {
+                    NoeudIA newNode = null;//initialier uniquement pour prevenir les warnings de creation de la variable
+                    if (state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE) {//si on pousse une bille alors on rejoue
+                        newNode = new NoeudIA(this, new Move(pos.goTo(dir),dir));
+                    }
+                    else {
+                        newNode = new NoeudIA(this, null);
+                    }
+                    if (depth == 1) {
+                        newNode.value = this.rateValue();//ATTENTION PEUT-ETRE newNode.rateValue
+                    }
+                    else {
+                        //newNode.value = this.minimax(depth);
+                    }
+                    newNode.dir = dir;
+                    newNode.pos = pos;
+                    this.fils.add(newNode);
+                    plateau.undoLastMove(dir,state,joueurAcc,joueurAdv,false);
                 }
             }
         }
     }
 
-
-    public static Move determineBestMove (Plateau p, int depth, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        NoeudIA arbre = createTree(p, depth, joueurAcc, joueurAdv);
-        int bestValue = -999999999;
+    public static Move determineBestMove (Plateau p,Joueur joueurAcc, Joueur joueurAdv, int depth) throws CloneNotSupportedException {
+        NoeudIA arbre = createTree(p, depth);
+        int bestValue = 999999999;
         NoeudIA bestNode = arbre.fils.getFirst();
+        System.out.println();
         for (NoeudIA node : arbre.fils) {
-            int minm = node.minimax(depth);
-            if (bestValue < minm ) {
-                bestValue = minm;
+            System.out.println(node.value+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
+            if (node.value < bestValue) {
+                bestValue = node.value;
                 bestNode = node;
             }
         }
+        System.out.println("move choisi : " + bestNode.value+" = "+bestNode.dir+"/"+bestNode.pos.i+","+bestNode.pos.j);
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
         return bestMove;
     }
 
-    public static NoeudIA createTree (Plateau p, int depth, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        NoeudIA tete = new NoeudIA(p,joueurAcc,joueurAdv);
+    public static NoeudIA createTree (Plateau p, int depth) throws CloneNotSupportedException {
+        NoeudIA tete = new NoeudIA(p);
         createTreeRec(tete, depth);
         return tete;
     }
 
-    public static void createTreeRec (NoeudIA n, int depth) throws CloneNotSupportedException {
-        if (depth == 0) { return; }
-        n.createNextNodes();
+    public static void createTreeRec (NoeudIA n,int depth) throws CloneNotSupportedException {
+        if (depth == 0) {
+            return;
+        }
+        n.createNextNodes(depth);
         for (NoeudIA node : n.fils) {
             createTreeRec(node, depth - 1);
+            if (node.value != -999999999 && node.value != 99999999) {//si le jeu est fini on a pas besoin de remplacer la valeur
+                node.value = node.minimax();
+            }
         }
     }
 
-    public int minimax (int depth) {
-        if (depth == 0 || this.fils.isEmpty()) {
+    public int minimax () {
+        if (this.fils.isEmpty()) {
             return this.value;
         }
-        if (this.joueurAcc.getColor()==Colour.WHITE) {
-            int m = -999999999;
+        if (this.joueurAcc.getColor() == Colour.BLACK) {
+            int m = 999999999;
             for (NoeudIA node : fils) {
-                m = Math.max(m, node.minimax(depth - 1));
+                m = Math.min(m, node.minimax());
             }
             return m;
         }
         else {
-            int m = 999999999;
+            int m = -999999999;
             for (NoeudIA node : fils) {
-                m = Math.min(m, node.minimax(depth - 1));
+                m = Math.max(m, node.minimax());
             }
             return m;
         }
     }
 
-    public int rateValue () { //A FAIRE
-        return this.joueurAcc.getBilles()-this.joueurAdv.getBilles()
-        + this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees();
+    public int rateValue () {
+        if (this.joueurAcc.getColor() == Colour.WHITE) {//ATTENTION PEUT ETRE A INVERSER
+            return (this.joueurAcc.getBilles()-this.joueurAdv.getBilles()) * 2 + 
+            (this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees());
+        }
+        else {
+            return (this.joueurAdv.getBilles()-this.joueurAcc.getBilles()) * 2 + 
+            (this.joueurAdv.getBillesRougesCapturees() - this.joueurAcc.getBillesRougesCapturees());
+        }
     }
 }

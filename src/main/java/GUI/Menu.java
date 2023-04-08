@@ -10,7 +10,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
-import Controleur.Controleur;
+import Controleur.*;
+import Model.ModeJeu;
 import Model.Model;
 
 public class Menu extends JPanel {
@@ -24,7 +25,7 @@ public class Menu extends JPanel {
     int n;
 
     JLabel play;
-    Interrupteur isIA;
+    Interrupteur selectMode;
     JLabel retour;
 
     //fleche[0] = gauche;
@@ -91,9 +92,8 @@ public class Menu extends JPanel {
         });
 
 
-        isIA=new Interrupteur();
-        isIA.setBounds(550, 120+60*1, 300, 50);
-        isIA.initialise();
+        selectMode=new Interrupteur();
+        selectMode.setBounds(550, 120+60*1, 300, 50);
 
         play=new JLabel("Play");
         play.setVisible(true);
@@ -105,13 +105,25 @@ public class Menu extends JPanel {
             public void mouseClicked(MouseEvent e) {
                     fenetre.setVisible(false);
                     int n = getN();
-                    Model m = new Model(n,isIA.getValue()==1,false,false);
-                    View v = new View(n,fenetre);
-                    Controleur ctrl= new Controleur(m,v.getTaille_case());
-                    m.addObserveur(v);
-                    m.getPlateau().initialiseBille();
-                    m.noticeObserveurs(m);
-                    v.addCtrl(ctrl);
+                    Model m = null;
+                    try {
+                        m = new Model(n,selectMode.getValue());
+                        System.out.println("Mode : "+selectMode.getValue());
+                        View v = new View(n,fenetre);
+                        m.addObserveur(v);
+                        m.noticeObserveurs(m);
+                        if(selectMode.getValue()==ModeJeu.EDITION){
+                            ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
+                            v.addCtrlEditeur(ctrl);
+                        }
+                        else{
+                            Controleur ctrl= new Controleur(m,v.getTaille_case());
+                            v.addCtrl(ctrl);
+                        }
+                    } catch (CloneNotSupportedException e1) {
+                        System.out.println("Erreur dans le lancement du model dans Menu");
+                    }
+                    
             }
         });
 
@@ -131,7 +143,7 @@ public class Menu extends JPanel {
         });
 
         containerButton.add(play);
-        containerButton.add(isIA);
+        containerButton.add(selectMode);
         containerButton.add(retour);
 
         this.add(container,BorderLayout.NORTH);

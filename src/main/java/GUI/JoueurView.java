@@ -39,19 +39,18 @@ public class JoueurView extends JPanel{
             default : titre.setText("Erreur");break;
         }
         try {
-			imageBackground = ImageIO.read(new File("src/ressource/end_screen.png"));
+			imageBackground = ImageIO.read(new File("ressource/panneau.jpg"));
 		} catch (IOException e1) {
-			System.out.println("Image non trouvé");
-			e1.printStackTrace();
+			System.out.println("Image non trouve dans JoueurView");
 		}
         
         this.add(barre);
-        this.setBackground(Color.lightGray);
+
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        //g.drawImage(imageBackground,0,0,null);
+        g.drawImage(imageBackground,0,0,null);
         this.repaint();
         
     }
@@ -59,6 +58,8 @@ public class JoueurView extends JPanel{
     public void initialisePaneMarbleCaptured(){
         titre.setBounds(this.getWidth()/3, 10, 100, 20);
         this.add(titre);
+
+        imageBackground = imageBackground.getScaledInstance(getWidth(), getHeight(),Image.SCALE_FAST);
 
         for(int i = 0;i<2;i++){
             int j =i;

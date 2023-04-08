@@ -12,31 +12,27 @@ public class Model implements Observe<Data>,Data{
     int n;
     State state;
     LinkedList<Observeur<Data>> observeurs;
-    boolean isIA;
-    boolean estDefi;
-    boolean estEditeur;
+    ModeJeu modeJ;
 
-    public Model(int n, boolean b,boolean x,boolean y){
+    public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
+        modeJ = mode;
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
         Joueur j1 = new Joueur(Colour.WHITE,n);
         Joueur j2 = new Joueur(Colour.BLACK,n);
-        if(x){
-            plat = new Defi(n,j1,j2);
+        plat =new Plateau(n,j1,j2); 
+        plat.initialiseBille(); 
+        switch(mode){
+            case DEFI : plat = new Defi(n,j1,j2);break;
+            case EDITION :plat.creerPlatVide(); break;
+            case FUN : plat.initialiseBilleWithSpecialRedMarble();
+            default : break;
         }
-        else{
-            plat = new Plateau(n,j1,j2);
-        }
+
         state=State.SUCCESS;
         joueurs[0] = j1;
         joueurs[1] = j2;
         this.n = n;
-        this.estDefi = x;
-        this.isIA = b;
-        this.estEditeur = y;
-        if (estEditeur){
-            plat.crerPlatVide();
-        }
     }
 
     public void initialiseBille(){
@@ -49,21 +45,21 @@ public class Model implements Observe<Data>,Data{
     }
 
     public boolean isIa(){
-        return isIA;
+        return modeJ == ModeJeu.IA;
     }
 
     public Joueur getCurrentPlayer(){
         return joueurs[joueurCurrent];
     }
 
-    public Joueur getOtherPlayer(){
+    public Joueur getOtherPlayer() {
         if (joueurCurrent==0){
             return joueurs[1];
         }
         return joueurs[0];
     }
 
-    public void joueurSuivant(){
+    public void joueurSuivant() {
         joueurCurrent ++;
         if (joueurCurrent>=2){
             joueurCurrent = 0;
@@ -79,10 +75,10 @@ public class Model implements Observe<Data>,Data{
     }
 
     public State push(Position p,Direction d){
-        if (isIA && joueurCurrent == 1) {
+        if (modeJ == ModeJeu.IA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat, 5, getOtherPlayer(), getCurrentPlayer());
+                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 4);//peut etre depth pair ou impaire obligatoire
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return State.WRONGDIRECTION;
@@ -92,6 +88,8 @@ public class Model implements Observe<Data>,Data{
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         }
+        //this.joueurs[0].afficheTab();
+        //this.joueurs[1].afficheTab();
 
         if(plat.isOver(joueurs[0],joueurs[1])==null ){
             if(State.SUCCESS == state){
@@ -111,7 +109,7 @@ public class Model implements Observe<Data>,Data{
     }
 
     public boolean estEditeur(){
-        return estEditeur;
+        return modeJ == ModeJeu.EDITION;
     }
 
 
@@ -130,8 +128,8 @@ public class Model implements Observe<Data>,Data{
     }
 
     @Override
-    public Colour getMarble(int i, int j) {
-        return plat.getColor(i,j);
+    public Marble getMarble(int i, int j) {
+        return plat.getMarble(i,j);
     }
 
     @Override
@@ -151,6 +149,7 @@ public class Model implements Observe<Data>,Data{
 
     @Override
     public void reset(){
+        joueurCurrent = 0;
         partieFinie=false;
         plat.resetAll();
         plat.initialiseBille();

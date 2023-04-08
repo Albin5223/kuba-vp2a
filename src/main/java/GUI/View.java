@@ -36,7 +36,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 	JFrame launcher;
 
-	Image[] banqueMarblImages;
+	Image[] banqueMarbleImages;
+	Image[] banquePowerImages;
+
 	Image imageBackgroundScale;
 
     public View(int nb,JFrame l) {
@@ -44,7 +46,8 @@ public class View extends JFrame implements Observeur<Data>{
 		joueurs = new JoueurView[2];
 		launcher = l;
 		this.setTitle("Plateau KUBA");
-		banqueMarblImages = new Image[3];
+		banqueMarbleImages = new Image[3];
+		banquePowerImages = new Image[1];
 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
@@ -67,8 +70,15 @@ public class View extends JFrame implements Observeur<Data>{
 				String s="ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-				banqueMarblImages[i] = marbleScaled;
+				banqueMarbleImages[i] = marbleScaled;
 			}
+			for (int i = 0;i<1;i++){
+				String s="ressource/Power"+i+".png";
+				Image marble = ImageIO.read(new File(s));
+				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+				banquePowerImages[i] = marbleScaled;
+			}
+
 		}catch (IOException e) {
 			System.out.println("Image des billes non touve");
 		}
@@ -111,12 +121,12 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
-		jv1 = new JoueurView(Colour.WHITE,banqueMarblImages);
+		jv1 = new JoueurView(Colour.WHITE,banqueMarbleImages);
 		int taille_Jv = plateau.getX()-20;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();
-		jv2 = new JoueurView(Colour.BLACK,banqueMarblImages);
+		jv2 = new JoueurView(Colour.BLACK,banqueMarbleImages);
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
@@ -183,9 +193,14 @@ public class View extends JFrame implements Observeur<Data>{
 	public void updatePlateau(Graphics g,Data plateau) throws IOException {
 		for (int i = 0;i<longueur;i++){
 			for (int j = 0;j<longueur;j++){
-				Colour c = plateau.getMarble(j , i);
+				Colour c = plateau.getMarble(j , i).getColour();
+				Power p = plateau.getMarble(j, i).getPower();
 				if (c != null){
-					g.drawImage(banqueMarblImages[c.ordinal()],i*taille_case,j*taille_case,null);
+					switch(p){
+						case NORMAL:g.drawImage(banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
+						default : g.drawImage(banquePowerImages[p.ordinal()-1],i*taille_case,j*taille_case,null);break;
+					}
+					
 							
 				}
 			}

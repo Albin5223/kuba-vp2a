@@ -4,6 +4,7 @@ package GUI;
 import javax.swing.*;
 
 import Controleur.*;
+import Model.ModeJeu;
 import Model.Model;
 
 import java.awt.*;
@@ -30,7 +31,7 @@ public class PanneauDemarrage extends JPanel{
      */
 
 
-    public PanneauDemarrage(JFrame fen){
+    public PanneauDemarrage(JFrame fen) {
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
        
@@ -96,14 +97,20 @@ public class PanneauDemarrage extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 fenetre.setVisible(false);
-                Model m = new Model(3,false,false,true);
-                View v = new View(3,fenetre);
-                ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
+                Model m;
+                try {
+                    m = new Model(3,ModeJeu.EDITION);
+                    View v = new View(3,fenetre);
+                    ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
 
-                m.addObserveur(v);
+                    m.addObserveur(v);
+                    
+                    m.noticeObserveurs(m);
+                    v.addCtrlEditeur(ctrl);
+                } catch (CloneNotSupportedException e1) {
+                    System.out.println("Probleme avec le Clone du model");
+                }
                 
-                m.noticeObserveurs(m);
-                v.addCtrlEditeur(ctrl);
             }
 
             public void mouseEntered(MouseEvent e) {

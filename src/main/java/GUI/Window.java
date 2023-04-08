@@ -39,7 +39,7 @@ public class Window extends JFrame {
         pd.anime();
     }
 
-    public static void main(String[] args) { 
+    public static void main(String[] args) {
         new Window();
     }
 }

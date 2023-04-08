@@ -6,9 +6,11 @@ public enum Colour {
 	RED;
 
 	public String toString() {
-		if (this.ordinal() == 1) return "W";
-		else if (this.ordinal() == 0) return "B";
-		else return "R";
+		switch (this.ordinal()){
+			case 0 : return "B";
+			case 1 : return "W";
+			default : return "R";
+		}
 	}
 
 	static String[] name={"NOIR","BLANC","ROUGE"};
@@ -18,8 +20,10 @@ public enum Colour {
 	}
 
 	public Colour next(){
-		if (this.ordinal() == 0) return WHITE;
-		else if (this.ordinal() == 1) return RED;
-		else return null;
+		switch (this.ordinal()){
+			case 0 : return WHITE;
+			case 1 : return RED;
+			default : return null; 
+		}
 	}
 }

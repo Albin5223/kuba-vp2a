@@ -1,6 +1,6 @@
 package Model;
 
-public class Joueur {
+public class Joueur implements Cloneable {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
@@ -12,14 +12,11 @@ public class Joueur {
 		this.nBilles = 2*(n*n);
 		this.color = c;
 		this.billesRougesCapturees = 0;
+		this.tabBilles = new Position[n*n*2];
+		this.initTabBilles(n, c);
 	}
 
-	public void loseMarble(Position pos) {
-		for (int i = 0; i < tabBilles.length; i++) {
-			if (tabBilles[i].i == pos.i && tabBilles[i].j == pos.j) {
-				tabBilles[i].i = -1;
-			}
-		}
+	public void loseMarble() {
 		nBilles --;
 	}
 
@@ -40,7 +37,7 @@ public class Joueur {
 	}
 
 	public void undoWinRedMarble() {
-		this.billesRougesCapturees ++;
+		this.billesRougesCapturees --;
 	}
 
 	public int getBillesRougesCapturees() {
@@ -93,5 +90,17 @@ public class Joueur {
 			System.out.println("(pos " + i + " :" + tabBilles[i].i + "," + tabBilles[i].j + ")");
 		}
 	}
+
+	@Override
+    protected Joueur clone() throws CloneNotSupportedException {
+		Joueur jCloned = new Joueur(this.color,this.n);
+		for (int i = 0; i < tabBilles.length; i++) {
+			jCloned.tabBilles[i] = this.tabBilles[i].clone();
+		}
+		jCloned.nBilles = this.nBilles;
+		jCloned.billesRougesCapturees = this.billesRougesCapturees;
+		return jCloned;
+	}
+
 }
 
