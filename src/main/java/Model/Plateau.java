@@ -89,17 +89,23 @@ public class Plateau implements Cloneable{
 		ancienPlateau.add(s);
 	}
 
-	public void initialiseBilleWithSpecialRedMarble(){
+	public void initialiseBilleWithSpecialMarble(){
 		int rouge = longueur/3;
-		int nb = 0;
+		int marble = lengthN*lengthN/4;
+		int nbR = 0;
+		int nbW = 0;
+		int nbB = 0;
 		for (int i=0;i<longueur;i++){
 			for (int j=0;j<longueur;j++){
-				if(nb==rouge){
-					return;
+				if(nbR != rouge && board[i][j].setRedMarblePower()){
+					nbR++;
 				}
-				if(board[i][j].setRedMarblePower()){
-					nb++;
-				} 
+				if(nbW != marble && board[i][j].setMarblePower(Colour.WHITE)){
+					nbW++;
+				}
+				if(nbB != marble && board[i][j].setMarblePower(Colour.BLACK)){
+					nbB++;
+				}
 			}
 		}
 	}
@@ -154,6 +160,10 @@ public class Plateau implements Cloneable{
 		return pos.i >= 0 && pos.i < this.longueur && pos.j >= 0 && pos.j < this.longueur;
 	}
 
+	private void doublePush(Position pos,Direction dir,Joueur j1, Joueur j2){
+		 //TODO
+	}
+
 	
 
 	private void updateTabBilles(Position pos, Direction direction, Joueur j1, Joueur j2) {
@@ -199,6 +209,7 @@ public class Plateau implements Cloneable{
 		if (state != null) {//si il n'y a eu aucune erreur lors du procede alors nous poussons toutes les billes
 			updateTabBilles(pos, direction, j1, j2);
 			board[pos.i][pos.j].setColor(bille.getColour());
+			board[pos.i][pos.j].setPower(bille.getPower());
 			
 		}
 		return state;

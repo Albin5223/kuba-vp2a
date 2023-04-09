@@ -38,7 +38,7 @@ public class Window extends JFrame {
         this.add(pd);
         pd.anime();
     }
-
+    
     public static void main(String[] args) {
         new Window();
     }

@@ -47,7 +47,7 @@ public class View extends JFrame implements Observeur<Data>{
 		launcher = l;
 		this.setTitle("Plateau KUBA");
 		banqueMarbleImages = new Image[3];
-		banquePowerImages = new Image[1];
+		banquePowerImages = new Image[3];
 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
@@ -71,11 +71,9 @@ public class View extends JFrame implements Observeur<Data>{
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarbleImages[i] = marbleScaled;
-			}
-			for (int i = 0;i<1;i++){
-				String s="ressource/Power"+i+".png";
-				Image marble = ImageIO.read(new File(s));
-				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
+				s="ressource/Power"+i+".png";
+				marble = ImageIO.read(new File(s));
+				marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banquePowerImages[i] = marbleScaled;
 			}
 
@@ -198,10 +196,8 @@ public class View extends JFrame implements Observeur<Data>{
 				if (c != null){
 					switch(p){
 						case NORMAL:g.drawImage(banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
-						default : g.drawImage(banquePowerImages[p.ordinal()-1],i*taille_case,j*taille_case,null);break;
+						default : g.drawImage(banquePowerImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
 					}
-					
-							
 				}
 			}
 		}

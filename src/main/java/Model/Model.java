@@ -25,7 +25,7 @@ public class Model implements Observe<Data>,Data{
         switch(mode){
             case DEFI : plat = new Defi(n,j1,j2);break;
             case EDITION :plat.creerPlatVide(); break;
-            case FUN : plat.initialiseBilleWithSpecialRedMarble();
+            case FUN : plat.initialiseBilleWithSpecialMarble();
             default : break;
         }
 
@@ -153,6 +153,11 @@ public class Model implements Observe<Data>,Data{
         partieFinie=false;
         plat.resetAll();
         plat.initialiseBille();
+        switch(modeJ){
+            case EDITION :plat.creerPlatVide(); break;
+            case FUN : plat.initialiseBilleWithSpecialMarble(); break;
+            default : break;
+        }
         for (int i = 0;i<2;i++){
             joueurs[i].resetData();
         }

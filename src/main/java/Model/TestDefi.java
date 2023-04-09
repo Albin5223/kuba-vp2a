@@ -10,7 +10,7 @@ public class TestDefi {
 		
 		Model m = null;
 		try {
-			m = new Model(3,false,false,true);
+			m = new Model(3,ModeJeu.EDITION);
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

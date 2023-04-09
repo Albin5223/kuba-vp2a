@@ -30,6 +30,7 @@ public class Marble implements Cloneable {
 
     public void reset(){
         couleur = null;
+        power = Power.NORMAL;
     }
 
     public Colour getColour(){
@@ -62,4 +63,16 @@ public class Marble implements Cloneable {
         }
         return false;
     }
+
+    public boolean setMarblePower(Colour c){
+        Random r = new Random();
+        int x = r.nextInt(0, 4);
+        if(couleur == c && x==0){
+            setPower(Power.DOUBLEPUSH);
+            return true;
+        }
+        return false;
+    }
+
+
 }
