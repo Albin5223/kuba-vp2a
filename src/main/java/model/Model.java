@@ -71,12 +71,12 @@ public class Model implements Observe<Data>,Data{
         if (isIA && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 5);
+                move = NoeudIA.determineBestMove(plat, 5);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return;
             }
-            state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
+            state = plat.push(move.pos,move.dir,joueurs[1],joueurs[0]);
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
