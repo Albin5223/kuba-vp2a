@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
 
-import Controleur.Controleur;
+import Controleur.*;
 import Model.*;
 
 public class View extends JFrame implements Observeur<Data>{
@@ -196,6 +196,11 @@ public class View extends JFrame implements Observeur<Data>{
 	public void addCtrl(Controleur ctrl){
 		plateau.addMouseMotionListener(ctrl);
 		plateau.addMouseListener(ctrl);
+	}
+
+	public void addCtrlEditeur (ControleurEditeur ctrl){
+		this.addKeyListener(ctrl);
+		plateau.addMouseListener(ctrl);		
 	}
 
 	public void updatePlateau(Graphics g,Data plateau) throws IOException {

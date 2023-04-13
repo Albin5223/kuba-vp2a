@@ -70,7 +70,7 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     fenetre.setVisible(false);
                     int n = menu.getN();
-                    Model m = new Model(n,isIA.isSelected(),false);
+                    Model m = new Model(n,isIA.isSelected(),false,false);
                     View v = new View(n,fenetre);
                     Controleur ctrl= new Controleur(m,v.getTaille_case());
                     m.addObserveur(v);

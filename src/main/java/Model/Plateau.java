@@ -28,6 +28,7 @@ public class Plateau implements Cloneable{
 		this.j2 = j2;
 		this.j1.initTabBilles(n, j1.getColor());
 		this.j2.initTabBilles(n, j2.getColor());
+		
 	}
 
 
@@ -40,6 +41,9 @@ public class Plateau implements Cloneable{
 
 	public void setBoard( Colour [][] tab){
 		this.board = tab;
+	}
+	public void setBoard(String s){
+		this.board = stringToList(s);
 	}
 
 	public int getLongueur() {
@@ -302,6 +306,7 @@ public class Plateau implements Cloneable{
 
 	// Cette fonction permet de passer d'une chaine de caractère encodé de manière efficace à un tableau de Bille
 	public static Colour[][] stringToList(String s){
+		
 		int l = 0; //Ici on détermine la longueur d'une tableau 
 		int occ = 0; // On additionne tous les nombres derrière les caractères
 		while(occ<s.length()){
@@ -311,7 +316,6 @@ public class Plateau implements Cloneable{
 		}
 		int longueur = (int)Math.sqrt(l); //La longueur est la racine de la somme
 		Colour[][] res = new Colour[longueur][longueur];
-
 		int i = 0;
 		int colonne = 0;
 		int ligne = 0; //Puis on remplie le tableau
@@ -380,4 +384,19 @@ public class Plateau implements Cloneable{
 		}
         return clonedPlat;
     }
+
+	public void crerPlatVide(){
+		board = new Colour[longueur][longueur];
+	}
+
+	public void changeCouleur(Position p){
+		Colour c = board[p.i][p.j] ;
+		if (c == null){
+			c = Colour.BLACK;
+		}
+		else{
+			c=c.next();
+		}
+		board[p.i][p.j] = c;
+	}
 }

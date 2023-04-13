@@ -1,12 +1,14 @@
 package Model;
 
 
+import java.io.IOException;
+
 import Controleur.Controleur;
 import GUI.View;
 
 public class Test {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		//----------------------TEST PLATEAU--------------------
 		//Joueur j1 = new Joueur(Colour.BLACK,3);
 		//Joueur j2 = new Joueur(Colour.WHITE,3);
@@ -50,10 +52,12 @@ public class Test {
         }
 		*/
 
-		int n = 1;
-		Model m = new Model(n,true);
-		View v = new View(n,null);
+		int n = 0;
+		Model m = new Model(n,false,true,false);
+		View v = new View(3,null);
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
+		m.addObserveur(v);
+        m.noticeObserveurs(m);
 		v.addCtrl(ctrl);
 	}
 }
