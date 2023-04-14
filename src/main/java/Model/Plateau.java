@@ -91,20 +91,22 @@ public class Plateau implements Cloneable{
 
 	public void initialiseBilleWithSpecialMarble(){
 		int rouge = longueur/3;
-		int marble = lengthN*lengthN/4;
+		int marble = lengthN*lengthN/3;
 		int nbR = 0;
 		int nbW = 0;
 		int nbB = 0;
-		for (int i=0;i<longueur;i++){
-			for (int j=0;j<longueur;j++){
-				if(nbR != rouge && board[i][j].setRedMarblePower()){
-					nbR++;
-				}
-				if(nbW != marble && board[i][j].setMarblePower(Colour.WHITE)){
-					nbW++;
-				}
-				if(nbB != marble && board[i][j].setMarblePower(Colour.BLACK)){
-					nbB++;
+		while(marble != nbW || marble != nbB){
+			for (int i=0;i<longueur;i++){
+				for (int j=0;j<longueur;j++){
+					if(nbR != rouge && board[i][j].setRedMarblePower()){
+						nbR++;
+					}
+					if(nbW != marble && board[i][j].setMarblePower(Colour.WHITE)){
+						nbW++;
+					}
+					if(nbB != marble && board[i][j].setMarblePower(Colour.BLACK)){
+						nbB++;
+					}
 				}
 			}
 		}
@@ -160,8 +162,17 @@ public class Plateau implements Cloneable{
 		return pos.i >= 0 && pos.i < this.longueur && pos.j >= 0 && pos.j < this.longueur;
 	}
 
-	private void doublePush(Position pos,Direction dir,Joueur j1, Joueur j2){
-		 //TODO
+	private State doublePush(Position pos,Direction dir,Marble bille,Joueur j1, Joueur j2){
+		State state = push_rec(pos,dir,new Marble(),j1,j2);//et on avance dans la direction direc
+		if(state != null){
+			pos = pos.goTo(dir);
+			State bis = push_rec(pos,dir,new Marble(),j1,j2);//et on avance dans la direction direc
+
+			if(bis != null){
+				return bis;
+			}
+		}
+		return state;
 	}
 
 	
@@ -231,7 +242,14 @@ public class Plateau implements Cloneable{
 				return State.TILEBEFORENOTEMPTY;
 			}
 		}
-		State state = push_rec(pos,direction,new Marble(),j1,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+		State state = null;
+		if(board[pos.i][pos.j].getPower() ==  Power.DOUBLEPUSH){
+			state = doublePush(pos,direction,new Marble(),j1,j2);
+		}
+		else{
+			state = push_rec(pos,direction,new Marble(),j1,j2);//on push la bille du joueur 2 car c'est le joueur 1 qui pousse
+		}
+		
 		if (state == null) {
 			return State.PUSHINGOWNMARBLE;
 		}

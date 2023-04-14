@@ -57,7 +57,7 @@ public class Marble implements Cloneable {
     public boolean setRedMarblePower(){
         Random r = new Random();
         int x = r.nextInt(0, 5);
-        if(couleur == Colour.RED && x==0){
+        if(couleur == Colour.RED && power != Power.UNMOVABLE && x==0){
             setPower(Power.UNMOVABLE);
             return true;
         }
@@ -67,7 +67,7 @@ public class Marble implements Cloneable {
     public boolean setMarblePower(Colour c){
         Random r = new Random();
         int x = r.nextInt(0, 4);
-        if(couleur == c && x==0){
+        if(couleur == c && power != Power.DOUBLEPUSH && x==0){
             setPower(Power.DOUBLEPUSH);
             return true;
         }

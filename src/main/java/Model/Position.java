@@ -13,7 +13,7 @@ public class Position implements Cloneable {
 		Position pos = new Position(this.i,this.j);
 		pos.i+= direction.dirX();
 		pos.j+= direction.dirY();
-		return pos;
+		return pos; 
 	}
 
 	public int getI(){
