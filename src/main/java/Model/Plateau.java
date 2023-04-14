@@ -12,7 +12,7 @@ public class Plateau implements Cloneable{
 	protected Joueur j1;//j1 sera toujours les blancs parce que les blancs commencent toujours la partie
 	protected Joueur j2;//donc j2 sera toujours les noirs
 	public LinkedList<Position> lastMarblesPushed = new LinkedList<Position>();//pour simplifier la fonction push, undoLastMove et l'IA
-	public boolean defi = false;
+	private int nMarblesOut;
 
 	public Plateau(int n, Joueur j1, Joueur j2) {//on admet que n > 0 car nous avons deja fait le test dans la class Jeu
 		this.longueur = 4*n-1;
@@ -138,10 +138,11 @@ public class Plateau implements Cloneable{
 			j2.undoLoseMarble();
 			push_rec(pos,direction.dirInverse(),new Marble(j2.getColor()),j1,j2);//puisque j1 vient de push sur j2
 			for (int i = 0; i < j2.tabBilles.length; i++) {
-				if (j2.tabBilles[i].i == -1 && j2.tabBilles[i].j == pos.j) {//si une bille est au dernier emplacement et qu'on a push la bille de l'opposant alors cette bille avait comme coordonnee -1
+				if (j2.tabBilles[i].i == (-1 * nMarblesOut) && j2.tabBilles[i].j == pos.j) {//si une bille est au dernier emplacement et qu'on a push la bille de l'opposant alors cette bille avait comme coordonnee -1
 					j2.tabBilles[i].i = pos.i;//j n'a pas ete modifie
 				}
 			}
+			nMarblesOut--;
 		}
 		else if (s == State.PUSHREDMARBLE) {
 			j1.undoWinRedMarble();
@@ -149,7 +150,7 @@ public class Plateau implements Cloneable{
 			push_rec(pos,direction.dirInverse(),new Marble(Colour.RED),j1,j2);
 		}
 		else if (s == State.SUCCESS) {
-			push_rec(pos,direction.dirInverse(),new Marble(null),j1,j2);
+			push_rec(pos,direction.dirInverse(),new Marble(),j1,j2);
 		}
 		if (!rptboard) {
 			ancienPlateau.remove(ancienPlateau.size()-1);
@@ -157,6 +158,8 @@ public class Plateau implements Cloneable{
 		lastMarblesPushed.remove(lastMarblesPushed.size()-1);
 		lastMarblesPushed.remove(lastMarblesPushed.size()-1);//deux fois car dans le push_rec nous ajoutons encore la dernière position poussé
 	}
+
+
 
 	private boolean isInBoard(Position pos) {
 		return pos.i >= 0 && pos.i < this.longueur && pos.j >= 0 && pos.j < this.longueur;
@@ -178,21 +181,33 @@ public class Plateau implements Cloneable{
 	
 
 	private void updateTabBilles(Position pos, Direction direction, Joueur j1, Joueur j2) {
-		Position pos2 = pos.goTo(direction.dirInverse());
 		for (int i = 0; i < j1.tabBilles.length; i++) {
-			if (this.isInBoard(pos2) && board[pos2.i][pos2.j].isColour(j1.getColor()) && pos2.i == j1.tabBilles[i].i && pos2.j == j1.tabBilles[i].j) {
-				j1.tabBilles[i] = j1.tabBilles[i].goTo(direction);
+			if (this.isInBoard(pos) && board[pos.i][pos.j].getColour() == j1.getColor() && pos.i == j1.tabBilles[i].i && pos.j == j1.tabBilles[i].j) {
+				if (!this.isInBoard(pos.goTo(direction))) {
+					nMarblesOut++;
+					j1.tabBilles[i].i = -1*nMarblesOut;
+				}
+				else {
+					j1.tabBilles[i] = pos.goTo(direction);
+				}
 			}
-			else if (this.isInBoard(pos2) && board[pos2.i][pos2.j].isColour(j2.getColor()) && pos2.i == j2.tabBilles[i].i && pos2.j == j2.tabBilles[i].j) {
-				j2.tabBilles[i] = j2.tabBilles[i].goTo(direction);
+			else if (this.isInBoard(pos) && board[pos.i][pos.j].getColour() == j2.getColor() && pos.i == j2.tabBilles[i].i && pos.j == j2.tabBilles[i].j) {
+				if (!this.isInBoard(pos.goTo(direction))) {
+					nMarblesOut++;
+					j2.tabBilles[i].i = -1*nMarblesOut;
+				}
+				else {
+					j2.tabBilles[i] = pos.goTo(direction);
+				}
 			}
 		}
 	}
 
+
 	protected State push_rec (Position pos, Direction direction, Marble bille, Joueur j1, Joueur j2) {
 		if (!this.isInBoard(pos)) {//si on est en dehors du plateau et qu'on vient d'y pousser une bille
 			this.lastMarblesPushed.add(pos.goTo(direction.dirInverse()));
-			if (bille.getColour() == Colour.RED) {
+			if (bille.getColour()== Colour.RED) {
 				billesRouges--;
 				j1.winRedMarble();
 				return State.PUSHREDMARBLE;
@@ -205,9 +220,6 @@ public class Plateau implements Cloneable{
 				j2.loseMarble();//alors on enleve une bille au joueur
 				return State.PUSHOPPMARBLE;
 			}
-		}
-		if(board[pos.i][pos.j].getPower() == Power.UNMOVABLE){
-			return null;
 		}
 		if (board[pos.i][pos.j].getColour() == null) {
 			board[pos.i][pos.j].setColor(bille.getColour());

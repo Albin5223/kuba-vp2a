@@ -75,23 +75,20 @@ public class Model implements Observe<Data>,Data{
     }
 
     public State push(Position p,Direction d){
-        if (modeJ == ModeJeu.IA && joueurCurrent == 1) {
+        if (isIa() && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat,joueurs[1],joueurs[0], 4);//peut etre depth pair ou impaire obligatoire
+                move = NoeudIA.determineBestMove(plat, 5);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
-                return State.WRONGDIRECTION;
+                return null;
             }
-            state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
+            state = plat.push(move.pos,move.dir,joueurs[1],joueurs[0]);
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         }
-        //this.joueurs[0].afficheTab();
-        //this.joueurs[1].afficheTab();
-
-        if(plat.isOver(joueurs[0],joueurs[1])==null ){
+        if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
                 joueurSuivant();
             }
@@ -103,6 +100,7 @@ public class Model implements Observe<Data>,Data{
         noticeObserveurs(this);
         return state;
     }
+
 
     public int getJoueurCurrent(){
         return joueurCurrent;

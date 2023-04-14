@@ -88,7 +88,10 @@ public class Controleur extends MouseAdapter{
 				public void run() {
 					if(time == 0){
 						cancel();
-						move(p1,p2);
+						State r = move(p1,p2);
+						if(r == State.PUSHOPPMARBLE || r == State.PUSHREDMARBLE){
+							jouerIA(p1, p2);
+						}
 						
 					}
 					time--;

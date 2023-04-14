@@ -47,6 +47,8 @@ public class Joueur implements Cloneable {
 	public void resetData(){
 		nBilles = 2*(n*n);
 		billesRougesCapturees=0;
+		tabBilles = new Position[nBilles];
+		initTabBilles(n, color);
 	}
 
 	public void initTabBilles (int n, Colour c) {
