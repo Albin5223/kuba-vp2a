@@ -221,6 +221,10 @@ public class Plateau implements Cloneable{
 				return State.PUSHOPPMARBLE;
 			}
 		}
+		if(board[pos.i][pos.j].getPower() == Power.UNMOVABLE){
+			return null;
+		}
+
 		if (board[pos.i][pos.j].getColour() == null) {
 			board[pos.i][pos.j].setColor(bille.getColour());
 			board[pos.i][pos.j].setPower(bille.getPower());

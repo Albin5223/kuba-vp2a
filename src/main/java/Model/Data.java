@@ -16,5 +16,7 @@ public interface Data {
 
     public boolean estEditeur();
 
+    public int[][] billesCapturees();
+
 
 }

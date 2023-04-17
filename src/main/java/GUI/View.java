@@ -355,11 +355,7 @@ public class View extends JFrame implements Observeur<Data>{
 					vibrer(obj.getState());
 				}	
 			} else {
-				switch(obj.getState()){
-					case PUSHOPPMARBLE : joueurs[obj.getJoueurCurrent()].addMarble(1);break;
-					case PUSHREDMARBLE : joueurs[obj.getJoueurCurrent()].addMarble(0);break;
-					default : break;
-					}
+				joueurs[obj.getJoueurCurrent()].updateBille(obj.billesCapturees());
 				joueurs[obj.getJoueurCurrent()].repaint();
 
 				if (joueurs[obj.getJoueurCurrent()] != null) {
@@ -369,22 +365,27 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 			this.repaint();
 			if(obj.getVainqueur()!=null){
-				AnimationVicory[] av = new AnimationVicory[4];
-				double[] angles = {0,180,90,270};
-				for (int i =0;i<av.length;i++){
-					av[i] = new AnimationVicory(plateau.getX()+plateau.getWidth()/2, plateau.getY()+plateau.getHeight()/2, plateau.getWidth()/2, 0, conteneur);
-					av[i].setAngle(angles[i]);
-					av[i].setBounds(av[i].posX, av[i].posY, 100, 100);
-					conteneur.add(av[i]);
-					conteneur.repaint();
-					av[i].anime();
-				}
+				
+				animationVictoire();
 
 				isOver=true;
 				plateauMove(obj);
 			}
 		}
 		
+	}
+
+	public void animationVictoire(){
+		AnimationVicory[] av = new AnimationVicory[4];
+		double[] angles = {0,180,90,270};
+		for (int i =0;i<av.length;i++){
+			av[i] = new AnimationVicory(plateau.getX()+plateau.getWidth()/2, plateau.getY()+plateau.getHeight()/2, plateau.getWidth()/2, 0, conteneur);
+			av[i].setAngle(angles[i]);
+			av[i].setBounds(av[i].posX, av[i].posY, 100, 100);
+			conteneur.add(av[i]);
+			conteneur.repaint();
+			av[i].anime();
+		}
 	}
 
 }

@@ -19,6 +19,7 @@ public class Defi extends Plateau {
 
 	private Position [][] pos =  new Position[2][3];
 	private Direction [][] coups = new Direction[2][3] ;
+	private boolean defi;
 
 	public Defi(int n,Joueur j1, Joueur j2){
 		
@@ -26,7 +27,7 @@ public class Defi extends Plateau {
         initialiseDefi(n);
 		this.defi = true;
 		
-
+  
     }
 
 

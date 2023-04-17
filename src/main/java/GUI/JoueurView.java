@@ -86,6 +86,12 @@ public class JoueurView extends JPanel{
         }
         
     }
+    
+    public void updateBille(int [][] nv){
+        int i = (couleur.ordinal()+1)%2;
+        nbMarble[0] = nv[i][0];
+        nbMarble[1] = nv[i][1];
+    }
 
     public void paintMarble(Graphics g ,int i){
         if (i==0){
@@ -109,15 +115,7 @@ public class JoueurView extends JPanel{
             g.fillOval(MarbleX,MarbleY,15,15);
             MarbleX+=25;
         }
-    }
-
-    
-    public void addMarble(int i){
-        nbMarble[i]++;
-        paneMarble[i].repaint();
-    }
-
-    
+    }    
 
     public void mettreBarre(){
         barre.setBounds(0,0,20,this.getHeight());

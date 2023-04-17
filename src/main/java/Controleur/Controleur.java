@@ -1,8 +1,6 @@
 package Controleur;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import Model.*;
 
@@ -72,32 +70,16 @@ public class Controleur extends MouseAdapter{
     	Position p1 = new Position(positionDepartX,positionDepartY);
 		Position p2 = new Position(positionArriveX,positionArriveY);
 			
-		State retour = move(p1,p2);
-    	resetPosition();
+		move(p1,p2);
 		
-		if(model.isIa() && retour != State.PUSHOPPMARBLE && retour != State.PUSHREDMARBLE ){
-			jouerIA(p1,p2);
-		}
+    	resetPosition();
     }
 
-	public void jouerIA(Position p1,Position p2){
-		Timer vibe = new Timer();
-			vibe.schedule(new TimerTask() {
-				int time = 100;
-				
-				public void run() {
-					if(time == 0){
-						cancel();
-						State r = move(p1,p2);
-						if(r == State.PUSHOPPMARBLE || r == State.PUSHREDMARBLE){
-							jouerIA(p1, p2);
-						}
-						
-					}
-					time--;
-			}
-		},0,15);
+	public State jouerIA(){
+		State r = model.push(null,null);
+		return r;
 	}
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {

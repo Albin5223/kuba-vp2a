@@ -110,7 +110,12 @@ public class Model implements Observe<Data>,Data{
         return modeJ == ModeJeu.EDITION;
     }
 
-
+    public int[][] billesCapturees(){
+        int nb = 2*(n*n);
+        int[][] tab = {{joueurs[0].getBillesRougesCapturees(),nb-joueurs[1].getBilles()},
+                        {joueurs[1].getBillesRougesCapturees(),nb-joueurs[0].getBilles()}};
+        return tab;
+    }
 
     @Override
     public void addObserveur(Observeur<Data> obs) {
