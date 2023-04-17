@@ -20,9 +20,13 @@ public class JoueurView extends JPanel{
     //Indice 1 : Opp
     JPanel[] paneMarble;
     Image imageBackground;
+    Image[] banqueMarblImages;
 
-    public JoueurView(Colour c){
-        paneMarble = new JPanel[2];
+
+    public JoueurView(Colour c,Image[] img){
+        banqueMarblImages = img;
+
+        paneMarble = new JPanel[2]; 
         nbMarble = new int[2];
         this.setLayout(null);
         titre = new JLabel("");
@@ -35,19 +39,18 @@ public class JoueurView extends JPanel{
             default : titre.setText("Erreur");break;
         }
         try {
-			imageBackground = ImageIO.read(new File("ressource/end_screen.png"));
+			imageBackground = ImageIO.read(new File("ressource/panneau.jpg"));
 		} catch (IOException e1) {
-			System.out.println("Image non trouvé");
-			e1.printStackTrace();
+			System.out.println("Image non trouve dans JoueurView");
 		}
         
         this.add(barre);
-        this.setBackground(Color.lightGray);
+
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        //g.drawImage(imageBackground,0,0,null);
+        g.drawImage(imageBackground,0,0,null);
         this.repaint();
         
     }
@@ -55,6 +58,8 @@ public class JoueurView extends JPanel{
     public void initialisePaneMarbleCaptured(){
         titre.setBounds(this.getWidth()/3, 10, 100, 20);
         this.add(titre);
+
+        imageBackground = imageBackground.getScaledInstance(getWidth(), getHeight(),Image.SCALE_FAST);
 
         for(int i = 0;i<2;i++){
             int j =i;
@@ -81,6 +86,12 @@ public class JoueurView extends JPanel{
         }
         
     }
+    
+    public void updateBille(int [][] nv){
+        int i = (couleur.ordinal()+1)%2;
+        nbMarble[0] = nv[i][0];
+        nbMarble[1] = nv[i][1];
+    }
 
     public void paintMarble(Graphics g ,int i){
         if (i==0){
@@ -101,18 +112,10 @@ public class JoueurView extends JPanel{
                 MarbleY+=25;
                 MarbleX = 5;
             }
-            g.fillOval(MarbleX,MarbleY,15, 15);
+            g.fillOval(MarbleX,MarbleY,15,15);
             MarbleX+=25;
         }
-    }
-
-    
-    public void addMarble(int i){
-        nbMarble[i]++;
-        paneMarble[i].repaint();
-    }
-
-    
+    }    
 
     public void mettreBarre(){
         barre.setBounds(0,0,20,this.getHeight());

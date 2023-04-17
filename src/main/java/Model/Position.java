@@ -1,6 +1,6 @@
 package  Model;
 
-public class Position {
+public class Position implements Cloneable {
 	public int i;
 	public int j;
 
@@ -13,7 +13,7 @@ public class Position {
 		Position pos = new Position(this.i,this.j);
 		pos.i+= direction.dirX();
 		pos.j+= direction.dirY();
-		return pos;
+		return pos; 
 	}
 
 	public int getI(){
@@ -22,5 +22,11 @@ public class Position {
 
 	public int getJ(){
 		return this.j;
+	}
+
+	@Override
+	public Position clone() throws CloneNotSupportedException {
+		Position posCloned = new Position(this.i,this.j);
+		return posCloned;
 	}
 }

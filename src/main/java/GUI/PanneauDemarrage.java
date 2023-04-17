@@ -3,7 +3,8 @@ package GUI;
 
 import javax.swing.*;
 
-import Controleur.Controleur;
+import Controleur.*;
+import Model.ModeJeu;
 import Model.Model;
 
 import java.awt.*;
@@ -17,17 +18,20 @@ public class PanneauDemarrage extends JPanel{
     JPanel container;
     JPanel containerButton;
     JLabel[] JlabelLettres;
-    String[] lettres = {"K","U","B","A"};
+
+    String[] lettres = {"C","U","B","A"};
     JFrame fenetre;
     Menu menu;
 
-    JLabel play;
-    JCheckBox isIA;
+    JLabel[] button;
+    /*
+     * button[0] = play
+     * button[1] = modeEdition
+     * button[2] = quitter
+     */
 
-    boolean menuActivated;
 
-
-    public PanneauDemarrage(JFrame fen){
+    public PanneauDemarrage(JFrame fen) {
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
        
@@ -38,64 +42,116 @@ public class PanneauDemarrage extends JPanel{
         container.setOpaque(false);
         for(int i = 0;i<4;i++){
             JlabelLettres[i] = new JLabel(lettres[i]);
-            JlabelLettres[i].setFont(new Font("Impact",Font.PLAIN,200));
+            JlabelLettres[i].setFont(new Font("Impact",Font.PLAIN,150));
             JlabelLettres[i].setVisible(false);
             container.add(JlabelLettres[i]);
         }
-        menu = new Menu();
-        isIA=new JCheckBox("IA");
+        menu = new Menu(fenetre);
 
-        isIA.setSize(100,100);
-        isIA.setFont(new Font("Impact",Font.PLAIN,30));
-        isIA.setHorizontalAlignment(SwingConstants.CENTER);
 
+        containerButton = new JPanel();
+        containerButton.setOpaque(false);
        
-        isIA.setVisible(false);
+        containerButton.setLayout(null);
 
-        play=new JLabel("Play");
-        play.setSize(100,200);
-        play.setFont(new Font("Impact",Font.PLAIN,70));
 
-        play.setHorizontalAlignment(SwingConstants.CENTER);
-        play.addMouseListener(new MouseAdapter() {
+        String[] nom = {"Play","Mode Edition","Quitter"};
+        button = new JLabel[3];
+        for (int i = 0;i<button.length;i++){
+            button[i]=new JLabel(nom[i]);
+            button[i].setFont(new Font("Dyuthi",Font.PLAIN,50-(5*i)));
+            button[i].setVisible(false);
+            button[i].setHorizontalAlignment(SwingConstants.CENTER);
+            button[i].setBounds(550, 76+53*i, 300, 100);
+            containerButton.add(button[i]);
+            
+        }
+
+        
+
+        
+        button[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(!menuActivated){
-                    container.removeAll();
-                    container.add(menu);
-                    fenetre.revalidate();
-                    menuActivated=!menuActivated;
-                    isIA.setVisible(true);
-                }
-                else{
-                    fenetre.setVisible(false);
-                    int n = menu.getN();
-                    Model m = new Model(n,isIA.isSelected(),false);
-                    View v = new View(n,fenetre);
-                    Controleur ctrl= new Controleur(m,v.getTaille_case());
+                quitter();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                button[0].setFont(new Font("Dyuthi",Font.BOLD,button[0].getFont().getSize()));
+                button[0].setForeground(new Color(50,200,255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                button[0].setFont(new Font("Dyuthi",Font.PLAIN,button[0].getFont().getSize()));
+
+                button[0].setForeground(new Color(38, 38, 38));
+            }
+        });
+        
+        
+        button[1].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                fenetre.setVisible(false);
+                Model m;
+                try {
+                    m = new Model(3,ModeJeu.EDITION);
+                    View v = new View(3,fenetre);
+                    ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
+
                     m.addObserveur(v);
-                    m.getPlateau().initialiseBille();
+                    
                     m.noticeObserveurs(m);
-                    v.addCtrl(ctrl);
+                    v.addCtrlEditeur(ctrl);
+                } catch (CloneNotSupportedException e1) {
+                    System.out.println("Probleme avec le Clone du model");
                 }
                 
             }
+
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                button[1].setFont(new Font("Dyuthi",Font.BOLD,button[1].getFont().getSize()));
+                button[1].setForeground(new Color(50,200,255));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                button[1].setFont(new Font("Dyuthi",Font.PLAIN,button[1].getFont().getSize()));
+                button[1].setForeground(new Color(38, 38, 38));
+            }
         });
-        play.setVisible(false);
+
+        button[2].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                fenetre.dispose();
+                System.exit(0);
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                button[2].setFont(new Font("Dyuthi",Font.BOLD,button[2].getFont().getSize()));
+                button[2].setForeground(new Color(50,200,255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                button[2].setFont(new Font("Dyuthi",Font.PLAIN,button[1].getFont().getSize()));
+                button[2].setForeground(new Color(38, 38, 38));
+            }
+        });
+        
 
 
         this.add(container,BorderLayout.NORTH);
 
-        containerButton = new JPanel();
-        containerButton.setOpaque(false);
-        containerButton.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
-        gbc.insets=new Insets(0,0,60,0);
-        containerButton.add(play,gbc);
-        containerButton.add(isIA,gbc);
+        
         this.add(containerButton,BorderLayout.CENTER);
 
        
@@ -116,12 +172,51 @@ public class PanneauDemarrage extends JPanel{
                 }
                 if(time == -6){
 					cancel();
-                    play.setVisible(true);
+                    for(int i = 0;i<button.length;i++){
+                        button[i].setVisible(true);
+                    }
                     fenetre.repaint();	
 				}
 				
 				time--;
     		}
 		},0,15 );
+    }
+
+
+    public void quitter(){
+        this.removeAll();
+        
+        TransitionPane tp = new TransitionPane(1020,fenetre);
+        this.add(tp);
+        this.repaint();
+        Timer vibe = new Timer();
+		vibe.schedule(new TimerTask() {
+			
+            int size = 10;
+    		public void run() {
+                if(size<200){
+                    tp.billeMontante();
+                    size+=10;
+                }
+                else{
+                    if(tp.isFinish()){
+                        cancel();
+                        PanneauDemarrage.this.remove(tp);
+                        PanneauDemarrage.this.add(menu);   
+                        fenetre.revalidate();
+                    } 
+                }
+    		}
+		},0,20 );
+    }
+
+    public void affiche(){
+        for(int i = 0;i<4;i++){
+            JlabelLettres[i].setVisible(true);
+        }
+        for(int i = 0;i<3;i++){
+            button[i].setVisible(true);
+        }
     }
 }

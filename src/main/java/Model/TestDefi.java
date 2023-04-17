@@ -1,6 +1,6 @@
 package Model;
 
-import Controleur.Controleur;
+import Controleur.*;
 import GUI.View;
 
 public class TestDefi {
@@ -8,14 +8,20 @@ public class TestDefi {
 	public static void main(String[] args) {
 
 		
-		Model m = new Model(0,false,true);
+		Model m = null;
+		try {
+			m = new Model(3,ModeJeu.EDITION);
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		View v = new View(3,null);
-		Controleur ctrl= new Controleur(m,v.getTaille_case());
+		ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
 
 		m.addObserveur(v);
         
         m.noticeObserveurs(m);
-		v.addCtrl(ctrl);
+		v.addCtrlEditeur(ctrl);
 		
 	}
 }

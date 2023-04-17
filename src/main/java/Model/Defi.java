@@ -5,33 +5,41 @@ public class Defi extends Plateau {
 	private int numero;
 	private int prog = 0;
 
-	private Position [][] solpos = {{new Position(0,7),new Position(0,8),new Position(0,9)}};
-	private Direction [][] solcoups = {{Direction.EAST,Direction.EAST,Direction.EAST}} ;
+	
+
+	private Position [][] solpos = {
+								   {new Position(0,7),new Position(0,8),new Position(0,9)},
+								   {new Position(8,9), new Position(7,10)}
+								   };
+	private Direction [][] solcoups = {
+									{Direction.EAST,Direction.EAST,Direction.EAST},
+									{Direction.EAST,Direction.SOUTH}
+									};
 
 
-	private Position [][] pos =  {{null,null,null}};
-	private Direction [][] coups = {{null,null,null}} ;
+	private Position [][] pos =  new Position[2][3];
+	private Direction [][] coups = new Direction[2][3] ;
+	private boolean defi;
 
 	public Defi(int n,Joueur j1, Joueur j2){
 		
 		super(3,j1,j2);
         initialiseDefi(n);
-        numero = n;
 		this.defi = true;
 		
-
+  
     }
 
 
 
     public void initialiseDefi(int x){
-
+		/* 
     	board = new Colour[11][11];
     	
     	board[0][7] = Colour.WHITE;
         board[0][8] = Colour.BLACK;
         board[0][9] = Colour.BLACK;
-        board[0][10] = Colour.BLACK;
+        board[0][10] = Colour.BLACK;*/
 
     }
 
@@ -49,9 +57,8 @@ public class Defi extends Plateau {
     }
 
     public State coupValide (Position position, Direction direction){
-
     	if(position.i == solpos[numero][prog].i && position.j == solpos[numero][prog].j && direction == solcoups[numero][prog]){
-    			pos[numero][prog] = position;
+				pos[numero][prog] = position;
     			coups[numero][prog] = direction;
     			prog++;
     			return State.SUCCESS;
@@ -63,7 +70,7 @@ public class Defi extends Plateau {
 		if (board[position.i][position.j] ==  null) {
 			return State.EMPTYTILE;
 		}
-		if ( Colour.WHITE != board[position.i][position.j]) {
+		if ( Colour.WHITE != board[position.i][position.j].getColour()) {
 			return State.MARBLEOWNERSHIPERROR;
 		}
 		//Mauvaise gestion 

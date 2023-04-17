@@ -4,99 +4,109 @@ import java.util.LinkedList;
 
 public class NoeudIA  {
     private Plateau plateau;
-    protected Joueur joueurAcc;
-    protected Joueur joueurAdv;
-    protected int value;
-    protected Direction dir;
-    protected Position pos;
-    protected LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
+    private Joueur joueurAcc;
+    private Joueur joueurAdv;
+    private int value;
+    private Direction dir;
+    private Position pos;
+    private LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
 
-    public NoeudIA (Plateau p, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        this.plateau = p;
-        this.joueurAcc = joueurAcc;
-        this.joueurAdv = joueurAdv;
+    public NoeudIA (Plateau p) throws CloneNotSupportedException {
+        this.plateau = p;//.clone();
+        this.joueurAcc = this.plateau.getJoueur2();
+        this.joueurAdv = this.plateau.getJoueur1();
     }
 
-    public NoeudIA (NoeudIA n, Plateau p) throws CloneNotSupportedException {
-        plateau = n.plateau.clone();
-        joueurAcc = n.joueurAdv;//on fait jouer l'adversaire
-        joueurAdv = n.joueurAcc;
+    public NoeudIA (NoeudIA n, boolean replay) throws CloneNotSupportedException {
+        this.plateau = n.plateau;
+        if (!replay) {//donc si on ne rejoue pas
+            Joueur tmp = n.joueurAcc;
+            this.joueurAcc = n.joueurAdv;
+            this.joueurAdv = tmp;
+        }
+        else {
+            this.joueurAcc = n.joueurAcc;
+            this.joueurAdv = n.joueurAdv;
+        }
     }
 
     public static boolean validState(State s) {
         return s == State.SUCCESS || s == State.PUSHOPPMARBLE || s == State.PUSHREDMARBLE;
     }
 
-    public void createNextNodes () throws CloneNotSupportedException {
-        for (int i = 0; i < joueurAdv.tabBilles.length ; i++) {
+    public static void createNextNodes (NoeudIA node, int depth) throws CloneNotSupportedException {
+        if (depth == 0) {
+            return;
+        }
+        for (int i = 0; i < node.joueurAcc.tabBilles.length ; i++) {
             for (int j = 0; j < 4; j++) {
                 Direction dir = Direction.values()[j];
-                if (this.plateau.isOver(joueurAcc,joueurAdv) != null) {
-                    return;
+                Position pos = node.joueurAcc.tabBilles[i];
+                State state = State.WRONGDIRECTION;
+                if (pos.i >= 0) {
+                    state = node.plateau.push(pos,dir,node.joueurAcc,node.joueurAdv);
                 }
-                if (joueurAdv.tabBilles[i].i != -1 && validState(plateau.push(joueurAdv.tabBilles[i],dir,joueurAdv,joueurAcc))) {
-                    NoeudIA newNode = new NoeudIA(this,this.plateau);
-                    newNode.value=newNode.rateValue();
-                    newNode.dir=dir;
-                    newNode.pos=joueurAdv.tabBilles[i];
-                    fils.add(newNode);
-                    plateau.undoLastMove();
+                if (validState(state)) {
+                    NoeudIA newNode = null;//initialier uniquement pour prevenir les warnings de creation de la variable
+                    newNode = new NoeudIA(node, state == State.PUSHOPPMARBLE || state == State.PUSHREDMARBLE);//si on pousse une bille alors on rejoue
+                    if (depth == 1) {
+                        newNode.value = rateValue(node);
+                    }
+                    newNode.dir = dir;
+                    newNode.pos = pos;
+                    node.fils.add(newNode);
+                    createNextNodes(newNode, depth-1);
+                    if (depth != 1 && newNode.value != -999999999 && newNode.value != 99999999) {
+                        newNode.value = newNode.minimax();
+                    }
+                    node.plateau.undoLastMove(dir,state,node.joueurAcc,node.joueurAdv,false);
                 }
             }
         }
     }
 
-    public static Move determineBestMove (Plateau p, int depth, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        NoeudIA arbre = createTree(p, depth, joueurAcc, joueurAdv);
-        int bestValue = -999999999;
+    public static Move determineBestMove (Plateau p, int depth) throws CloneNotSupportedException {
+        NoeudIA arbre = new NoeudIA(p);
+        createNextNodes(arbre, depth);//change en place arbre
+        int bestValue = 999999999;
         NoeudIA bestNode = arbre.fils.getFirst();
         for (NoeudIA node : arbre.fils) {
-            int minm = node.minimax(depth);
-            if (bestValue < minm ) {
-                bestValue = minm;
+            System.out.println(node.value+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
+            if (node.value < bestValue) {
+                bestValue = node.value;
                 bestNode = node;
             }
         }
+        System.out.println("move choisi : " + bestNode.value+" = "+bestNode.dir+"/"+bestNode.pos.i+","+bestNode.pos.j);
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
         return bestMove;
     }
 
-    public static NoeudIA createTree (Plateau p, int depth, Joueur joueurAcc, Joueur joueurAdv) throws CloneNotSupportedException {
-        NoeudIA tete = new NoeudIA(p,joueurAcc,joueurAdv);
-        createTreeRec(tete, depth);
-        return tete;
-    }
-
-    public static void createTreeRec (NoeudIA n, int depth) throws CloneNotSupportedException {
-        if (depth == 0) { return; }
-        n.createNextNodes();
-        for (NoeudIA node : n.fils) {
-            createTreeRec(node, depth - 1);
-        }
-    }
-
-    public int minimax (int depth) {
-        if (depth == 0 || this.fils.isEmpty()) {
-            return this.value;
-        }
-        if (this.joueurAcc.getColor()==Colour.WHITE) {
-            int m = -999999999;
+    public int minimax () {
+        if (this.joueurAcc.getColor() == Colour.BLACK) {
+            int m = 999999999;
             for (NoeudIA node : fils) {
-                m = Math.max(m, node.minimax(depth - 1));
+                m = Math.min(m,node.value);// anciennement recursif et l'appel etait dans le min et le max a la place de node.value (=node.minimax())
             }
             return m;
         }
         else {
-            int m = 999999999;
+            int m = -999999999;
             for (NoeudIA node : fils) {
-                m = Math.min(m, node.minimax(depth - 1));
+                m = Math.max(m, node.value);
             }
             return m;
         }
     }
 
-    public int rateValue () { //A FAIRE
-        return this.joueurAcc.getBilles()-this.joueurAdv.getBilles()
-        + this.joueurAcc.getBillesRougesCapturees() - this.joueurAdv.getBillesRougesCapturees();
+    private static int rateValue (NoeudIA node) {
+        if (node.joueurAcc.getColor() == Colour.WHITE) {//ATTENTION PEUT ETRE A INVERSER
+            return (node.joueurAcc.getBilles()-node.joueurAdv.getBilles()) * 2 + 
+            (node.joueurAcc.getBillesRougesCapturees() - node.joueurAdv.getBillesRougesCapturees());
+        }
+        else {
+            return (node.joueurAdv.getBilles()-node.joueurAcc.getBilles()) * 2 + 
+            (node.joueurAdv.getBillesRougesCapturees() - node.joueurAcc.getBillesRougesCapturees());
+        }
     }
 }

@@ -2,7 +2,7 @@ package Model;
 
 public interface Data {
 
-    public Colour getMarble(int i,int j);
+    public Marble getMarble(int i,int j);
 
     public State getState();
 
@@ -12,7 +12,11 @@ public interface Data {
 
     public void reset();
 
+    public int getJoueurCurrent();
 
+    public boolean estEditeur();
+
+    public int[][] billesCapturees();
 
 
 }

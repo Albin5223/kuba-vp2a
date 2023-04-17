@@ -12,26 +12,27 @@ public class Model implements Observe<Data>,Data{
     int n;
     State state;
     LinkedList<Observeur<Data>> observeurs;
-    boolean isIA;
-    boolean estDefi;
+    ModeJeu modeJ;
 
-    public Model(int n, boolean b,boolean x){
+    public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
+        modeJ = mode;
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
         Joueur j1 = new Joueur(Colour.WHITE,n);
         Joueur j2 = new Joueur(Colour.BLACK,n);
-        if(x){
-            plat = new Defi(n,j1,j2);
+        plat =new Plateau(n,j1,j2); 
+        plat.initialiseBille(); 
+        switch(mode){
+            case DEFI : plat = new Defi(n,j1,j2);break;
+            case EDITION :plat.creerPlatVide(); break;
+            case FUN : plat.initialiseBilleWithSpecialMarble();
+            default : break;
         }
-        else{
-            plat = new Plateau(n,j1,j2);
-        }
+
         state=State.SUCCESS;
         joueurs[0] = j1;
         joueurs[1] = j2;
         this.n = n;
-        this.estDefi = x;
-        this.isIA = b;
     }
 
     public void initialiseBille(){
@@ -43,18 +44,22 @@ public class Model implements Observe<Data>,Data{
         return n;
     }
 
+    public boolean isIa(){
+        return modeJ == ModeJeu.IA;
+    }
+
     public Joueur getCurrentPlayer(){
         return joueurs[joueurCurrent];
     }
 
-    public Joueur getOtherPlayer(){
+    public Joueur getOtherPlayer() {
         if (joueurCurrent==0){
             return joueurs[1];
         }
         return joueurs[0];
     }
 
-    public void joueurSuivant(){
+    public void joueurSuivant() {
         joueurCurrent ++;
         if (joueurCurrent>=2){
             joueurCurrent = 0;
@@ -69,23 +74,21 @@ public class Model implements Observe<Data>,Data{
         return plat;
     }
 
-    public void push(Position p,Direction d){
-        if (isIA && joueurCurrent == 1) {
+    public State push(Position p,Direction d){
+        if (isIa() && joueurCurrent == 1) {
             Move move;
             try {
-                move = NoeudIA.determineBestMove(plat, 5, getOtherPlayer(), getCurrentPlayer());
+                move = NoeudIA.determineBestMove(plat, 5);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
-                return;
+                return null;
             }
-            state = plat.push(move.pos,move.dir,getCurrentPlayer(),getOtherPlayer());
-            plat.affiche();
+            state = plat.push(move.pos,move.dir,joueurs[1],joueurs[0]);
         }
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         }
-
-        if(plat.isOver(joueurs[0],joueurs[1])==null ){
+        if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
                 joueurSuivant();
             }
@@ -95,8 +98,24 @@ public class Model implements Observe<Data>,Data{
         }
 
         noticeObserveurs(this);
+        return state;
     }
 
+
+    public int getJoueurCurrent(){
+        return joueurCurrent;
+    }
+
+    public boolean estEditeur(){
+        return modeJ == ModeJeu.EDITION;
+    }
+
+    public int[][] billesCapturees(){
+        int nb = 2*(n*n);
+        int[][] tab = {{joueurs[0].getBillesRougesCapturees(),nb-joueurs[1].getBilles()},
+                        {joueurs[1].getBillesRougesCapturees(),nb-joueurs[0].getBilles()}};
+        return tab;
+    }
 
     @Override
     public void addObserveur(Observeur<Data> obs) {
@@ -112,8 +131,8 @@ public class Model implements Observe<Data>,Data{
     }
 
     @Override
-    public Colour getMarble(int i, int j) {
-        return plat.getColor(i,j);
+    public Marble getMarble(int i, int j) {
+        return plat.getMarble(i,j);
     }
 
     @Override
@@ -133,13 +152,24 @@ public class Model implements Observe<Data>,Data{
 
     @Override
     public void reset(){
+        joueurCurrent = 0;
         partieFinie=false;
         plat.resetAll();
         plat.initialiseBille();
+        switch(modeJ){
+            case EDITION :plat.creerPlatVide(); break;
+            case FUN : plat.initialiseBilleWithSpecialMarble(); break;
+            default : break;
+        }
         for (int i = 0;i<2;i++){
             joueurs[i].resetData();
         }
 
+        noticeObserveurs(this);
+    }
+
+    public void changeCouleur(Position p){
+        plat.changeCouleur(p);
         noticeObserveurs(this);
     }
 }
