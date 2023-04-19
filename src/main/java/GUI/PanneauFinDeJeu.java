@@ -13,8 +13,6 @@ public class PanneauFinDeJeu extends JPanel{
     JButton rejouer;
     JButton quitter;
     JLabel afficheVainqueur;
-    JLabel afficheDemande;
-
 
     Image background;
 
@@ -22,8 +20,6 @@ public class PanneauFinDeJeu extends JPanel{
     public PanneauFinDeJeu(Colour c,Image img){
         this.setLayout(null);
         background = img;
-        afficheDemande = new JLabel("Voulez-vous rejouer?");
-        afficheDemande.setForeground(new Color(155,255,155));
         afficheVainqueur = new JLabel("Le joueur "+c.getName()+" a gagné");
         rejouer = new JButton("Rejouer");
         quitter = new JButton("Quitter");
@@ -38,16 +34,14 @@ public class PanneauFinDeJeu extends JPanel{
 
     public void initialise(){
         this.setBackground(Color.RED);
-        afficheVainqueur.setBounds( 80, 0, 200,25);
-        afficheDemande.setBounds(90, 50, 200,25);
+        afficheVainqueur.setBounds( 80, 130, 200,25);
 
 
-        quitter.setBounds(175,100,100,30);
+        quitter.setBounds(200,230,100,30);
         this.add(quitter);
 
-        rejouer.setBounds(30,100,100,30);
+        rejouer.setBounds(30,230,100,30);
         this.add(rejouer);
-        this.add(afficheDemande);
         this.add(afficheVainqueur);
 
         this.repaint();

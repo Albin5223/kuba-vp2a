@@ -89,7 +89,6 @@ public class View extends JFrame implements Observeur<Data>{
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				g.drawImage(imageBackgroundScale,0,0,null);
-				this.repaint();
 				
 			}
 		};
@@ -111,11 +110,7 @@ public class View extends JFrame implements Observeur<Data>{
 						g1.drawRect(taille_case/2+i*taille_case,taille_case/2+j*taille_case,taille_case,taille_case);
 					}
 				}
-				try {
-					updatePlateau(g,obj);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
+				updatePlateau(g,obj);
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
@@ -153,6 +148,7 @@ public class View extends JFrame implements Observeur<Data>{
 						time--;
     				}
 					},0,10);
+					vibe.purge();
 				}
             }
 
@@ -188,7 +184,7 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.addMouseListener(ctrl);
 	}
 
-	public void updatePlateau(Graphics g,Data plateau) throws IOException {
+	public void updatePlateau(Graphics g,Data plateau){
 		for (int i = 0;i<longueur;i++){
 			for (int j = 0;j<longueur;j++){
 				Colour c = plateau.getMarble(j , i).getColour();
@@ -234,6 +230,8 @@ public class View extends JFrame implements Observeur<Data>{
 				time--;
     		}
 		},0,100);
+
+		vibe.purge();
 	}
 
 	public void plateauMove(Data data){
@@ -251,9 +249,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 				if(time == 0){
 					cancel();
-					
+					imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400, 300,Image.SCALE_FAST);
 					panneauFinDeJeu = new PanneauFinDeJeu(c,imagePanneauFinDeJeu);
-					panneauFinDeJeu.setBounds(View.this.getWidth()/2-150, View.this.getHeight()/2-100, 300, 200);
+					panneauFinDeJeu.setBounds(View.this.getWidth()/2-200, View.this.getHeight()/2-150, 400, 300);
 					panneauFinDeJeu.initialise();
 
 					conteneur.add(panneauFinDeJeu);
@@ -275,6 +273,7 @@ public class View extends JFrame implements Observeur<Data>{
 				time--;
     		}
 		},0,10);
+		vibe.purge();
 	}
 
 
@@ -299,6 +298,7 @@ public class View extends JFrame implements Observeur<Data>{
 				time--;
     		}
 		},0,10);
+		vibe.purge();
 		
 	}
 
@@ -323,6 +323,7 @@ public class View extends JFrame implements Observeur<Data>{
 				time--;
     		}
 		},0, 150);
+		affiche.purge();
 		
 	}
 
@@ -349,6 +350,7 @@ public class View extends JFrame implements Observeur<Data>{
 			start(obj);
 		}
 		else {
+			this.repaint();
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
 				if(!isViber){
 					isViber=true;
@@ -363,7 +365,6 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 
 			}
-			this.repaint();
 			if(obj.getVainqueur()!=null){
 				
 				animationVictoire();

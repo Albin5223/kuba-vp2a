@@ -180,7 +180,7 @@ public class PanneauDemarrage extends JPanel{
 				
 				time--;
     		}
-		},0,15 );
+		},10,15 );
     }
 
 
