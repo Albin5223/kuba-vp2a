@@ -1,8 +1,6 @@
 package Controleur;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import Model.*;
 
@@ -71,18 +69,20 @@ public class Controleur extends MouseAdapter{
     public void mouseReleased(MouseEvent e) {
     	Position p1 = new Position(positionDepartX,positionDepartY);
 		Position p2 = new Position(positionArriveX,positionArriveY);
-			
-		State r = move(p1,p2);
+		
+		if(model.tourIA()){
+			Move m = model.determineBestMove();
+			model.push(m.pos, m.dir);
+		}
+		else{
+			move(p1,p2);
+		}
+		
 		
     	resetPosition();
-
+		
     }
 		
-
-	public State jouerIA(){
-		State r = model.push(null,null);
-		return r;
-	}
 
 
 	@Override

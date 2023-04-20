@@ -184,11 +184,11 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.addMouseListener(ctrl);
 	}
 
-	public void updatePlateau(Graphics g,Data plateau){
+	public void updatePlateau(Graphics g,Data obj){
 		for (int i = 0;i<longueur;i++){
 			for (int j = 0;j<longueur;j++){
-				Colour c = plateau.getMarble(j , i).getColour();
-				Power p = plateau.getMarble(j, i).getPower();
+				Colour c = obj.getMarble(j , i).getColour();
+				Power p = obj.getMarble(j, i).getPower();
 				if (c != null){
 					switch(p){
 						case NORMAL:g.drawImage(banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
@@ -330,14 +330,9 @@ public class View extends JFrame implements Observeur<Data>{
 	
 
 	public void joueurSuivant(Data obj){
-		if (obj.getJoueur().getColor()==Colour.WHITE){
-			jv1.mettreBarre();
-			jv2.enleverBarre();
-		}
-		else{
-			jv2.mettreBarre();
-			jv1.enleverBarre();
-		}
+		int n = obj.getJoueurCurrent();
+		joueurs[n].mettreBarre();
+		joueurs[(n+1)%2].enleverBarre();
 	}
 
 	public int getTaille_case(){
@@ -346,11 +341,19 @@ public class View extends JFrame implements Observeur<Data>{
 
 	@Override
 	public void update(Data obj) {
+		if(obj.getVainqueur()!=null){
+				
+			animationVictoire();
+
+			isOver=true;
+			plateauMove(obj);
+			return;
+		}
 		if(plateau==null){
 			start(obj);
 		}
 		else {
-			this.repaint();
+			
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
 				if(!isViber){
 					isViber=true;
@@ -363,17 +366,31 @@ public class View extends JFrame implements Observeur<Data>{
 				if (joueurs[obj.getJoueurCurrent()] != null) {
 					joueurSuivant(obj);
 				}
+				if(obj.tourIA()){
+					IAturn();
+				}
+				this.repaint();
 
 			}
-			if(obj.getVainqueur()!=null){
-				
-				animationVictoire();
-
-				isOver=true;
-				plateauMove(obj);
-			}
-		}
+		}	
 		
+	}
+
+	public void IAturn(){
+		Timer affiche = new Timer();
+		affiche.schedule(new TimerTask() {
+			int time = 5;
+
+    		public void run() {
+				if(time == 0){
+					cancel();
+					plateau.getMouseListeners()[0].mouseReleased(null);
+				}
+				time--;
+    		}
+		},0, 150);
+		affiche.purge();
+
 	}
 
 	public void animationVictoire(){

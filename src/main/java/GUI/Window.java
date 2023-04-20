@@ -40,6 +40,12 @@ public class Window extends JFrame {
     }
     
     public static void main(String[] args) {
-        new Window();
+        javax.swing.SwingUtilities.invokeLater(
+			new Runnable() {
+				public void run() {
+					new Window();
+				}
+			}
+		);
     }
 }
