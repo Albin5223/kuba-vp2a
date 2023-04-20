@@ -74,7 +74,8 @@ public class Model implements Observe<Data>,Data{
     } 
     
     public void ouvreDefi(int n){
-        String a = menuNiveaux.ouvreDefi(n);
+        menuNiveaux.panneauOuverture();
+        String a = menuNiveaux.getDefi(menuNiveaux.result,false);
         String platNiveau = "";
         int x = 0;
         int y = 0;
