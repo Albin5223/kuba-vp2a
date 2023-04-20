@@ -48,6 +48,7 @@ public class Model implements Observe<Data>,Data{
         return modeJ == ModeJeu.IA;
     }
 
+
     public Joueur getCurrentPlayer(){
         return joueurs[joueurCurrent];
     }
@@ -74,7 +75,20 @@ public class Model implements Observe<Data>,Data{
         return plat;
     }
 
+    public Move determineBestMove(){
+        Move move = null;
+        try {
+            move = NoeudIA.determineBestMove(plat, 5);
+        } catch (CloneNotSupportedException e) {
+
+            e.printStackTrace();
+        }
+
+        return move;
+    }
+
     public State push(Position p,Direction d){
+        /* 
         if (isIa() && joueurCurrent == 1) {
             Move move;
             try {
@@ -88,6 +102,8 @@ public class Model implements Observe<Data>,Data{
         else {
             state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         }
+        */
+        state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
                 joueurSuivant();
@@ -101,7 +117,9 @@ public class Model implements Observe<Data>,Data{
         return state;
     }
 
-
+    public boolean tourIA(){
+        return isIa() && getJoueurCurrent() == 1;
+    }
     public int getJoueurCurrent(){
         return joueurCurrent;
     }

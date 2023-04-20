@@ -4,7 +4,6 @@ public class Joueur implements Cloneable {
 	private Colour color;//'b' pour noir (= black) et 'w' pour blanc (=white)
 	private int nBilles;//pour savoir combien de billes il lui reste
 	private int billesRougesCapturees;//si il en a capture la moitie il peut gagner
-	private int billeOppCapturees;
 	private int n;
 	protected Position[] tabBilles;
 

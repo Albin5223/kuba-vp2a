@@ -71,13 +71,11 @@ public class NoeudIA  {
         int bestValue = 999999999;
         NoeudIA bestNode = arbre.fils.getFirst();
         for (NoeudIA node : arbre.fils) {
-            System.out.println(node.value+" = "+node.dir+"/"+node.pos.i+","+node.pos.j);
             if (node.value < bestValue) {
                 bestValue = node.value;
                 bestNode = node;
             }
         }
-        System.out.println("move choisi : " + bestNode.value+" = "+bestNode.dir+"/"+bestNode.pos.i+","+bestNode.pos.j);
         Move bestMove = new Move(bestNode.pos,bestNode.dir);
         return bestMove;
     }

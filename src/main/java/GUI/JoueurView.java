@@ -38,6 +38,7 @@ public class JoueurView extends JPanel{
             case WHITE : titre.setText("Joueur BLANC");break;
             default : titre.setText("Erreur");break;
         }
+        titre.setForeground(Color.GREEN);
         try {
 			imageBackground = ImageIO.read(new File("ressource/panneau.jpg"));
 		} catch (IOException e1) {

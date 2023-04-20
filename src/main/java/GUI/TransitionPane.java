@@ -72,6 +72,7 @@ public class TransitionPane extends JPanel {
                 time-=5;
         }
         },0,15);
+        vibe.purge();
     }
 
     public boolean isFinish(){
