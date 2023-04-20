@@ -18,11 +18,11 @@ public class Window extends JFrame {
         this.setSize(1020,600);
         this.setVisible(true);
         this.setResizable(false);
-        this.setIconImage(getIconImage());
-
         Image iconImage = null;
         try {
-            iconImage = ImageIO.read(new File("ressource/background4.jpg"));
+            this.setIconImage(ImageIO.read(new File("src/ressource/icone.png")));
+
+            iconImage = ImageIO.read(new File("src/ressource/background4.jpg"));
         } catch (IOException e) {
            System.out.println("Image non trouve dans Window");
         }

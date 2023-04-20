@@ -41,7 +41,7 @@ public class AnimationVicory extends JPanel {
         this.conteneur = conteneur;
 
         try {
-			img = ImageIO.read(new File("ressource/etoile.png"));
+			img = ImageIO.read(new File("src/ressource/etoile.png"));
             img = img.getScaledInstance(100,100,Image.SCALE_FAST);
 		}catch (IOException e) {
 			System.out.println("Image non trouve dans AnimationVictory");

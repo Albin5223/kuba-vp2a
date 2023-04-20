@@ -40,7 +40,7 @@ public class JoueurView extends JPanel{
         }
         titre.setForeground(Color.GREEN);
         try {
-			imageBackground = ImageIO.read(new File("ressource/panneau.jpg"));
+			imageBackground = ImageIO.read(new File("src/ressource/panneau.jpg"));
 		} catch (IOException e1) {
 			System.out.println("Image non trouve dans JoueurView");
 		}

@@ -1,13 +1,14 @@
 package GUI;
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import Controleur.*;
@@ -22,16 +23,17 @@ public class Menu extends JPanel {
     JPanel container;
     JPanel containerButton;
     JLabel[] fleches;
+    //fleche[0] = gauche;
+    //fleche[1] = droite;
     int n;
 
     JLabel play;
     Interrupteur selectMode;
     JLabel retour;
 
-    //fleche[0] = gauche;
-    //fleche[1] = droite;
+
     JFrame fenetre;
-    
+
     public Menu(JFrame fen) {
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
@@ -56,7 +58,14 @@ public class Menu extends JPanel {
         fleches = new JLabel[2];
 
         for(int i = 0;i<2;i++){
-            fleches[i] = new JLabel(new ImageIcon("ressource/fleche"+i+".png"));
+            BufferedImage im=null;
+            try {
+                im= ImageIO.read(new File("src/ressource/fleche"+i+".png"));
+            } catch (IOException e) {
+                System.out.println("image des fleche");
+            }
+
+            fleches[i] = new JLabel(new ImageIcon (im.getScaledInstance(200,200, Image.SCALE_SMOOTH)));
             fleches[i].setOpaque(false);
             fleches[i].setForeground(new Color(0,0,0,150));
         }
@@ -77,6 +86,31 @@ public class Menu extends JPanel {
                 container.repaint();
 
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                BufferedImage im=null;
+                try {
+                    im= ImageIO.read(new File("src/ressource/flecheHover0.png"));
+                } catch (IOException ex) {
+                    System.out.println("image des fleche hover");
+                }
+                fleches[0].setIcon(new ImageIcon(im.getScaledInstance(200,200, Image.SCALE_SMOOTH)));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                BufferedImage im=null;
+                try {
+                    im= ImageIO.read(new File("src/ressource/fleche0.png"));
+                } catch (IOException ex) {
+                    System.out.println("image des fleche hover");
+                }
+                fleches[0].setIcon(new ImageIcon(im.getScaledInstance(200,200, Image.SCALE_SMOOTH)));
+
+            }
         });
 
         fleches[1].addMouseListener(new MouseAdapter() {
@@ -88,6 +122,32 @@ public class Menu extends JPanel {
                 n+=1;
                 taille.setText(n+"");
                 container.repaint();   
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                BufferedImage im=null;
+                try {
+                    im= ImageIO.read(new File("src/ressource/flecheHover1.png"));
+                } catch (IOException ex) {
+                    System.out.println("image des fleche hover");
+                    System.exit(1);
+                }
+                fleches[1].setIcon(new ImageIcon(im.getScaledInstance(200,200, Image.SCALE_SMOOTH)));
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                BufferedImage im=null;
+                try {
+                    im= ImageIO.read(new File("src/ressource/fleche1.png"));
+                } catch (IOException ex) {
+                    System.out.println("image des fleche hover");
+                }
+                fleches[1].setIcon(new ImageIcon(im.getScaledInstance(200,200, Image.SCALE_SMOOTH)));
             }
         });
 

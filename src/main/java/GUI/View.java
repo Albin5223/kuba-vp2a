@@ -63,15 +63,15 @@ public class View extends JFrame implements Observeur<Data>{
 
 		//Trouver une boone image de fond
 		try {
-			imageBackground = ImageIO.read(new File("ressource/background3.jpg"));
-			imagePanneauFinDeJeu = ImageIO.read(new File("ressource/end_screen.png"));
+			imageBackground = ImageIO.read(new File("src/ressource/background3.jpg"));
+			imagePanneauFinDeJeu = ImageIO.read(new File("src/ressource/end_screen.png"));
 			imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(300,200,Image.SCALE_FAST);
 			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
+				String s="src/ressource/Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banqueMarbleImages[i] = marbleScaled;
-				s="ressource/Power"+i+".png";
+				s="src/ressource/Power"+i+".png";
 				marble = ImageIO.read(new File(s));
 				marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
 				banquePowerImages[i] = marbleScaled;
