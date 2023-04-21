@@ -159,11 +159,6 @@ public class Model implements Observe<Data>,Data{
     }
 
     @Override
-    public Joueur getJoueur() {
-        return getCurrentPlayer();
-    }
-
-    @Override
     public Joueur getVainqueur() {
         return plat.isOver(joueurs[0],joueurs[1]);
     }

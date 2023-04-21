@@ -56,7 +56,7 @@ public class Menu extends JPanel {
         fleches = new JLabel[2];
 
         for(int i = 0;i<2;i++){
-            fleches[i] = new JLabel(new ImageIcon("ressource/fleche"+i+".png"));
+            fleches[i] = new JLabel(new ImageIcon(BanqueImage.fleches[i]));
             fleches[i].setOpaque(false);
             fleches[i].setForeground(new Color(0,0,0,150));
         }

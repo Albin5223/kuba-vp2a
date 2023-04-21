@@ -4,12 +4,9 @@ package GUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,8 +25,7 @@ public class OptionView extends JPanel {
 	JLabel icon;
     JLabel abandonner;
     JLabel replay;
-    JLabel quitter;
-	Image iconImage;	
+    JLabel quitter;	
 
     public OptionView(View view, JFrame launcher){
         this.setLayout(null);
@@ -38,17 +34,14 @@ public class OptionView extends JPanel {
         this.launcher = launcher;
 		this.setOpaque(false);
 		
-		try {
-			iconImage = ImageIO.read(new File("ressource/iconDerouler.png"));
-			icWidth = iconImage.getWidth(this)/3;
-			icHeight = iconImage.getHeight(this)/3;
-			iconImage = iconImage.getScaledInstance(icWidth, icHeight, Image.SCALE_FAST);
-
-			ImageIcon imic = new ImageIcon(iconImage);
-			icon = new JLabel(imic);
-		} catch (IOException e) {
-			System.out.println("Image non trouve dans OptionView");
-		}
+		
+		icWidth = BanqueImage.imageIcon.getWidth(this)/3;
+		icHeight = BanqueImage.imageIcon.getHeight(this)/3;
+		BanqueImage.imageIcon = BanqueImage.scaleImage(icHeight, icHeight, BanqueImage.imageIcon);
+		
+		ImageIcon imic = new ImageIcon(BanqueImage.imageIcon);
+		icon = new JLabel(imic);
+		
 		icon.setBounds(0, 0, icWidth, icHeight);
 
 		icon.addMouseListener(new MouseAdapter() {
