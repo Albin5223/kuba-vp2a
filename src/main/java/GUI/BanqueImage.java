@@ -22,6 +22,7 @@ public class BanqueImage {
     static Image imageEtoile;
 
     static Image[] fleches;
+    static Image[] flechesHover;
 
 
 	static Image[] banquePowerImages;
@@ -39,9 +40,17 @@ public class BanqueImage {
         return img;
     }
 
+    public static void scaleFleches(){
+        for (int i = 0;i<2;i++){
+            fleches[i] = fleches[i].getScaledInstance(200,200, Image.SCALE_SMOOTH);
+            flechesHover[i] = flechesHover[i].getScaledInstance(200,200, Image.SCALE_SMOOTH);
+        }
+    }
+
     public static void charger(){
         String path = "ressource/";
         fleches = new Image[2];
+        flechesHover = new Image[2];
         banqueMarbleImages = new Image[3];
         banquePowerImages = new Image[3];
         try {
@@ -52,23 +61,26 @@ public class BanqueImage {
 			imageBackgroundPlateau = ImageIO.read(new File(path+"background3.jpg"));
 			imagePanneauFinDeJeu = ImageIO.read(new File(path+"end_screen.png"));
 			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
+				String s=path+"Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
 				banqueMarbleImages[i] = marble;
-				s="ressource/Power"+i+".png";
+				s=path+"Power"+i+".png";
 				marble = ImageIO.read(new File(s));
 				banquePowerImages[i] = marble;
 			}
             for (int i = 0;i<2;i++){
-                fleches[i]= ImageIO.read(new File("ressource/fleche"+i+".png"));
+                fleches[i]= ImageIO.read(new File(path+"fleche"+i+".png"));
+                flechesHover[i]= ImageIO.read(new File(path+"flecheHover"+i+".png"));
+
             }
 
 		}catch (IOException e) {
-			System.out.println("Image des billes non touve");
+			System.out.println("Erreur lors de la recherche des Images");
             System.exit(1);
 		}
         
         imageEtoile = imageEtoile.getScaledInstance(100,100,Image.SCALE_FAST);
         imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400,300,Image.SCALE_FAST);
+        scaleFleches();
     }
 }
