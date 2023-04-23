@@ -4,15 +4,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import Model.Model;
 
 
 public class MenuNiveaux extends JFrame {
 
     private int nbniveaux ;
-    private int numI;
-    public int result;
+    private Model model;
+    private ArrayList<JButton> listButton = new ArrayList<JButton>();
 
-    public MenuNiveaux(){
+    public MenuNiveaux(Model model){
+      this.model = model;
       try
       {
         File file = new File("ressource/Editeur.txt");    
@@ -76,23 +81,25 @@ public class MenuNiveaux extends JFrame {
       for (int i = 0; i < nbniveaux; i++){
           JButton boutton = new JButton();
           boutton.setText(getDefi(i+1,true));
-          numI = i;
+          listButton.add(boutton);
           boutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-              System.out.println(getI());
-             changeResult(getI());
+              boutton.setSelected(true);  
+              bouttonPressed();    
           }} );
 
           panel.add(boutton);
       }
     }
 
-    private void changeResult (int x){
-      result = x;
+    private void bouttonPressed(){
+      for ( int i = 0; i < listButton.size(); i++){
+        if (listButton.get(i).isSelected()){
+          model.changePlateau(i+1);
+          listButton.get(i).setSelected(false);
+        }
+      }
+      listButton.clear();
     }
-    private int getI(){ return numI;}
 
-    
-    
-    
 }

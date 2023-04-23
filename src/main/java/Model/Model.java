@@ -23,7 +23,7 @@ public class Model implements Observe<Data>,Data{
     boolean estDefi = false;
     boolean estEditeur = false;
     PrintWriter doc;
-    MenuNiveaux menuNiveaux= new MenuNiveaux();
+    MenuNiveaux menuNiveaux= new MenuNiveaux(this);
 
     public Model(int n, boolean b,boolean x,boolean y){
         observeurs= new LinkedList<>();
@@ -36,17 +36,14 @@ public class Model implements Observe<Data>,Data{
         if(x){
             plat = new Defi(n,j1,j2);
             this.estDefi = true;
-            System.out.println("est defi ");
         }
         else{ 
             plat = new Plateau(n,j1,j2);
             if (estEditeur){               
                 plat.crerPlatVide();
-                System.out.println("est Editeur ");
             }
             else{
             initialiseBille();
-            System.out.println("est plateau ");
             }
         }
         state=State.SUCCESS;
@@ -66,16 +63,19 @@ public class Model implements Observe<Data>,Data{
         try {
             String s = Integer.toString(n)+";"+plat.toString()+"\n";
             Files.write(Paths.get("ressource/Editeur.txt"),s.getBytes(),StandardOpenOption.APPEND);        
-        System.out.println("ajout fait");
         }
         catch (IOException e){
-            System.out.println("erreur");
         }
-    } 
-    
+    }
+
     public void ouvreDefi(int n){
         menuNiveaux.panneauOuverture();
-        String a = menuNiveaux.getDefi(menuNiveaux.result,false);
+
+
+    }
+    
+    public void changePlateau(int n){
+        String a = menuNiveaux.getDefi(n,false);
         String platNiveau = "";
         int x = 0;
         int y = 0;
