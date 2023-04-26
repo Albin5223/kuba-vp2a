@@ -46,6 +46,7 @@ public class Plateau implements Cloneable{
 		this.board = stringToList(s);
 	}
 
+
 	public int getLongueur() {
 		return this.longueur;
 	}
@@ -377,12 +378,7 @@ public class Plateau implements Cloneable{
 	}
 
 	// Cette fonction permet de passer d'une chaine de caractère encodé de manière efficace à un tableau de Bille
-<<<<<<< HEAD
 	public static Marble[][] stringToList(String s){
-=======
-	public static Colour[][] stringToList(String s){
-		
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
 		int l = 0; //Ici on détermine la longueur d'une tableau 
 		int occ = 0; // On additionne tous les nombres derrière les caractères
 		while(occ<s.length()){
@@ -391,12 +387,8 @@ public class Plateau implements Cloneable{
 			occ+=1+nbChiffre(count);
 		}
 		int longueur = (int)Math.sqrt(l); //La longueur est la racine de la somme
-<<<<<<< HEAD
 		Marble[][] res = new Marble[longueur][longueur];
 
-=======
-		Colour[][] res = new Colour[longueur][longueur];
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
 		int i = 0;
 		int colonne = 0;
 		int ligne = 0; //Puis on remplie le tableau
@@ -473,7 +465,6 @@ public class Plateau implements Cloneable{
         return clonedPlat;
     }
 
-<<<<<<< HEAD
 	public void creerPlatVide(){
 		for (int i=0;i<longueur;i++){
 			for (int j=0;j<longueur;j++){
@@ -484,26 +475,13 @@ public class Plateau implements Cloneable{
 
 	public void changeCouleur(Position p){
 		Colour c = board[p.i][p.j].getColour() ;
-=======
-	public void crerPlatVide(){
-		board = new Colour[longueur][longueur];
-	}
-
-	public void changeCouleur(Position p){
-		Colour c = board[p.i][p.j] ;
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
 		if (c == null){
 			c = Colour.BLACK;
 		}
 		else{
 			c=c.next();
 		}
-<<<<<<< HEAD
 		board[p.i][p.j].setColor(c);
 	}
 
-=======
-		board[p.i][p.j] = c;
-	}
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
 }

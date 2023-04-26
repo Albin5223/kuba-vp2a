@@ -22,8 +22,8 @@ public class Defi extends Plateau {
 	private boolean defi;
 
 	public Defi(int n,Joueur j1, Joueur j2){
-		
 		super(3,j1,j2);
+		numero = n;
         initialiseDefi(n);
 		this.defi = true;
 		
@@ -33,6 +33,7 @@ public class Defi extends Plateau {
 
 
     public void initialiseDefi(int x){
+		/* 
 		/* 
     	board = new Colour[11][11];
     	
@@ -58,6 +59,7 @@ public class Defi extends Plateau {
 
     public State coupValide (Position position, Direction direction){
     	if(position.i == solpos[numero][prog].i && position.j == solpos[numero][prog].j && direction == solcoups[numero][prog]){
+				pos[numero][prog] = position;
 				pos[numero][prog] = position;
     			coups[numero][prog] = direction;
     			prog++;
