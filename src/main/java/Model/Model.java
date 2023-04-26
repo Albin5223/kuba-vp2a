@@ -1,7 +1,14 @@
 package Model;
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
+import GUI.MenuNiveaux;
 
 
 public class Model implements Observe<Data>,Data{
@@ -12,6 +19,7 @@ public class Model implements Observe<Data>,Data{
     int n;
     State state;
     LinkedList<Observeur<Data>> observeurs;
+    MenuNiveaux menuNiveaux= new MenuNiveaux(this);
     ModeJeu modeJ;
 
     public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
@@ -35,8 +43,42 @@ public class Model implements Observe<Data>,Data{
         this.n = n;
     }
 
+
     public void initialiseBille(){
         plat.initialiseBille();
+    }
+
+    
+    public void ajouteNiveau() throws IOException {
+        String nom ;
+        try {
+            String s = Integer.toString(n)+";"+plat.toString()+"\n";
+            Files.write(Paths.get("ressource/Editeur.txt"),s.getBytes(),StandardOpenOption.APPEND);        
+        }
+        catch (IOException e){
+        }
+    }
+
+    public void ouvreDefi(int n){
+        menuNiveaux.panneauOuverture();
+
+
+    }
+    
+    public void changePlateau(int n){
+        String a = menuNiveaux.getDefi(n,false);
+        String platNiveau = "";
+        int x = 0;
+        int y = 0;
+        while (y < 2){
+            if (a.charAt(x) == ';') y++;
+            x++;
+        }
+        for (int i = x; i<a.length()-1; i ++){
+            platNiveau += a.charAt(i);
+        }
+        plat.setBoard(platNiveau);
+
     }
 
 
@@ -158,10 +200,6 @@ public class Model implements Observe<Data>,Data{
         return state;
     }
 
-    @Override
-    public Joueur getJoueur() {
-        return getCurrentPlayer();
-    }
 
     @Override
     public Joueur getVainqueur() {
@@ -190,4 +228,5 @@ public class Model implements Observe<Data>,Data{
         plat.changeCouleur(p);
         noticeObserveurs(this);
     }
+
 }

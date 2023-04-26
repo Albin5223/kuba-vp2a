@@ -4,11 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.imageio.ImageIO;
 
 import Controleur.*;
 import Model.*;
@@ -31,23 +28,17 @@ public class View extends JFrame implements Observeur<Data>{
 	OptionView optView;
 	PanneauFinDeJeu panneauFinDeJeu;
 
-	Image imageBackground;
-	Image imagePanneauFinDeJeu;
 
 	JFrame launcher;
 
-	Image[] banqueMarbleImages;
-	Image[] banquePowerImages;
-
-	Image imageBackgroundScale;
+	
 
     public View(int nb,JFrame l) {
 
 		joueurs = new JoueurView[2];
 		launcher = l;
 		this.setTitle("Plateau KUBA");
-		banqueMarbleImages = new Image[3];
-		banquePowerImages = new Image[3];
+		
 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
@@ -61,34 +52,14 @@ public class View extends JFrame implements Observeur<Data>{
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
 
-		//Trouver une boone image de fond
-		try {
-			imageBackground = ImageIO.read(new File("ressource/background3.jpg"));
-			imagePanneauFinDeJeu = ImageIO.read(new File("ressource/end_screen.png"));
-			imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(300,200,Image.SCALE_FAST);
-			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
-				Image marble = ImageIO.read(new File(s));
-				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-				banqueMarbleImages[i] = marbleScaled;
-				s="ressource/Power"+i+".png";
-				marble = ImageIO.read(new File(s));
-				marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-				banquePowerImages[i] = marbleScaled;
-			}
-
-		}catch (IOException e) {
-			System.out.println("Image des billes non touve");
-		}
-
-
-
-		imageBackgroundScale=imageBackground.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_FAST);
+		BanqueImage.scaleMarble(taille_case);
+		
+		BanqueImage.imageBackgroundPlateau = BanqueImage.scaleImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,BanqueImage.imageBackgroundPlateau);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				g.drawImage(imageBackgroundScale,0,0,null);
+				g.drawImage(BanqueImage.imageBackgroundPlateau,0,0,null);
 				
 			}
 		};
@@ -114,12 +85,12 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
-		jv1 = new JoueurView(Colour.WHITE,banqueMarbleImages);
+		jv1 = new JoueurView(Colour.WHITE);
 		int taille_Jv = plateau.getX()-20;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();
-		jv2 = new JoueurView(Colour.BLACK,banqueMarbleImages);
+		jv2 = new JoueurView(Colour.BLACK);
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
@@ -191,8 +162,8 @@ public class View extends JFrame implements Observeur<Data>{
 				Power p = obj.getMarble(j, i).getPower();
 				if (c != null){
 					switch(p){
-						case NORMAL:g.drawImage(banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
-						default : g.drawImage(banquePowerImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
+						case NORMAL:g.drawImage(BanqueImage.banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
+						default : g.drawImage(BanqueImage.banquePowerImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
 					}
 				}
 			}
@@ -249,8 +220,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 				if(time == 0){
 					cancel();
-					imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400, 300,Image.SCALE_FAST);
-					panneauFinDeJeu = new PanneauFinDeJeu(c,imagePanneauFinDeJeu);
+					panneauFinDeJeu = new PanneauFinDeJeu(c);
 					panneauFinDeJeu.setBounds(View.this.getWidth()/2-200, View.this.getHeight()/2-150, 400, 300);
 					panneauFinDeJeu.initialise();
 
