@@ -21,6 +21,7 @@ public class TestDefi {
         
         m.noticeObserveurs(m);
 		v.addCtrlEditeur(ctrl);
+		v.addCtrlEditeur(ctrl);
 		
 	}
 }

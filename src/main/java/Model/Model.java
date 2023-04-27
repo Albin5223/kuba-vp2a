@@ -4,6 +4,7 @@ package Model;
 import java.util.LinkedList;
 
 
+
 public class Model implements Observe<Data>,Data{
     Plateau plat;
     Joueur[] joueurs;
@@ -13,8 +14,10 @@ public class Model implements Observe<Data>,Data{
     State state;
     LinkedList<Observeur<Data>> observeurs;
     ModeJeu modeJ;
+  
 
     public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
+        GestionnaireNiveaux.addModel(this);
         modeJ = mode;
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
@@ -23,7 +26,6 @@ public class Model implements Observe<Data>,Data{
         plat =new Plateau(n,j1,j2); 
         plat.initialiseBille(); 
         switch(mode){
-            case DEFI : plat = new Defi(n,j1,j2);break;
             case EDITION :plat.creerPlatVide(); break;
             case FUN : plat.initialiseBilleWithSpecialMarble();
             default : break;
@@ -35,10 +37,17 @@ public class Model implements Observe<Data>,Data{
         this.n = n;
     }
 
+
+
     public void initialiseBille(){
         plat.initialiseBille();
     }
+    
+    public void setBoard(Marble [][] newBoard){
+        plat.setBoard(newBoard);
+    }
 
+    
 
     public int getN(){
         return n;
@@ -88,21 +97,6 @@ public class Model implements Observe<Data>,Data{
     }
 
     public State push(Position p,Direction d){
-        /* 
-        if (isIa() && joueurCurrent == 1) {
-            Move move;
-            try {
-                move = NoeudIA.determineBestMove(plat, 5);
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                return null;
-            }
-            state = plat.push(move.pos,move.dir,joueurs[1],joueurs[0]);
-        }
-        else {
-            state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-        }
-        */
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
@@ -158,6 +152,7 @@ public class Model implements Observe<Data>,Data{
         return state;
     }
 
+
     @Override
     public Joueur getVainqueur() {
         return plat.isOver(joueurs[0],joueurs[1]);
@@ -185,4 +180,5 @@ public class Model implements Observe<Data>,Data{
         plat.changeCouleur(p);
         noticeObserveurs(this);
     }
+
 }

@@ -94,6 +94,9 @@ public class BanqueImage {
         
         imageEtoile = imageEtoile.getScaledInstance(100,100,Image.SCALE_FAST);
         imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400,300,Image.SCALE_FAST);
+        int icWidth = BanqueImage.imageIcon.getWidth(null)/3;
+		int icHeight = BanqueImage.imageIcon.getHeight(null)/3;
+		BanqueImage.imageIcon = BanqueImage.scaleImage(icWidth, icHeight, BanqueImage.imageIcon);
         scaleFleches();
         scalePets();
     }

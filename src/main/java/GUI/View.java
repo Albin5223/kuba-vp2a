@@ -153,6 +153,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 	public void addCtrlEditeur (ControleurEditeur ctrl){
 		plateau.addMouseListener(ctrl);
+		this.addKeyListener(ctrl);
 	}
 
 	public void updatePlateau(Graphics g,Data obj){

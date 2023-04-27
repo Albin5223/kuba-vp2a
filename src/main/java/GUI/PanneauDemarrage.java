@@ -202,7 +202,7 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     if(tp.isFinish()){
                         cancel();
-                        PanneauDemarrage.this.remove(tp);
+                        PanneauDemarrage.this.removeAll();
                         PanneauDemarrage.this.add(menu);   
                         fenetre.revalidate();
                     } 

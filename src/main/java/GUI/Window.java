@@ -1,6 +1,9 @@
 package GUI;
 
 import javax.swing.*;
+
+import Model.GestionnaireNiveaux;
+
 import java.awt.*;
 
 public class Window extends JFrame {
@@ -10,7 +13,7 @@ public class Window extends JFrame {
     PanneauDemarrage pd;
 
     public Window(){
-
+        GestionnaireNiveaux.initialiser();
         BanqueImage.charger();
         BanqueImage.scaleMarble(50);
         this.setTitle("Launcher KUBA");
