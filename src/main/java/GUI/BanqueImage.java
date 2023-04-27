@@ -24,6 +24,8 @@ public class BanqueImage {
     static Image[] fleches;
     static Image[] flechesHover;
 
+    static Image[] imagePets;
+
 
 	static Image[] banquePowerImages;
 
@@ -47,8 +49,15 @@ public class BanqueImage {
         }
     }
 
+    public static void scalePets(){
+        for (int i = 0;i<imagePets.length;i++){
+            imagePets[i] = imagePets[i].getScaledInstance(60,60, Image.SCALE_SMOOTH);
+        }
+    }
+
     public static void charger(){
         String path = "ressource/";
+        imagePets = new Image[1];
         fleches = new Image[2];
         flechesHover = new Image[2];
         banqueMarbleImages = new Image[3];
@@ -74,6 +83,10 @@ public class BanqueImage {
 
             }
 
+            for(int i = 0;i<imagePets.length;i++){
+                imagePets[i] = ImageIO.read(new File(path+"pets"+i+".png"));
+            }
+
 		}catch (IOException e) {
 			System.out.println("Erreur lors de la recherche des Images");
             System.exit(1);
@@ -82,5 +95,6 @@ public class BanqueImage {
         imageEtoile = imageEtoile.getScaledInstance(100,100,Image.SCALE_FAST);
         imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400,300,Image.SCALE_FAST);
         scaleFleches();
+        scalePets();
     }
 }

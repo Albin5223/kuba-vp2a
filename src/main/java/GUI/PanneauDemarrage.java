@@ -73,7 +73,7 @@ public class PanneauDemarrage extends JPanel{
         button[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                quitter();
+                goToMenu();
             }
 
             @Override
@@ -184,9 +184,9 @@ public class PanneauDemarrage extends JPanel{
     }
 
 
-    public void quitter(){
+    public void goToMenu(){
         this.removeAll();
-        
+        BanqueImage.scaleMarble(50);
         TransitionPane tp = new TransitionPane(1020,fenetre);
         this.add(tp);
         this.repaint();

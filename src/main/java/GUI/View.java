@@ -15,8 +15,8 @@ public class View extends JFrame implements Observeur<Data>{
     
 	int longueur;
 	int n;
-	boolean isOver;
-	boolean isReloading;
+	private boolean isOver;
+	private boolean isReloading;
 	int taille_case;
 	JPanel plateau;
 	JPanel conteneur;

@@ -116,11 +116,11 @@ public class Menu extends JPanel {
 
 
         selectMode=new Interrupteur();
-        selectMode.setBounds(550, 120+60*1, 300, 50);
+        selectMode.setBounds(550, 90+60, 300, 50);
 
         play=new JLabel("Play");
         play.setVisible(true);
-        play.setBounds(650, 115, 300, 60);
+        play.setBounds(650, 90, 300, 60);
         play.setFont(new Font("Impact",Font.PLAIN,50));
 
         play.addMouseListener(new MouseAdapter() {
@@ -151,7 +151,7 @@ public class Menu extends JPanel {
         });
 
         retour=new JLabel("Retour");
-        retour.setBounds(650, 100+50*2, 300, 100);
+        retour.setBounds(650, 90+45*2, 300, 100);
         retour.setFont(new Font("Impact",Font.PLAIN,30));
 
         retour.addMouseListener(new MouseAdapter() {
