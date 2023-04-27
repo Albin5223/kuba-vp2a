@@ -1,12 +1,7 @@
 package Model;
 
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
-import GUI.MenuNiveaux;
 
 
 
@@ -22,7 +17,7 @@ public class Model implements Observe<Data>,Data{
   
 
     public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
-        GestionnaireNiveaux.initialiser(this);
+        GestionnaireNiveaux.addModel(this);
         modeJ = mode;
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
@@ -31,7 +26,6 @@ public class Model implements Observe<Data>,Data{
         plat =new Plateau(n,j1,j2); 
         plat.initialiseBille(); 
         switch(mode){
-            case DEFI : plat = new Defi(n,j1,j2);break;
             case EDITION :plat.creerPlatVide(); break;
             case FUN : plat.initialiseBilleWithSpecialMarble();
             default : break;
@@ -47,14 +41,6 @@ public class Model implements Observe<Data>,Data{
 
     public void initialiseBille(){
         plat.initialiseBille();
-    }
-
-    
-    public void ouvreDefi(){
-        new MenuNiveaux(GestionnaireNiveaux.nbLignes());
-    }
-    public void ajouteNiveau(){
-        
     }
     
     public void setBoard(Marble [][] newBoard){
@@ -111,21 +97,6 @@ public class Model implements Observe<Data>,Data{
     }
 
     public State push(Position p,Direction d){
-        /* 
-        if (isIa() && joueurCurrent == 1) {
-            Move move;
-            try {
-                move = NoeudIA.determineBestMove(plat, 5);
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                return null;
-            }
-            state = plat.push(move.pos,move.dir,joueurs[1],joueurs[0]);
-        }
-        else {
-            state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
-        }
-        */
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){

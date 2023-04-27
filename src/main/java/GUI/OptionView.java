@@ -14,8 +14,7 @@ import javax.swing.JPanel;
 
 
 public class OptionView extends JPanel {
-	int icHeight =0;
-	int icWidth =0;
+	
 
     View view;
     JFrame launcher;
@@ -35,13 +34,13 @@ public class OptionView extends JPanel {
 		this.setOpaque(false);
 		
 		
-		icWidth = BanqueImage.imageIcon.getWidth(this)/3;
-		icHeight = BanqueImage.imageIcon.getHeight(this)/3;
-		BanqueImage.imageIcon = BanqueImage.scaleImage(icHeight, icHeight, BanqueImage.imageIcon);
-		
 		ImageIcon imic = new ImageIcon(BanqueImage.imageIcon);
 		icon = new JLabel(imic);
 		
+
+		int icWidth = BanqueImage.imageIcon.getWidth(null);
+		int icHeight = BanqueImage.imageIcon.getHeight(null);
+
 		icon.setBounds(0, 0, icWidth, icHeight);
 
 		icon.addMouseListener(new MouseAdapter() {

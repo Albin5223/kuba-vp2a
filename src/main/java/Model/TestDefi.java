@@ -12,7 +12,6 @@ public class TestDefi {
 		try {
 			m = new Model(3,ModeJeu.EDITION);
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		View v = new View(3,null);

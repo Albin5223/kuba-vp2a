@@ -341,7 +341,7 @@ public class Plateau implements Cloneable{
 	}
 	/*
 	 * 
-	 * @return toString1 convertit le plateau en une chaine de caractère reduite
+	 * @return toString convertit le plateau en une chaine de caractère reduite
 	 */
 	public String toString(){
 		String res = "";

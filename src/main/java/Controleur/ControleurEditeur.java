@@ -1,7 +1,6 @@
 package Controleur;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -33,6 +32,7 @@ public class ControleurEditeur extends MouseAdapter implements KeyListener{
     
     public void keyTyped(KeyEvent e) {
     }
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
@@ -40,17 +40,15 @@ public class ControleurEditeur extends MouseAdapter implements KeyListener{
         }
         if (e.getKeyCode() == KeyEvent.VK_S && controlPressed){
             System.out.println("Les touches ctrl et s sont préssées en même temps");
-            try {
-                model.ajouteNiveau();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            GestionnaireNiveaux.ajouteDefi();
+           
         }
-
+        /*
         if (e.getKeyCode() == KeyEvent.VK_O && controlPressed){
             System.out.println("Les touches ctrl et o sont préssées en même temps");
             model.ouvreDefi(1);
         }
+         */
     }
     @Override
     public void keyReleased(KeyEvent e) {

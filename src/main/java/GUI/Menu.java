@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 import Controleur.*;
+import Model.GestionnaireNiveaux;
 import Model.ModeJeu;
 import Model.Model;
 
@@ -26,13 +27,14 @@ public class Menu extends JPanel {
     Interrupteur selectMode;
     JLabel retour;
 
+    
 
     JFrame fenetre;
 
     public Menu(JFrame fen) {
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-
+        
         fenetre = fen;
         container = new JPanel();
         container.setLayout(new GridLayout(1,3));
@@ -116,33 +118,42 @@ public class Menu extends JPanel {
 
 
         selectMode=new Interrupteur();
-        selectMode.setBounds(550, 120+60*1, 300, 50);
+        selectMode.setBounds(550, 90+60, 300, 50);
 
         play=new JLabel("Play");
         play.setVisible(true);
-        play.setBounds(650, 115, 300, 60);
+        play.setBounds(650, 90, 300, 60);
         play.setFont(new Font("Impact",Font.PLAIN,50));
 
         play.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                    fenetre.setVisible(false);
+                    
                     int n = getN();
                     Model m = null;
                     try {
+                        
                         m = new Model(n,selectMode.getValue());
-                        System.out.println("Mode : "+selectMode.getValue());
                         View v = new View(n,fenetre);
                         m.addObserveur(v);
                         m.noticeObserveurs(m);
-                        if(selectMode.getValue()==ModeJeu.EDITION){
-                            ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
-                            v.addCtrlEditeur(ctrl);
+                        switch(selectMode.getValue()){
+                            case EDITION : ControleurEditeur ctrlEd= new ControleurEditeur(m,v.getTaille_case());v.addCtrlEditeur(ctrlEd);break;
+                            default : Controleur ctrl = new Controleur(m,v.getTaille_case());v.addCtrl(ctrl);break;
+                        }
+                       
+                        
+                        if(selectMode.getValue() != ModeJeu.DEFI){
+                            fenetre.setVisible(false);
+                            
                         }
                         else{
-                            Controleur ctrl= new Controleur(m,v.getTaille_case());
-                            v.addCtrl(ctrl);
+                            v.setVisible(false);
+                            GestionnaireNiveaux.addModel(m);
+                            ouvrirDefi(v);
                         }
+                        
+                        
                     } catch (CloneNotSupportedException e1) {
                         System.out.println("Erreur dans le lancement du model dans Menu");
                     }
@@ -151,7 +162,7 @@ public class Menu extends JPanel {
         });
 
         retour=new JLabel("Retour");
-        retour.setBounds(650, 100+50*2, 300, 100);
+        retour.setBounds(650, 90+45*2, 300, 100);
         retour.setFont(new Font("Impact",Font.PLAIN,30));
 
         retour.addMouseListener(new MouseAdapter() {
@@ -177,6 +188,22 @@ public class Menu extends JPanel {
 
     public int getN(){
         return n;
+    }
+
+    public void ouvrirDefi(View v){
+        removeAll();
+        MenuNiveaux menuNiveaux = new MenuNiveaux(GestionnaireNiveaux.getNbLignes(),v,fenetre);
+        add(menuNiveaux);
+        fenetre.revalidate();
+    }
+
+    public void setAllVisible(boolean b){
+        containerButton.setVisible(b);
+        for(int i = 0;i<fleches.length;i++){
+            fleches[i].setVisible(b);
+        }
+
+        taille.setVisible(b);
     }
 
 }

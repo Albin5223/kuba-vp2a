@@ -1,94 +1,89 @@
 package Model;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GestionnaireNiveaux {
+
     static Model model;
     static File file;
+    static int lignes;
 
-    public static void initialiser(Model m){
-        model = m;
-        file = new File("ressource/Editeur.txt"); 
-    }
+    static ArrayList<Defi> tabDefi;
 
-    public static int nbLignes(){
-        try
-        {   
-          FileReader fr = new FileReader(file);        
-          BufferedReader br = new BufferedReader(fr);  
-          int x = 0;
-          while(br.readLine() != null) {  
-            x++; 
-          }
-          return x;
-          }
-        catch(IOException e)
-        {
-          e.printStackTrace();
-          return 0;
-        }
-      }
+    public static void initialiser(){
+        tabDefi = new ArrayList<>();
+        file = new File("ressource/Editeur.txt");
 
-    public static void enregistrer(String s){
-        try {
-            String s2 = Integer.toString(model.n)+";"+model.plat.toString()+"\n";
-            Files.write(Paths.get("ressource/Editeur.txt"),s.getBytes(),StandardOpenOption.APPEND);        
-        }
-        catch (IOException e){
+        try{
+          initialiseDefi();
+        }catch(Exception e){
+          System.out.println("Probleme avec l'ouverture du fichier Defi");
+          System.exit(1);
         }
     }
 
-    public static String getNiveaux(int n, boolean b){
-        try{   
-          FileReader fr = new FileReader(file);        
-          BufferedReader br = new BufferedReader(fr);  
-          StringBuffer sb = new StringBuffer();    
-          String line = "";
-          int x = 0;
-          while(x != n) {
-            line = br.readLine();   
-            x++; 
-          }
-          sb.append(line);      
-          sb.append("\n"); 
-          fr.close();    
-          if (b){
-            String s = "";
-            int i = 0;
-            while (sb.toString().charAt(i) != ';'){
-              s+= sb.toString().charAt(i);
-              i++;
-            }
-            return s;
-          }
-          return sb.toString();
-        }
-        catch(IOException e)
-        {
-          e.printStackTrace();
-        }
-        return "erreur";
+
+
+    public static void addModel(Model m){
+      model = m;
+    }
+
+    public static int getNbLignes(){
+      return lignes;
+    }
+
+    private static void initialiseDefi() throws FileNotFoundException{
+      Scanner scan = new Scanner(file);
+      
+      while(scan.hasNext()){
+        Defi def = new Defi(scan.next());
+        lignes++;
+        tabDefi.add(def);
       }
+
+      scan.close();
+    }
+
+    public static void ajouteDefi(){
+      String plateau = model.getPlateau().toString();
+      int taille = model.getN();
+      int numero = tabDefi.size()+1;
+      String name = "Defi-"+numero;
+
+      Defi nouveau = new Defi(name,taille,plateau);
+      String nouvelleLigne = nouveau.getLine();
+
+      tabDefi.add(nouveau);
+      lignes++;
+
+
+      
+      
+      try {
+        FileWriter fw = new FileWriter(file, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        PrintWriter out = new PrintWriter(bw);
+        out.println(nouvelleLigne);
+
+        out.close();
+      } catch (IOException e) {
+        System.out.println("Erreur dans l'enregistrement");
+        System.exit(1);
+      }
+
+    }
+
+
+    public static String getNiveaux(int n){
+      return tabDefi.get(n).getPlateau();
+    }
     
     public static void lancer(int niveauSelected){
-        String s = getNiveaux(niveauSelected,false);
-        int count = 0;
-        int i = 0;
-        while (count < 2){
-            if (s.charAt(i) != '!') i++;
-            else {
-                i++;
-                count++;
-            }
-        }
-        String result = "";
-        for (int y = i; i<s.length(); i++){
-            result += s.charAt(y);
-        }
-        Marble[][] nv = Plateau.stringToList(result);
+        String plateau = getNiveaux(niveauSelected);
+        
+        Marble[][] nv = Plateau.stringToList(plateau);
         model.setBoard(nv);
     }
 }
