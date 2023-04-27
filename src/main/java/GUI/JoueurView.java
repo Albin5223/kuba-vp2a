@@ -1,10 +1,6 @@
 package GUI;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import Model.*;
 
@@ -19,12 +15,10 @@ public class JoueurView extends JPanel{
     //Indice 0 : red
     //Indice 1 : Opp
     JPanel[] paneMarble;
-    Image imageBackground;
-    Image[] banqueMarblImages;
 
 
-    public JoueurView(Colour c,Image[] img){
-        banqueMarblImages = img;
+
+    public JoueurView(Colour c){
 
         paneMarble = new JPanel[2]; 
         nbMarble = new int[2];
@@ -39,11 +33,7 @@ public class JoueurView extends JPanel{
             default : titre.setText("Erreur");break;
         }
         titre.setForeground(Color.GREEN);
-        try {
-			imageBackground = ImageIO.read(new File("ressource/panneau.jpg"));
-		} catch (IOException e1) {
-			System.out.println("Image non trouve dans JoueurView");
-		}
+       
         
         this.add(barre);
 
@@ -51,7 +41,7 @@ public class JoueurView extends JPanel{
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(imageBackground,0,0,null);
+        g.drawImage(BanqueImage.imageBackgroundJoueurView,0,0,null);
         this.repaint();
         
     }
@@ -59,9 +49,8 @@ public class JoueurView extends JPanel{
     public void initialisePaneMarbleCaptured(){
         titre.setBounds(this.getWidth()/3, 10, 100, 20);
         this.add(titre);
-
-        imageBackground = imageBackground.getScaledInstance(getWidth(), getHeight(),Image.SCALE_FAST);
-
+        BanqueImage.imageBackgroundJoueurView = BanqueImage.scaleImage(getWidth(), getHeight(),BanqueImage.imageBackgroundJoueurView);
+    
         for(int i = 0;i<2;i++){
             int j =i;
             paneMarble[i] = new JPanel(){

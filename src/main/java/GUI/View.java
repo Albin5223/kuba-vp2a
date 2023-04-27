@@ -8,7 +8,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import Controleur.*;
-import Controleur.*;
 import Model.*;
 
 public class View extends JFrame implements Observeur<Data>{

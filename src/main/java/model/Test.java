@@ -1,16 +1,5 @@
 package Model;
 
-<<<<<<< HEAD
-=======
-
-import java.io.IOException;
-
-import java.io.IOException;
-
-import Controleur.Controleur;
-import GUI.View;
-
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
 public class Test {
 	
 	public static void main(String[] args)  {
@@ -59,22 +48,10 @@ public class Test {
         }
 		*/
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 		/* 
 		int n = 1;
 		Model m = new Model(n,true,false,false);
 		View v = new View(n,null);
-=======
-		int n = 0;
-		Model m = new Model(n,false,true,false);
-		View v = new View(3,null);
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
-=======
-		int n = 0;
-		Model m = new Model(n,false,true,false);
-		View v = new View(3,null);
->>>>>>> 856e5d9f0c66a54859543ef4a52294f487857e42
 		Controleur ctrl= new Controleur(m,v.getTaille_case());
 		m.addObserveur(v);
         m.noticeObserveurs(m);

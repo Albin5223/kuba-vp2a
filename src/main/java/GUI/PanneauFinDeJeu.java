@@ -5,7 +5,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import Model.Colour;
 
 public class PanneauFinDeJeu extends JPanel{
@@ -14,12 +13,9 @@ public class PanneauFinDeJeu extends JPanel{
     JButton quitter;
     JLabel afficheVainqueur;
 
-    Image background;
-
-
-    public PanneauFinDeJeu(Colour c,Image img){
+    public PanneauFinDeJeu(Colour c){
         this.setLayout(null);
-        background = img;
+
         afficheVainqueur = new JLabel("Le joueur "+c.getName()+" a gagné");
         rejouer = new JButton("Rejouer");
         quitter = new JButton("Quitter");
@@ -28,7 +24,7 @@ public class PanneauFinDeJeu extends JPanel{
 
     @Override
     public void paintComponent(Graphics g){
-        g.drawImage(background, 0, 0, null);
+        g.drawImage(BanqueImage.imagePanneauFinDeJeu, 0, 0, null);
     }
 
 

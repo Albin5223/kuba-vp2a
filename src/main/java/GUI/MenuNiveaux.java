@@ -3,14 +3,40 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import Model.GestionnaireNiveaux;
 
-import Model.Model;
+public class MenuNiveaux extends Panel {
 
+    int niveauSelected;
+    private ArrayList<JButton> listButton = new ArrayList<JButton>();
 
+    public MenuNiveaux (int nbLignes){
+      for(int i = 0; i < nbLignes; i++){
+        JButton boutton = new JButton();
+        boutton.putClientProperty("id", i);
+        boutton.setText(GestionnaireNiveaux.getNiveaux(i,true));
+        boutton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e){
+            Object obj = boutton.getClientProperty("id"); 
+            if (obj instanceof Integer) {
+              niveauSelected = ((Integer)obj);
+              lancerNiveau();
+           }   
+        }} );
+      listButton.add(boutton);
+      this.add(boutton);
+      }
+    }
+
+    public void lancerNiveau(){
+      GestionnaireNiveaux.lancer(niveauSelected);
+    }
+}
+
+/* 
 public class MenuNiveaux extends JFrame {
+
 
     private int nbniveaux ;
     private Model model;
@@ -103,3 +129,4 @@ public class MenuNiveaux extends JFrame {
     }
 
 }
+*/

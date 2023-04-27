@@ -1,13 +1,9 @@
 package GUI;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +11,7 @@ import javax.swing.JPanel;
 
 public class TransitionPane extends JPanel {
 
-    Image[] banqueMarblImages;
+
     int debut;
     int fin;
 
@@ -27,20 +23,10 @@ public class TransitionPane extends JPanel {
     public TransitionPane(int width,JFrame fen){
         fenetre =fen;
         this.setOpaque(false);
-        banqueMarblImages = new Image[3];
         this.setLayout(null);
         this.debut = 50;
         this.fin =  width-50;
-        try {
-			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
-				Image marble = ImageIO.read(new File(s));
-				Image marbleScaled = marble.getScaledInstance(50,50,Image.SCALE_FAST);
-				banqueMarblImages[i] = marbleScaled;
-			}
-		}catch (IOException e) {
-			System.out.println("Image non trouve dans TransitionPane");
-		}
+        
 
 
     }
@@ -50,7 +36,7 @@ public class TransitionPane extends JPanel {
         nbBille++;
         Random r = new Random();
         int i = r.nextInt(0,3);
-        JLabel image = new JLabel(new ImageIcon(banqueMarblImages[i]));
+        JLabel image = new JLabel(new ImageIcon(BanqueImage.banqueMarbleImages[i]));
         image.setOpaque(false);
         int x = r.nextInt(debut, fin);
 

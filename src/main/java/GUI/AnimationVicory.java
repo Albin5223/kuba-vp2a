@@ -1,13 +1,9 @@
 package GUI;
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class AnimationVicory extends JPanel {
@@ -28,7 +24,7 @@ public class AnimationVicory extends JPanel {
     int posX;
     int posY;
 
-    Image img;
+    
     
 
     public AnimationVicory(int x,int y, int r, double a,JPanel conteneur){
@@ -40,13 +36,7 @@ public class AnimationVicory extends JPanel {
         miseAJourPosition();
         this.conteneur = conteneur;
 
-        try {
-			img = ImageIO.read(new File("ressource/etoile.png"));
-            img = img.getScaledInstance(100,100,Image.SCALE_FAST);
-		}catch (IOException e) {
-			System.out.println("Image non trouve dans AnimationVictory");
-		}
-
+        
         repaint();
     }
 
@@ -60,7 +50,7 @@ public class AnimationVicory extends JPanel {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(img,0,0,null);
+        g.drawImage(BanqueImage.imageEtoile,0,0,null);
         
     }
 

@@ -1,13 +1,9 @@
 package GUI;
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.*;
 
 import Controleur.*;
@@ -22,16 +18,17 @@ public class Menu extends JPanel {
     JPanel container;
     JPanel containerButton;
     JLabel[] fleches;
+    //fleche[0] = gauche;
+    //fleche[1] = droite;
     int n;
 
     JLabel play;
     Interrupteur selectMode;
     JLabel retour;
 
-    //fleche[0] = gauche;
-    //fleche[1] = droite;
+
     JFrame fenetre;
-    
+
     public Menu(JFrame fen) {
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
@@ -56,7 +53,7 @@ public class Menu extends JPanel {
         fleches = new JLabel[2];
 
         for(int i = 0;i<2;i++){
-            fleches[i] = new JLabel(new ImageIcon("ressource/fleche"+i+".png"));
+            fleches[i] = new JLabel(new ImageIcon(BanqueImage.fleches[i]));
             fleches[i].setOpaque(false);
             fleches[i].setForeground(new Color(0,0,0,150));
         }
@@ -77,6 +74,19 @@ public class Menu extends JPanel {
                 container.repaint();
 
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                fleches[0].setIcon(new ImageIcon(BanqueImage.flechesHover[0]));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                fleches[0].setIcon(new ImageIcon(BanqueImage.fleches[0]));
+
+            }
         });
 
         fleches[1].addMouseListener(new MouseAdapter() {
@@ -88,6 +98,19 @@ public class Menu extends JPanel {
                 n+=1;
                 taille.setText(n+"");
                 container.repaint();   
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                fleches[1].setIcon(new ImageIcon(BanqueImage.flechesHover[1]));
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                fleches[1].setIcon(new ImageIcon(BanqueImage.fleches[1]));
             }
         });
 
