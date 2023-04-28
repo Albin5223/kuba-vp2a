@@ -1,0 +1,26 @@
+Bonjour,
+
+Je suis M. White fondateur du jeu Kuba
+Je vais vous montrer comment y jouer
+Vous etes pres ?
+
+Les règles sont simples :
+Devant il y des billes rouges, des billes et des blanches
+
+Vous ne pouvez déplacer que des billes blanches
+Essayer !
+
+Excellent, vous apprenez vite
+
+Vous ne pouvez ni déplacer les billes noires ni les billes rouges
+Attention le plateau tremble
+
+Pour gagner il vous suffit de capturer la moitie des billes rouges
+Les billes capturées par chaque joueur sont affichées à gauche du plateau
+
+Lorsque vous capturez une bille rouge, vous devez rejouer
+
+Si vous voulez recommencer ou abandonner la partie c'est ici.
+
+A vous de joueur maintenant !
+Soyez malin

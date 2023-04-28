@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import Model.GestionnaireNiveaux;
+import Model.ModeJeu;
+import Model.Model;
 
 public class MenuNiveaux extends JPanel {
 
@@ -14,13 +16,12 @@ public class MenuNiveaux extends JPanel {
     private ArrayList<JButton> listButton = new ArrayList<JButton>();
 
     private JLabel retour;
-    View view;
     JFrame fenetre;
 
 
-    public MenuNiveaux (int nbLignes,View v,JFrame fen){
+    public MenuNiveaux (int nbLignes,JFrame fen){
       fenetre = fen;
-      view = v;
+
       this.setOpaque(false);
       retour = new JLabel("retour");
       retour.addMouseListener(new MouseAdapter() {
@@ -36,11 +37,10 @@ public class MenuNiveaux extends JPanel {
 
       
       for(int i = 0; i < nbLignes; i++){
-
-        JButton boutton = new JButton();
+        String name = GestionnaireNiveaux.getName(i);
+        JButton boutton = new JButton(name);
         boutton.setSize(i, i);
         boutton.putClientProperty("id", i);
-        boutton.setName("Defi - "+i);
         boutton.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e){
             Object obj = boutton.getClientProperty("id"); 
@@ -58,7 +58,23 @@ public class MenuNiveaux extends JPanel {
 
 
     public void lancerNiveau(){
+      
+      int n = GestionnaireNiveaux.getTaille(niveauSelected);
+      Model m = null;
+      try {
+              fenetre.setVisible(false);
+              m = new Model(n,ModeJeu.DEFI);
+              View v = new View(n,fenetre);
+              m.addObserveur(v);
+              m.noticeObserveurs(m);
+              GestionnaireNiveaux.addModel(m);
+  
+      } catch (CloneNotSupportedException e1) {
+          System.out.println("Erreur dans le lancement du model dans Defi");
+          System.exit(1);
+      }
+      
       GestionnaireNiveaux.lancer(niveauSelected);
-      view.setVisible(true);
+
     }
 }

@@ -56,7 +56,7 @@ public class BanqueImage {
     }
 
     public static void charger(){
-        String path = "ressource/";
+        String path = "ressource/Images/";
         imagePets = new Image[1];
         fleches = new Image[2];
         flechesHover = new Image[2];

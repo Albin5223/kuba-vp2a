@@ -19,7 +19,7 @@ public class GestionnaireNiveaux {
         try{
           initialiseDefi();
         }catch(Exception e){
-          System.out.println("Probleme avec l'ouverture du fichier Defi");
+          System.out.println("Probleme avec l'initialisation du Gestionnaire Defi");
           System.exit(1);
         }
     }
@@ -46,11 +46,17 @@ public class GestionnaireNiveaux {
       scan.close();
     }
 
-    public static void ajouteDefi(){
+    public static String getName(int n){
+      return tabDefi.get(n).getName();
+    }
+
+    public static void ajouteDefi(String name){
       String plateau = model.getPlateau().toString();
       int taille = model.getN();
       int numero = tabDefi.size()+1;
-      String name = "Defi-"+numero;
+      if(name.length() == 0){
+        name = "Defi-"+numero;
+      }
 
       Defi nouveau = new Defi(name,taille,plateau);
       String nouvelleLigne = nouveau.getLine();
@@ -69,7 +75,7 @@ public class GestionnaireNiveaux {
 
         out.close();
       } catch (IOException e) {
-        System.out.println("Erreur dans l'enregistrement");
+        System.out.println("Erreur dans l'enregistrement d'un Defi");
         System.exit(1);
       }
 
@@ -79,10 +85,13 @@ public class GestionnaireNiveaux {
     public static String getNiveaux(int n){
       return tabDefi.get(n).getPlateau();
     }
+
+    public static int getTaille(int i){
+      return tabDefi.get(i).getTaille();
+    }
     
     public static void lancer(int niveauSelected){
         String plateau = getNiveaux(niveauSelected);
-        
         Marble[][] nv = Plateau.stringToList(plateau);
         model.setBoard(nv);
     }
