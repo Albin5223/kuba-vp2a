@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import Model.Colour;
+import SearchFile.*;
 
 public class PanneauFinDeJeu extends JPanel{
 

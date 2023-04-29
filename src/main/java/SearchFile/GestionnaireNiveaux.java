@@ -1,9 +1,12 @@
-package Model;
+package SearchFile;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import Model.Defi;
+import Model.Marble;
+import Model.Model;
+import Model.Plateau;
 public class GestionnaireNiveaux {
 
     static Model model;
@@ -14,7 +17,7 @@ public class GestionnaireNiveaux {
 
     public static void initialiser(){
         tabDefi = new ArrayList<>();
-        file = new File("ressource/Editeur.txt");
+        file = BanqueImage.fichierDefi;
 
         try{
           initialiseDefi();
@@ -35,15 +38,15 @@ public class GestionnaireNiveaux {
     }
 
     private static void initialiseDefi() throws FileNotFoundException{
-      Scanner scan = new Scanner(file);
+      LecteurFichier lecfic = new LecteurFichier(file);
       
-      while(scan.hasNext()){
-        Defi def = new Defi(scan.next());
+      while(lecfic.hasNext()){
+        Defi def = new Defi(lecfic.next());
         lignes++;
         tabDefi.add(def);
       }
 
-      scan.close();
+      lecfic.close();
     }
 
     public static String getName(int n){

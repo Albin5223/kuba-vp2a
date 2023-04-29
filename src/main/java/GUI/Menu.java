@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import SearchFile.*;
 
 import Controleur.*;
-import Model.GestionnaireNiveaux;
 import Model.ModeJeu;
 import Model.Model;
 

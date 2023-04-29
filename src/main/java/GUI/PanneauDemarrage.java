@@ -6,6 +6,7 @@ import javax.swing.*;
 import Controleur.*;
 import Model.ModeJeu;
 import Model.Model;
+import SearchFile.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -108,6 +109,9 @@ public class PanneauDemarrage extends JPanel{
                     
                     m.noticeObserveurs(m);
                     vt.addCtrl(ctrl);
+                    vt.ajouterTextPanel();
+                    vt.MiseEnPlaceTuto();
+                    
                 } catch (CloneNotSupportedException e1) {
                     System.out.println("Probleme lors du lancement du model en mode Tuto");
                     System.exit(0);

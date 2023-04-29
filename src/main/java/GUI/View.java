@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import Controleur.*;
 import Model.*;
+import SearchFile.*;
 
 public class View extends JFrame implements Observeur<Data>{
     
