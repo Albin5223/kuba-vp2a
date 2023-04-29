@@ -1,4 +1,4 @@
-package GUI;
+package SearchFile;
 
 import java.awt.*;
 import java.io.File;
@@ -7,27 +7,31 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class BanqueImage {
-    static Image[] banqueMarbleImages;
+
+
+    public static File fichierTuto;
+    public static File fichierDefi; 
+    public static Image[] banqueMarbleImages;
     /* 
     0 : BLACK,
 	1 : WHITE,
 	2 : RED;
     */
 
-    static Image imageBackgroundPlateau;
-	static Image imagePanneauFinDeJeu;
-    static Image imageBackgroundJoueurView;
-    static Image imageBackgroundMenu;
-    static Image imageIcon;
-    static Image imageEtoile;
+    public static Image imageBackgroundPlateau;
+	public static Image imagePanneauFinDeJeu;
+    public static Image imageBackgroundJoueurView;
+    public static Image imageBackgroundMenu;
+    public static Image imageIcon;
+    public static Image imageEtoile;
 
-    static Image[] fleches;
-    static Image[] flechesHover;
+    public static Image[] fleches;
+    public static Image[] flechesHover;
 
-    static Image[] imagePets;
+    public static Image[] imagePets;
 
 
-	static Image[] banquePowerImages;
+	public static Image[] banquePowerImages;
 
     public static void scaleMarble(int taille_case){
         for (int i = 0;i<3;i++){
@@ -56,7 +60,9 @@ public class BanqueImage {
     }
 
     public static void charger(){
-        String path = "ressource/";
+        fichierDefi = new File("ressource/Editeur.txt");
+        fichierTuto = new File("ressource/TextTuto.txt");
+        String path = "ressource/Images/";
         imagePets = new Image[1];
         fleches = new Image[2];
         flechesHover = new Image[2];

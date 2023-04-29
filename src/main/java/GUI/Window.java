@@ -1,8 +1,7 @@
 package GUI;
 
 import javax.swing.*;
-
-import Model.GestionnaireNiveaux;
+import SearchFile.*;
 
 import java.awt.*;
 
@@ -13,9 +12,10 @@ public class Window extends JFrame {
     PanneauDemarrage pd;
 
     public Window(){
-        GestionnaireNiveaux.initialiser();
         BanqueImage.charger();
         BanqueImage.scaleMarble(50);
+        GestionnaireNiveaux.initialiser();
+        
         this.setTitle("Launcher KUBA");
         pd = new PanneauDemarrage(this);
         this.setSize(1020,600);

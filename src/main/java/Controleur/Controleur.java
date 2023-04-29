@@ -6,6 +6,7 @@ import Model.*;
 
 public class Controleur extends MouseAdapter{
 
+	
     Model model;
     int positionDepartX = -1;
     int positionDepartY = -1;
@@ -70,6 +71,7 @@ public class Controleur extends MouseAdapter{
     	Position p1 = new Position(positionDepartX,positionDepartY);
 		Position p2 = new Position(positionArriveX,positionArriveY);
 		
+		
 		if(model.tourIA()){
 			Move m = model.determineBestMove();
 			model.push(m.pos, m.dir);
@@ -77,7 +79,6 @@ public class Controleur extends MouseAdapter{
 		else{
 			move(p1,p2);
 		}
-		
 		
     	resetPosition();
 		

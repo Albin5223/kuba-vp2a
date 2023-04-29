@@ -3,6 +3,7 @@ package GUI;
 import java.awt.*;
 import javax.swing.*;
 import Model.*;
+import SearchFile.*;
 
 public class JoueurView extends JPanel{
     

@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
+import SearchFile.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;

@@ -3,6 +3,8 @@ package Model;
 
 import java.util.LinkedList;
 
+import SearchFile.GestionnaireNiveaux;
+
 
 
 public class Model implements Observe<Data>,Data{
@@ -70,6 +72,9 @@ public class Model implements Observe<Data>,Data{
     }
 
     public void joueurSuivant() {
+        if(modeJ == ModeJeu.TUTO){
+            return;
+        }
         joueurCurrent ++;
         if (joueurCurrent>=2){
             joueurCurrent = 0;

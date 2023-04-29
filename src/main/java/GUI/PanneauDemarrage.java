@@ -6,6 +6,7 @@ import javax.swing.*;
 import Controleur.*;
 import Model.ModeJeu;
 import Model.Model;
+import SearchFile.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -55,7 +56,7 @@ public class PanneauDemarrage extends JPanel{
         containerButton.setLayout(null);
 
 
-        String[] nom = {"Play","Mode Edition","Quitter"};
+        String[] nom = {"Play","Tutoriel","Quitter"};
         button = new JLabel[3];
         for (int i = 0;i<button.length;i++){
             button[i]=new JLabel(nom[i]);
@@ -98,17 +99,22 @@ public class PanneauDemarrage extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 fenetre.setVisible(false);
                 Model m;
+                int n = 2;
                 try {
-                    m = new Model(3,ModeJeu.EDITION);
-                    View v = new View(3,fenetre);
-                    ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
+                    m = new Model(n,ModeJeu.TUTO);
+                    ViewTuto vt = new ViewTuto(n,fenetre);
+                    Controleur ctrl= new Controleur(m,vt.getTaille_case());
 
-                    m.addObserveur(v);
+                    m.addObserveur(vt);
                     
                     m.noticeObserveurs(m);
-                    v.addCtrlEditeur(ctrl);
+                    vt.addCtrl(ctrl);
+                    vt.ajouterTextPanel();
+                    vt.MiseEnPlaceTuto();
+                    
                 } catch (CloneNotSupportedException e1) {
-                    System.out.println("Probleme avec le Clone du model");
+                    System.out.println("Probleme lors du lancement du model en mode Tuto");
+                    System.exit(0);
                 }
                 
             }
