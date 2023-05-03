@@ -6,7 +6,7 @@ import Model.*;
 
 public class Controleur extends MouseAdapter{
 
-	
+	private boolean isTurnIA;
     Model model;
     int positionDepartX = -1;
     int positionDepartY = -1;
@@ -22,6 +22,7 @@ public class Controleur extends MouseAdapter{
     public Controleur(Model m,int n){
         this.model = m;
         SIZE = n;
+		isTurnIA = false;
     }
 
     
@@ -71,13 +72,19 @@ public class Controleur extends MouseAdapter{
     	Position p1 = new Position(positionDepartX,positionDepartY);
 		Position p2 = new Position(positionArriveX,positionArriveY);
 		
+		if (isTurnIA) {
+			return;
+		}
 		
 		if(model.tourIA()){
+			isTurnIA = true;
 			Move m = model.determineBestMove();
 			model.push(m.pos, m.dir);
+			isTurnIA = false;
 		}
 		else{
 			move(p1,p2);
+			isTurnIA = false;
 		}
 		
     	resetPosition();

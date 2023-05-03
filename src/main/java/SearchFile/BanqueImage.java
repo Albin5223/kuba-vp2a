@@ -44,7 +44,6 @@ public class BanqueImage {
 
     public static Image scaleImage(int width,int height,Image img){
         img = img.getScaledInstance(width,height,Image.SCALE_FAST);
-
         return img;
     }
 

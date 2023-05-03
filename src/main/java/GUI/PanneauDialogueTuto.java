@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -11,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import SearchFile.BanqueImage;
 import SearchFile.LecteurFichier;
 
 

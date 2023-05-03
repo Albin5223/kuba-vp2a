@@ -11,7 +11,7 @@ public class LecteurFichier {
 
     public LecteurFichier(File f) throws FileNotFoundException{
         file = f;
-        scan = new Scanner(file);
+        scan = new Scanner(file, "UTF-8");
     }
 
     public boolean hasNext(){

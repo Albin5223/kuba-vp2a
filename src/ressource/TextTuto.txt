@@ -1,43 +1,45 @@
 HELLOOOO !!!
-Bienvenue a toi nouveau joueur
+Bienvenue à toi nouveau joueur
 
 Je suis M. White fondateur du jeu Kuba
 Je vais vous montrer comment y jouer
-Vous etes pres ?
+Vous êtes prêt(e) ?
 
 &plateau
-Voici le pleateau de jeu au depart.
-Il y a des billes rouges ,noires et billes blanches
-Les blanches sont les votres
+Voici le pleateau du jeu au depart.
+Il y a des billes rouges, noires et blanches
+Les blanches sont les vôtres
 Les noires sont les billes de l'adversaire
 Les billes rouges sont neutres
 
-Les regles sont simples :
-SORTIR LA MOITIE DES BILLES ROUGES
+Les règles sont simples :
+SORTIR LA MOITIÉ DES BILLES ROUGES
+OU
+SORTIR TOUTES LES BILLES ADVERSAIRES
 
-Pour deplacer un bille : 
+Pour déplacer un bille : 
 Cliquez sur la bille
 Maintenez et glissez dans la direction que vous souhaitez
-Vous ne pouvez deplacer que des billes blanches
-Essayer !
+Vous ne pouvez déplacer que des billes blanches
+Essayez !
 
-Excellent, vous apprenez vite
+Excellent, vous apprenez vite !!!
 
-Vous ne pouvez ni deplacer les billes noires 
-ni les billes rouges
-Attention le plateau tremble, Essayer!
+Vous ne pouvez ni déplacer les billes noires 
+et rouges
+Attention le plateau tremble, essayez !
 
 Lorsque vous sortez une bille rouge ou une bille noire
-Vous devez rejouer!
+Vous devez rejouer !
 
 &joueur-0
-Les billes capturees sont affichees a gauche du plateau
+Les billes capturées sont affichées a gauche du plateau
 
 &joueur-1
-Les billes capturees par l'adversaire sont aussi affichees
+Les billes capturées par l'adversaire sont aussi affichées gauche
 
 Si vous voulez recommencer ou abandonner la partie
-OUVRER LE PANNEAU A GAUCHE
+OUVREZ LE PANNEAU A DROITE
 
-A vous de joueur maintenant !
-Soyez malin
+A vous de jouer maintenant !
+Soyez malin !
