@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -10,11 +11,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import SearchFile.BanqueImage;
 import SearchFile.LecteurFichier;
 
 
 
-public class PanneauMessage extends JPanel{
+public class PanneauDialogueTuto extends JPanel{
 
     String message;
     LecteurFichier lecfic;
@@ -23,7 +25,7 @@ public class PanneauMessage extends JPanel{
     View view;
     
 
-    public PanneauMessage(File f,View v) throws FileNotFoundException{
+    public PanneauDialogueTuto(File f,View v) throws FileNotFoundException{
         view = v;
         lecfic = new LecteurFichier(f);
         Jmessage = new JLabel("*Cliquez ici pour continuer*");
@@ -31,12 +33,13 @@ public class PanneauMessage extends JPanel{
         textArea = new JTextArea("Bonjour la famille");
         textArea.setEditable(false);
         textArea.setLineWrap(true);
+        textArea.setOpaque(false);
         this.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 textArea.setText(nextMessage());
-                PanneauMessage.this.repaint();
+                PanneauDialogueTuto.this.repaint();
             }
 
             @Override
@@ -60,9 +63,11 @@ public class PanneauMessage extends JPanel{
         });
     }
 
+    
+
     public void initialise(){
         textArea.setBounds(0,0,this.getWidth(),this.getHeight() - 50);
-        this.add(textArea);
+        this.add(textArea,CENTER_ALIGNMENT);
 
         this.add(Jmessage);
     }

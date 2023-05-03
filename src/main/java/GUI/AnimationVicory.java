@@ -6,6 +6,8 @@ import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
+import SearchFile.BanqueImage;
+
 public class AnimationVicory extends JPanel {
 
     //x = x0 + r*cos(t)

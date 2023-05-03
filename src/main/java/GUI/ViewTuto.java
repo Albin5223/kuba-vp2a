@@ -13,10 +13,10 @@ public class ViewTuto extends View{
     }
 
     public void ajouterTextPanel(){
-        PanneauMessage pm;
+        PanneauDialogueTuto pm;
         try {
-            pm = new PanneauMessage(BanqueImage.fichierTuto,this);
-            pm.setBounds(this.plateau.getX()+plateau.getWidth()+30,this.joueurs[0].getY(), 300, 500);
+            pm = new PanneauDialogueTuto(BanqueImage.fichierTuto,this);
+            pm.setBounds(this.plateau.getX()+plateau.getWidth()+30,this.joueurs[0].getY(), 300, 200);
 
             pm.initialise();
 

@@ -1,7 +1,5 @@
 package GUI;
 
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -9,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Controleur.Controleur;
 import Model.ModeJeu;
 import Model.Model;
 import SearchFile.GestionnaireNiveaux;
@@ -45,8 +44,11 @@ public class DefiView extends JPanel{
                 fenetre.setVisible(false);
                 m = new Model(n,ModeJeu.DEFI);
                 View v = new View(n,fenetre);
+                Controleur ctrl = new Controleur(m,v.getTaille_case());
                 m.addObserveur(v);
                 m.noticeObserveurs(m);
+                v.addCtrl(ctrl);
+                
                 GestionnaireNiveaux.addModel(m);
     
         } catch (CloneNotSupportedException e1) {

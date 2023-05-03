@@ -18,6 +18,8 @@ public class BanqueImage {
 	2 : RED;
     */
 
+
+    public static Image imageBulleDialogue;
     public static Image imageBackgroundPlateau;
 	public static Image imagePanneauFinDeJeu;
     public static Image imageBackgroundJoueurView;
@@ -60,15 +62,16 @@ public class BanqueImage {
     }
 
     public static void charger(){
-        fichierDefi = new File("ressource/Editeur.txt");
-        fichierTuto = new File("ressource/TextTuto.txt");
-        String path = "ressource/Images/";
+        fichierDefi = new File("src/ressource/Editeur.txt");
+        fichierTuto = new File("src/ressource/TextTuto.txt");
+        String path = "src/ressource/Images/";
         imagePets = new Image[1];
         fleches = new Image[2];
         flechesHover = new Image[2];
         banqueMarbleImages = new Image[3];
         banquePowerImages = new Image[3];
         try {
+            imageBulleDialogue = ImageIO.read(new File(path+"bulle_dialogue.png"));
             imageEtoile = ImageIO.read(new File(path+"etoile.png"));
             imageIcon = ImageIO.read(new File(path+"iconDerouler.png"));
             imageBackgroundMenu = ImageIO.read(new File(path+"background4.jpg"));
@@ -100,6 +103,7 @@ public class BanqueImage {
         
         imageEtoile = imageEtoile.getScaledInstance(100,100,Image.SCALE_FAST);
         imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400,300,Image.SCALE_FAST);
+        imageBulleDialogue = imageBulleDialogue.getScaledInstance(300,200,Image.SCALE_FAST);
         int icWidth = BanqueImage.imageIcon.getWidth(null)/3;
 		int icHeight = BanqueImage.imageIcon.getHeight(null)/3;
 		BanqueImage.imageIcon = BanqueImage.scaleImage(icWidth, icHeight, BanqueImage.imageIcon);
