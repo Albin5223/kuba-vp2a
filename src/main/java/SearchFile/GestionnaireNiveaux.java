@@ -53,11 +53,23 @@ public class GestionnaireNiveaux {
       return tabDefi.get(n).getName();
     }
 
+    private static boolean isAlphaNumeric(String s) {
+      for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        boolean b1 = Character.isLetter(c);
+        boolean b2 = Character.isDigit(c);
+        if (!b1 && !b2) {
+          return false;
+        }
+      }
+      return true;
+    }
+
     public static void ajouteDefi(String name){
       String plateau = model.getPlateau().toString();
       int taille = model.getN();
       int numero = tabDefi.size()+1;
-      if(name.length() == 0){
+      if(name.length() == 0 || !isAlphaNumeric(name)){
         name = "Defi-"+numero;
       }
 

@@ -16,20 +16,15 @@ public class Controleur extends MouseAdapter{
     
     int SIZE;
 
-    public boolean defi = false;
-
-
     public Controleur(Model m,int n){
         this.model = m;
         SIZE = n;
 		isTurnIA = false;
     }
 
-    
     public void setModel(Model m){
         model = m;
     }
-    
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
     	int detailX = arrive.getI() - depart.getI();
@@ -86,9 +81,7 @@ public class Controleur extends MouseAdapter{
 			move(p1,p2);
 			isTurnIA = false;
 		}
-		
     	resetPosition();
-		
     }
 		
 

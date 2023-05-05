@@ -182,7 +182,7 @@ public class View extends JFrame implements Observeur<Data>{
 						View.this.plateau.setVisible(true);
 						View.this.requestFocus();
 						PanneauEnregistrement.openSave = false;
-						View.this.getFocusListeners();
+						afficherPopUp(null,"Sauvegarde réussie");
 
 					});
 
@@ -191,7 +191,6 @@ public class View extends JFrame implements Observeur<Data>{
 						View.this.remove(pe);
 						View.this.plateau.setVisible(true);
 						View.this.requestFocus();
-						afficherPopUp(null,"Sauvegarde réussie");
 					});
 				}
 			}
@@ -227,13 +226,15 @@ public class View extends JFrame implements Observeur<Data>{
 
 
 	public void vibrer(State state){
-		afficherPopUp(state,null);
+		PopUp popUp = new PopUp(state);
+		popUp.setBounds(plateau.getWidth()/2-100,plateau.getHeight()/2-50,250,100);
+		plateau.add(popUp);
+		plateau.repaint();
 		Timer vibe = new Timer();
 		int posX = plateau.getX();
 		vibe.schedule(new TimerTask() {
 			int time = 4;
 			boolean i = false;
-			
 
     		public void run() {
 				if(i){
@@ -244,7 +245,9 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 				i=!i;
 				if(time == 0){
+					isViber = false;
 					cancel();
+					plateau.remove(popUp);
 					plateau.setBounds(posX,plateau.getY(), plateau.getWidth(), plateau.getHeight());
 					conteneur.repaint();
 					
@@ -262,7 +265,7 @@ public class View extends JFrame implements Observeur<Data>{
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
 			int time = 200;
-			
+
     		public void run() {
 
 				if(time<=80){
@@ -337,8 +340,8 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.add(popUp);
 		plateau.repaint();
 		Timer affiche = new Timer();
-		affiche.schedule(new TimerTask() {
-			int time = 5;
+		affiche.schedule(new TimerTask() {	
+			int time = 10;
     		public void run() {
 				if(time == 0){
 					cancel();
@@ -346,8 +349,13 @@ public class View extends JFrame implements Observeur<Data>{
 					conteneur.repaint();
 					isViber=false;
 				}
-				time--;
-    		}
+				if (msg == null) {
+					time -= 2;
+				}
+				else {
+					time--;
+				}
+			}
 		},0, 150);
 		affiche.purge();
 		
@@ -368,7 +376,7 @@ public class View extends JFrame implements Observeur<Data>{
 	@Override
 	public void update(Data obj) {
 		if(obj.getVainqueur()!=null){
-				
+
 			animationVictoire();
 
 			isOver=true;
@@ -379,12 +387,11 @@ public class View extends JFrame implements Observeur<Data>{
 			start(obj);
 		}
 		else {
-			
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
 				if(!isViber){
 					isViber=true;
 					vibrer(obj.getState());
-				}	
+				}
 			} else {
 				joueurs[obj.getJoueurCurrent()].updateBille(obj.billesCapturees());
 				joueurs[obj.getJoueurCurrent()].repaint();
@@ -396,10 +403,8 @@ public class View extends JFrame implements Observeur<Data>{
 					IAturn();
 				}
 				this.repaint();
-
 			}
-		}	
-		
+		}
 	}
 
 	public void IAturn(){
