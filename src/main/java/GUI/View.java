@@ -161,7 +161,6 @@ public class View extends JFrame implements Observeur<Data>{
 			boolean controlPressed;
 			@Override
 			public void keyTyped(KeyEvent e) {
-				
 			}
 
 			@Override
@@ -192,7 +191,7 @@ public class View extends JFrame implements Observeur<Data>{
 						View.this.remove(pe);
 						View.this.plateau.setVisible(true);
 						View.this.requestFocus();
-
+						afficherPopUp(null,"Sauvegarde réussie");
 					});
 				}
 			}
@@ -228,7 +227,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 
 	public void vibrer(State state){
-		afficherPopUp(state);
+		afficherPopUp(state,null);
 		Timer vibe = new Timer();
 		int posX = plateau.getX();
 		vibe.schedule(new TimerTask() {
@@ -325,16 +324,21 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 
 
-	public void afficherPopUp(State state){
-		PopUpError popUp = new PopUpError(state);
-		
+	public void afficherPopUp(State state, String msg){
+		PopUp popUp;
+		if (msg == null) {
+			popUp = new PopUp(state);
+		}
+		else {
+			popUp = new PopUp(msg);
+		}
+
 		popUp.setBounds(plateau.getWidth()/2-100,plateau.getHeight()/2-50,250,100);
 		plateau.add(popUp);
 		plateau.repaint();
 		Timer affiche = new Timer();
 		affiche.schedule(new TimerTask() {
 			int time = 5;
-
     		public void run() {
 				if(time == 0){
 					cancel();
