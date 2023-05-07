@@ -24,6 +24,8 @@ public class BanqueImage {
 	public static Image imagePanneauFinDeJeu;
     public static Image imageBackgroundJoueurView;
     public static Image imageBackgroundMenu;
+
+    public static Image imagePanneauTuto;
     public static Image imageIcon;
     public static Image imageEtoile;
 
@@ -77,6 +79,7 @@ public class BanqueImage {
             imageBackgroundJoueurView = ImageIO.read(new File(path+"panneau.jpg"));
 			imageBackgroundPlateau = ImageIO.read(new File(path+"background3.jpg"));
 			imagePanneauFinDeJeu = ImageIO.read(new File(path+"end_screen.png"));
+            imagePanneauTuto=ImageIO.read(new File(path+"panneauTuto.png"));
 			for (int i = 0;i<3;i++){
 				String s=path+"Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
@@ -103,6 +106,7 @@ public class BanqueImage {
         imageEtoile = imageEtoile.getScaledInstance(100,100,Image.SCALE_FAST);
         imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400,300,Image.SCALE_FAST);
         imageBulleDialogue = imageBulleDialogue.getScaledInstance(300,200,Image.SCALE_FAST);
+        imagePanneauTuto=imagePanneauTuto.getScaledInstance(300,200,Image.SCALE_FAST);
         int icWidth = BanqueImage.imageIcon.getWidth(null)/3;
 		int icHeight = BanqueImage.imageIcon.getHeight(null)/3;
 		BanqueImage.imageIcon = BanqueImage.scaleImage(icWidth, icHeight, BanqueImage.imageIcon);

@@ -1,6 +1,6 @@
 package GUI;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import SearchFile.BanqueImage;
 import SearchFile.LecteurFichier;
 
 
@@ -24,11 +25,14 @@ public class PanneauDialogueTuto extends JPanel{
     
 
     public PanneauDialogueTuto(File f,View v) throws FileNotFoundException{
+        this.setOpaque(false);
         view = v;
         lecfic = new LecteurFichier(f);
         Jmessage = new JLabel("*Cliquez ici pour continuer*");
         Jmessage.setFont(new Font("Impact",Font.PLAIN,10));
+        Jmessage.setForeground(new Color(238, 179, 97));
         textArea = new JTextArea("Bonjour la famille");
+        textArea.setForeground(new Color(238, 179, 97));
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setOpaque(false);
@@ -59,6 +63,10 @@ public class PanneauDialogueTuto extends JPanel{
             
             
         });
+    }
+
+    public void paintComponent(Graphics g){
+        g.drawImage(BanqueImage.imagePanneauTuto, 0, 0, null);
     }
 
     
