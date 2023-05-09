@@ -1,12 +1,9 @@
 package GUI;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import Model.*;
+import SearchFile.*;
 
 public class JoueurView extends JPanel{
     
@@ -19,17 +16,16 @@ public class JoueurView extends JPanel{
     //Indice 0 : red
     //Indice 1 : Opp
     JPanel[] paneMarble;
-    Image imageBackground;
-    Image[] banqueMarblImages;
 
 
-    public JoueurView(Colour c,Image[] img){
-        banqueMarblImages = img;
+
+    public JoueurView(Colour c){
 
         paneMarble = new JPanel[2]; 
         nbMarble = new int[2];
         this.setLayout(null);
         titre = new JLabel("");
+        titre.setOpaque(true);
         barre = new JPanel();
         mettreBarre();
         couleur = c;
@@ -38,12 +34,10 @@ public class JoueurView extends JPanel{
             case WHITE : titre.setText("Joueur BLANC");break;
             default : titre.setText("Erreur");break;
         }
-        titre.setForeground(Color.GREEN);
-        try {
-			imageBackground = ImageIO.read(new File("ressource/panneau.jpg"));
-		} catch (IOException e1) {
-			System.out.println("Image non trouve dans JoueurView");
-		}
+        titre.setHorizontalAlignment(SwingConstants.CENTER);
+        titre.setForeground(new Color(187, 2, 2, 228));
+        titre.setBackground(new Color(239, 159, 52, 170));
+       
         
         this.add(barre);
 
@@ -51,7 +45,7 @@ public class JoueurView extends JPanel{
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(imageBackground,0,0,null);
+        g.drawImage(BanqueImage.images[4],0,0,null);
         this.repaint();
         
     }
@@ -59,9 +53,8 @@ public class JoueurView extends JPanel{
     public void initialisePaneMarbleCaptured(){
         titre.setBounds(this.getWidth()/3, 10, 100, 20);
         this.add(titre);
-
-        imageBackground = imageBackground.getScaledInstance(getWidth(), getHeight(),Image.SCALE_FAST);
-
+        BanqueImage.images[4] = BanqueImage.scaleImage(getWidth(), getHeight(),BanqueImage.images[4]);
+    
         for(int i = 0;i<2;i++){
             int j =i;
             paneMarble[i] = new JPanel(){
@@ -119,12 +112,13 @@ public class JoueurView extends JPanel{
     }    
 
     public void mettreBarre(){
+        barre.setOpaque(true);
         barre.setBounds(0,0,20,this.getHeight());
         barre.setBackground(Color.RED);
     }
 
     public void enleverBarre(){
-        barre.setBackground(Color.lightGray);
+        barre.setOpaque(false);
     }
 
     public void resetData(){

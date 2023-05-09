@@ -2,24 +2,24 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.imageio.ImageIO;
 
 import Controleur.*;
 import Model.*;
+import SearchFile.*;
 
 public class View extends JFrame implements Observeur<Data>{
     
     
 	int longueur;
 	int n;
-	boolean isOver;
-	boolean isReloading;
+	private boolean isOver;
+	private boolean isReloading;
 	int taille_case;
 	JPanel plateau;
 	JPanel conteneur;
@@ -27,27 +27,22 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView jv2;
 	JoueurView[] joueurs; 
 	boolean isViber;
+	boolean isTurnIA;
 	
 	OptionView optView;
 	PanneauFinDeJeu panneauFinDeJeu;
 
-	Image imageBackground;
-	Image imagePanneauFinDeJeu;
 
 	JFrame launcher;
 
-	Image[] banqueMarbleImages;
-	Image[] banquePowerImages;
-
-	Image imageBackgroundScale;
+	
 
     public View(int nb,JFrame l) {
 
 		joueurs = new JoueurView[2];
 		launcher = l;
 		this.setTitle("Plateau KUBA");
-		banqueMarbleImages = new Image[3];
-		banquePowerImages = new Image[3];
+		
 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
@@ -55,40 +50,22 @@ public class View extends JFrame implements Observeur<Data>{
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
+		this.setIconImage(BanqueImage.images[8]);
 
  		n = nb;
+		isTurnIA = false;
 
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
 
-		//Trouver une boone image de fond
-		try {
-			imageBackground = ImageIO.read(new File("ressource/background3.jpg"));
-			imagePanneauFinDeJeu = ImageIO.read(new File("ressource/end_screen.png"));
-			imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(300,200,Image.SCALE_FAST);
-			for (int i = 0;i<3;i++){
-				String s="ressource/Balle"+i+".png";
-				Image marble = ImageIO.read(new File(s));
-				Image marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-				banqueMarbleImages[i] = marbleScaled;
-				s="ressource/Power"+i+".png";
-				marble = ImageIO.read(new File(s));
-				marbleScaled = marble.getScaledInstance(taille_case,taille_case,Image.SCALE_FAST);
-				banquePowerImages[i] = marbleScaled;
-			}
-
-		}catch (IOException e) {
-			System.out.println("Image des billes non touve");
-		}
-
-
-
-		imageBackgroundScale=imageBackground.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_FAST);
+		BanqueImage.scaleMarble(taille_case);
+		
+		BanqueImage.images[5] = BanqueImage.scaleImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,BanqueImage.images[5]);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				g.drawImage(imageBackgroundScale,0,0,null);
+				g.drawImage(BanqueImage.images[5],0,0,null);
 				
 			}
 		};
@@ -114,16 +91,14 @@ public class View extends JFrame implements Observeur<Data>{
 			}
 		};
 		plateau.setBounds(this.getWidth()/2-taille_case*longueur/2,this.getHeight()/2-taille_case*longueur/2,taille_case*longueur+1,taille_case*longueur+1);
-		jv1 = new JoueurView(Colour.WHITE,banqueMarbleImages);
+		jv1 = new JoueurView(Colour.WHITE);
 		int taille_Jv = plateau.getX()-20;
 		jv1.setBounds(10,plateau.getY(),taille_Jv,longueur*taille_case/3);
 		jv1.initialisePaneMarbleCaptured();
 		jv1.mettreBarre();
-		jv2 = new JoueurView(Colour.BLACK,banqueMarbleImages);
+		jv2 = new JoueurView(Colour.BLACK);
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
-
-		
 
 		optView = new OptionView(this,launcher);
 		optView.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-300,50, 300,200);
@@ -132,7 +107,7 @@ public class View extends JFrame implements Observeur<Data>{
 		optView.getReplayLabel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-				if(!isOver && !isReloading){
+				if(!isOver && !isReloading && !isTurnIA){
 					isReloading = true;
 					Timer vibe = new Timer();
 					vibe.schedule(new TimerTask() {
@@ -161,7 +136,7 @@ public class View extends JFrame implements Observeur<Data>{
 			@Override
 			public void mouseExited(MouseEvent e){
 				View.this.setCursor(Cursor.getDefaultCursor());
-				optView.getReplayLabel().setForeground(Color.GRAY);
+				optView.getReplayLabel().setForeground(new Color(173, 103, 53));
 			}
         });
 
@@ -182,6 +157,58 @@ public class View extends JFrame implements Observeur<Data>{
 
 	public void addCtrlEditeur (ControleurEditeur ctrl){
 		plateau.addMouseListener(ctrl);
+		plateau.addMouseMotionListener(ctrl);
+
+		this.addKeyListener(new KeyListener() {
+			boolean controlPressed;
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+					controlPressed = true;
+					
+				}
+				if(e.getKeyCode() == KeyEvent.VK_R && controlPressed && !PanneauEnregistrement.openSave){
+					ControleurEditeur.SolutionMod = true;
+				}
+				if (e.getKeyCode() == KeyEvent.VK_S && controlPressed && !PanneauEnregistrement.openSave){
+					View.this.plateau.setVisible(false);
+					PanneauEnregistrement pe = new PanneauEnregistrement(View.this);
+					pe.setBounds(View.this.getWidth()/2-150, View.this.getHeight()/2-100, 300, 200);
+					pe.initialise();
+					View.this.add(pe);
+					View.this.repaint();
+
+					pe.getEnregistrerButton().addActionListener( event->{
+						View.this.remove(pe);
+						GestionnaireNiveaux.ajouteDefi(pe.getNom(),ControleurEditeur.solutions);
+						View.this.plateau.setVisible(true);
+						View.this.requestFocus();
+						PanneauEnregistrement.openSave = false;
+						afficherPopUp(null,"Sauvegarde réussie");
+						ControleurEditeur.SolutionMod = false;
+					});
+
+					pe.getAnnulerButton().addActionListener( event->{
+						PanneauEnregistrement.openSave = false;
+						View.this.remove(pe);
+						View.this.plateau.setVisible(true);
+						View.this.requestFocus();
+					});
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+					controlPressed = false;
+				}
+			}
+			
+		});
 	}
 
 	public void updatePlateau(Graphics g,Data obj){
@@ -191,8 +218,8 @@ public class View extends JFrame implements Observeur<Data>{
 				Power p = obj.getMarble(j, i).getPower();
 				if (c != null){
 					switch(p){
-						case NORMAL:g.drawImage(banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
-						default : g.drawImage(banquePowerImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
+						case NORMAL:g.drawImage(BanqueImage.banqueMarbleImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
+						default : g.drawImage(BanqueImage.banquePowerImages[c.ordinal()],i*taille_case,j*taille_case,null);break;
 					}
 				}
 			}
@@ -205,13 +232,15 @@ public class View extends JFrame implements Observeur<Data>{
 
 
 	public void vibrer(State state){
-		afficherPopUp(state);
+		PopUp popUp = new PopUp(state);
+		popUp.setBounds(plateau.getWidth()/2-100,plateau.getHeight()/2-50,250,100);
+		plateau.add(popUp);
+		plateau.repaint();
 		Timer vibe = new Timer();
 		int posX = plateau.getX();
 		vibe.schedule(new TimerTask() {
 			int time = 4;
 			boolean i = false;
-			
 
     		public void run() {
 				if(i){
@@ -220,9 +249,11 @@ public class View extends JFrame implements Observeur<Data>{
 				else{
 					bougerPlateau(Direction.SOUTH);
 				}
-				i=!i;
+				i = !i;
 				if(time == 0){
+					isViber = false;
 					cancel();
+					plateau.remove(popUp);
 					plateau.setBounds(posX,plateau.getY(), plateau.getWidth(), plateau.getHeight());
 					conteneur.repaint();
 					
@@ -240,7 +271,7 @@ public class View extends JFrame implements Observeur<Data>{
 		Timer vibe = new Timer();
 		vibe.schedule(new TimerTask() {
 			int time = 200;
-			
+
     		public void run() {
 
 				if(time<=80){
@@ -249,8 +280,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 				if(time == 0){
 					cancel();
-					imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400, 300,Image.SCALE_FAST);
-					panneauFinDeJeu = new PanneauFinDeJeu(c,imagePanneauFinDeJeu);
+					panneauFinDeJeu = new PanneauFinDeJeu(c);
 					panneauFinDeJeu.setBounds(View.this.getWidth()/2-200, View.this.getHeight()/2-150, 400, 300);
 					panneauFinDeJeu.initialise();
 
@@ -303,16 +333,21 @@ public class View extends JFrame implements Observeur<Data>{
 	}
 
 
-	public void afficherPopUp(State state){
-		PopUpError popUp = new PopUpError(state);
-		
+	public void afficherPopUp(State state, String msg){
+		PopUp popUp;
+		if (msg == null) {
+			popUp = new PopUp(state);
+		}
+		else {
+			popUp = new PopUp(msg);
+		}
+
 		popUp.setBounds(plateau.getWidth()/2-100,plateau.getHeight()/2-50,250,100);
 		plateau.add(popUp);
 		plateau.repaint();
 		Timer affiche = new Timer();
-		affiche.schedule(new TimerTask() {
-			int time = 5;
-
+		affiche.schedule(new TimerTask() {	
+			int time = 10;
     		public void run() {
 				if(time == 0){
 					cancel();
@@ -320,8 +355,13 @@ public class View extends JFrame implements Observeur<Data>{
 					conteneur.repaint();
 					isViber=false;
 				}
-				time--;
-    		}
+				if (msg == null) {
+					time -= 2;
+				}
+				else {
+					time--;
+				}
+			}
 		},0, 150);
 		affiche.purge();
 		
@@ -341,8 +381,9 @@ public class View extends JFrame implements Observeur<Data>{
 
 	@Override
 	public void update(Data obj) {
+		isTurnIA = obj.tourIA();
 		if(obj.getVainqueur()!=null){
-				
+
 			animationVictoire();
 
 			isOver=true;
@@ -353,12 +394,11 @@ public class View extends JFrame implements Observeur<Data>{
 			start(obj);
 		}
 		else {
-			
 			if (obj.getState() != State.PUSHOPPMARBLE && obj.getState() != State.PUSHREDMARBLE && obj.getState() != State.SUCCESS) {
 				if(!isViber){
 					isViber=true;
 					vibrer(obj.getState());
-				}	
+				}
 			} else {
 				joueurs[obj.getJoueurCurrent()].updateBille(obj.billesCapturees());
 				joueurs[obj.getJoueurCurrent()].repaint();
@@ -367,16 +407,14 @@ public class View extends JFrame implements Observeur<Data>{
 					joueurSuivant(obj);
 				}
 				if(obj.tourIA()){
-					IAturn();
+					IAturn(obj);
 				}
 				this.repaint();
-
 			}
-		}	
-		
+		}
 	}
 
-	public void IAturn(){
+	public void IAturn(Data obj){
 		Timer affiche = new Timer();
 		affiche.schedule(new TimerTask() {
 			int time = 5;
@@ -384,13 +422,15 @@ public class View extends JFrame implements Observeur<Data>{
     		public void run() {
 				if(time == 0){
 					cancel();
+					if (obj.tourIA()) {
+						Controleur.nClicks ++;
+					}
 					plateau.getMouseListeners()[0].mouseReleased(null);
 				}
 				time--;
     		}
 		},0, 150);
 		affiche.purge();
-
 	}
 
 	public void animationVictoire(){

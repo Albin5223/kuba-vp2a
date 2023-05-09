@@ -11,13 +11,13 @@ public class NoeudIA  {
     private Position pos;
     private LinkedList<NoeudIA> fils = new LinkedList<NoeudIA>();
 
-    public NoeudIA (Plateau p) throws CloneNotSupportedException {
-        this.plateau = p;//.clone();
+    public NoeudIA (Plateau p) {
+        this.plateau = p;
         this.joueurAcc = this.plateau.getJoueur2();
         this.joueurAdv = this.plateau.getJoueur1();
     }
 
-    public NoeudIA (NoeudIA n, boolean replay) throws CloneNotSupportedException {
+    public NoeudIA (NoeudIA n, boolean replay) {
         this.plateau = n.plateau;
         if (!replay) {//donc si on ne rejoue pas
             Joueur tmp = n.joueurAcc;
@@ -34,7 +34,7 @@ public class NoeudIA  {
         return s == State.SUCCESS || s == State.PUSHOPPMARBLE || s == State.PUSHREDMARBLE;
     }
 
-    public static void createNextNodes (NoeudIA node, int depth) throws CloneNotSupportedException {
+    public static void createNextNodes (NoeudIA node, int depth) {
         if (depth == 0) {
             return;
         }
@@ -65,7 +65,7 @@ public class NoeudIA  {
         }
     }
 
-    public static Move determineBestMove (Plateau p, int depth) throws CloneNotSupportedException {
+    public static Move determineBestMove (Plateau p, int depth){
         NoeudIA arbre = new NoeudIA(p);
         createNextNodes(arbre, depth);//change en place arbre
         int bestValue = 999999999;
@@ -99,12 +99,12 @@ public class NoeudIA  {
 
     private static int rateValue (NoeudIA node) {
         if (node.joueurAcc.getColor() == Colour.WHITE) {//ATTENTION PEUT ETRE A INVERSER
-            return (node.joueurAcc.getBilles()-node.joueurAdv.getBilles()) * 2 + 
-            (node.joueurAcc.getBillesRougesCapturees() - node.joueurAdv.getBillesRougesCapturees());
+            return (node.joueurAcc.getBilles()-node.joueurAdv.getBilles()) * 2 +
+                    (node.joueurAcc.getBillesRougesCapturees() - node.joueurAdv.getBillesRougesCapturees());
         }
         else {
-            return (node.joueurAdv.getBilles()-node.joueurAcc.getBilles()) * 2 + 
-            (node.joueurAdv.getBillesRougesCapturees() - node.joueurAcc.getBillesRougesCapturees());
+            return (node.joueurAdv.getBilles()-node.joueurAcc.getBilles()) * 2 +
+                    (node.joueurAdv.getBillesRougesCapturees() - node.joueurAcc.getBillesRougesCapturees());
         }
     }
 }

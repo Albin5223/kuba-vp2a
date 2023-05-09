@@ -5,7 +5,8 @@ public enum ModeJeu {
     IA,
     EDITION,
     DEFI,
-    FUN;
+    FUN,
+    TUTO;
 
     public static String[] name = {"NORMAL","IA","EDITION","DEFI","FUN"};
 

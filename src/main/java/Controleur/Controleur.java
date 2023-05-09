@@ -6,6 +6,7 @@ import Model.*;
 
 public class Controleur extends MouseAdapter{
 
+	public static int nClicks;
     Model model;
     int positionDepartX = -1;
     int positionDepartY = -1;
@@ -15,19 +16,15 @@ public class Controleur extends MouseAdapter{
     
     int SIZE;
 
-    public boolean defi = false;
-
 
     public Controleur(Model m,int n){
         this.model = m;
         SIZE = n;
     }
 
-    
     public void setModel(Model m){
         model = m;
     }
-    
     
     private static Direction detailDirectionEstWest(Position depart, Position arrive, Direction dir) {
     	int detailX = arrive.getI() - depart.getI();
@@ -40,9 +37,8 @@ public class Controleur extends MouseAdapter{
         }
     	return dir;
     }
-    
-    
-    private static Direction determineDirection(Position depart, Position arrive){
+
+    static Direction determineDirection(Position depart, Position arrive){
 		if(depart.getJ()==arrive.getJ() && depart.getI() == arrive.getI()){
 			return Direction.INVALID;
 		}
@@ -67,38 +63,39 @@ public class Controleur extends MouseAdapter{
     
     @Override
     public void mouseReleased(MouseEvent e) {
-    	Position p1 = new Position(positionDepartX,positionDepartY);
-		Position p2 = new Position(positionArriveX,positionArriveY);
-		
+		if (nClicks > 1) {
+			resetPosition();
+			return;
+		}
+
 		if(model.tourIA()){
 			Move m = model.determineBestMove();
 			model.push(m.pos, m.dir);
 		}
 		else{
+			Position p1 = new Position(positionDepartX,positionDepartY);
+			Position p2 = new Position(positionArriveX,positionArriveY);
 			move(p1,p2);
 		}
-		
-		
     	resetPosition();
-		
+		nClicks = 0;
     }
-		
-
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-			
+		if (model.tourIA()) {
+			nClicks ++;
+		}
 		positionDepartX = e.getX()/SIZE;
 		positionDepartY = e.getY()/SIZE;
 		
 		positionArriveX = positionDepartX;
-		positionArriveY = positionDepartY;	
+		positionArriveY = positionDepartY;
 	}
 
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
 		if (positionDepartX != -1 && positionDepartY != -1) {
 			if (positionDepartX != e.getX()/SIZE || positionDepartY != e.getY()/SIZE) {
 				positionArriveX = e.getX()/SIZE;

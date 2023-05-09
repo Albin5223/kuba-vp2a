@@ -1,10 +1,9 @@
 package GUI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import SearchFile.*;
+
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Window extends JFrame {
     JLabel content;
@@ -13,20 +12,19 @@ public class Window extends JFrame {
     PanneauDemarrage pd;
 
     public Window(){
+        BanqueImage.charger();
+        BanqueImage.scaleMarble(50);
+        GestionnaireNiveaux.initialiser();
+        
         this.setTitle("Launcher KUBA");
         pd = new PanneauDemarrage(this);
         this.setSize(1020,600);
         this.setVisible(true);
         this.setResizable(false);
-        this.setIconImage(getIconImage());
-
-        Image iconImage = null;
-        try {
-            iconImage = ImageIO.read(new File("ressource/background4.jpg"));
-        } catch (IOException e) {
-           System.out.println("Image non trouve dans Window");
-        }
-        iconImage = iconImage.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_FAST);
+        this.setIconImage(BanqueImage.images[8]);
+        this.setLocationRelativeTo(null);
+        
+        Image iconImage = BanqueImage.images[3].getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_FAST);
 
         ImageIcon imic = new ImageIcon(iconImage);
 
