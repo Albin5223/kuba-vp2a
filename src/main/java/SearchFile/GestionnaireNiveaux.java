@@ -6,18 +6,24 @@ import java.util.ArrayList;
 import Model.Defi;
 import Model.Marble;
 import Model.Model;
+import Model.Move;
 import Model.Plateau;
 public class GestionnaireNiveaux {
 
     static Model model;
     static File file;
     static int lignes;
+    static int numSelected;
+    static int numCoup;
+    static String savedPlat;
 
     static ArrayList<Defi> tabDefi;
 
     public static void initialiser(){
         tabDefi = new ArrayList<>();
         file = BanqueImage.fichierDefi;
+        numSelected = -1;
+        numCoup = -1;
 
         try{
           initialiseDefi();
@@ -35,6 +41,10 @@ public class GestionnaireNiveaux {
 
     public static int getNbLignes(){
       return lignes;
+    }
+
+    public static void savePlateau(){
+      savedPlat = model.getPlateau().toString();
     }
 
     private static void initialiseDefi() throws FileNotFoundException{
@@ -66,14 +76,13 @@ public class GestionnaireNiveaux {
     }
 
     public static void ajouteDefi(String name,String solution){
-      String plateau = model.getPlateau().toString();
       int taille = model.getN();
       int numero = tabDefi.size()+1;
       if(name.length() == 0 || !isAlphaNumeric(name)){
         name = "Defi-"+numero;
       }
 
-      Defi nouveau = new Defi(name,taille,plateau);
+      Defi nouveau = new Defi(name,taille,savedPlat);
       String nouvelleLigne = nouveau.getLine();
       nouvelleLigne+=solution;
       tabDefi.add(nouveau);
@@ -106,8 +115,18 @@ public class GestionnaireNiveaux {
     }
     
     public static void lancer(int niveauSelected){
+        numSelected = niveauSelected;
+        numCoup = 0 ;
         String plateau = getNiveaux(niveauSelected);
         Marble[][] nv = Plateau.stringToList(plateau);
         model.setBoard(nv);
+    }
+
+    public static Move getNextMove(){
+      return tabDefi.get(numSelected).nextMove(numCoup);
+    }
+
+    public static void moveReussi(){
+      numCoup++;
     }
 }

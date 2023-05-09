@@ -98,6 +98,22 @@ public class Model implements Observe<Data>,Data{
     }
 
     public State push(Position p,Direction d){
+        if(modeJ == ModeJeu.DEFI ){
+            Move action = GestionnaireNiveaux.getNextMove();
+            System.out.println(p.i  );
+            System.out.println(action.pos.i );
+            System.out.println(p.j);
+            System.out.println(action.pos.j );
+            System.out.println(d );
+            System.out.println(action.dir);
+            if (p.i != action.pos.i || p.j != action.pos.j || d != action.dir){
+                System.out.println("pas bon");
+                return State.WRONGDIRECTION;
+            }
+            else{
+                GestionnaireNiveaux.moveReussi();
+            }
+        }
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){

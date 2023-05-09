@@ -173,6 +173,7 @@ public class View extends JFrame implements Observeur<Data>{
 				}
 				if(e.getKeyCode() == KeyEvent.VK_R && controlPressed && !PanneauEnregistrement.openSave){
 					ControleurEditeur.SolutionMod = true;
+					GestionnaireNiveaux.savePlateau();
 				}
 				if (e.getKeyCode() == KeyEvent.VK_S && controlPressed && !PanneauEnregistrement.openSave){
 					View.this.plateau.setVisible(false);
