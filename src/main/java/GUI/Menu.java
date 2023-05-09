@@ -46,7 +46,7 @@ public class Menu extends JPanel {
         containerButton.setLayout(null);
 
 
-        n=3;
+        n=2;
 
         taille=new JLabel(""+n);
         taille.setFont(new Font("Impact",Font.PLAIN,50));
