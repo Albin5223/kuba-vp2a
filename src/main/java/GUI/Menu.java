@@ -46,7 +46,7 @@ public class Menu extends JPanel {
         containerButton.setLayout(null);
 
 
-        n=3;
+        n=2;
 
         taille=new JLabel(""+n);
         taille.setFont(new Font("Impact",Font.PLAIN,50));
@@ -131,28 +131,25 @@ public class Menu extends JPanel {
                     
                     int n = getN();
                     Model m = null;
-                    try {
-                        if(selectMode.getValue() != ModeJeu.DEFI){
+                    
+                    if(selectMode.getValue() != ModeJeu.DEFI){
 
-                            fenetre.setVisible(false);
-                            m = new Model(n,selectMode.getValue());
-                            View v = new View(n,fenetre);
-                            m.addObserveur(v);
-                            m.noticeObserveurs(m);
-                            switch(selectMode.getValue()){
-                                case EDITION : ControleurEditeur ctrlEd= new ControleurEditeur(m,v.getTaille_case());v.addCtrlEditeur(ctrlEd);break;
-                                default : Controleur ctrl = new Controleur(m,v.getTaille_case());v.addCtrl(ctrl);break;
-                            }
+                        fenetre.setVisible(false);
+                        m = new Model(n,selectMode.getValue());
+                        View v = new View(n,fenetre);
+                        m.addObserveur(v);
+                        m.noticeObserveurs(m);
+                        switch(selectMode.getValue()){
+                            case EDITION : ControleurEditeur ctrlEd= new ControleurEditeur(m,v.getTaille_case());v.addCtrlEditeur(ctrlEd);break;
+                            default : Controleur ctrl = new Controleur(m,v.getTaille_case());v.addCtrl(ctrl);break;
                         }
-                        else{
-                            ouvrirDefi();
-                        }
-                        
-                        
-                    } catch (CloneNotSupportedException e1) {
-                        System.out.println("Erreur dans le lancement du model dans Menu");
-                        System.exit(1);
                     }
+                    else{
+                        ouvrirDefi();
+                    }
+                        
+                        
+                   
                     
             }
         });

@@ -100,23 +100,17 @@ public class PanneauDemarrage extends JPanel{
                 fenetre.setVisible(false);
                 Model m;
                 int n = 2;
-                try {
-                    m = new Model(n,ModeJeu.TUTO);
-                    ViewTuto vt = new ViewTuto(n,fenetre);
-                    Controleur ctrl= new Controleur(m,vt.getTaille_case());
-
-                    m.addObserveur(vt);
-                    
-                    m.noticeObserveurs(m);
-                    vt.addCtrl(ctrl);
-                    vt.ajouterTextPanel();
-                    vt.MiseEnPlaceTuto();
-                    
-                } catch (CloneNotSupportedException e1) {
-                    System.out.println("Probleme lors du lancement du model en mode Tuto");
-                    System.exit(0);
-                }
                 
+                m = new Model(n,ModeJeu.TUTO);
+                ViewTuto vt = new ViewTuto(n,fenetre);
+                Controleur ctrl= new Controleur(m,vt.getTaille_case());
+
+                m.addObserveur(vt);
+                
+                m.noticeObserveurs(m);
+                vt.addCtrl(ctrl);
+                vt.ajouterTextPanel();
+                vt.MiseEnPlaceTuto();
             }
 
             public void mouseEntered(MouseEvent e) {

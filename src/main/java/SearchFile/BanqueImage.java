@@ -18,21 +18,13 @@ public class BanqueImage {
 	2 : RED;
     */
 
-
-    public static Image imageBulleDialogue;
-    public static Image imageBackgroundPlateau;
-	public static Image imagePanneauFinDeJeu;
-    public static Image imageBackgroundJoueurView;
-    public static Image imageBackgroundMenu;
-
-    public static Image imagePanneauTuto;
-    public static Image imageIcon;
-    public static Image imageEtoile;
+    public static Image[] imagePets;
+    public static Image[] images;
 
     public static Image[] fleches;
     public static Image[] flechesHover;
 
-    public static Image[] imagePets;
+
 
 
 	public static Image[] banquePowerImages;
@@ -71,15 +63,18 @@ public class BanqueImage {
         flechesHover = new Image[2];
         banqueMarbleImages = new Image[3];
         banquePowerImages = new Image[3];
+        images=new Image[10];
         try {
-            imageBulleDialogue = ImageIO.read(new File(path+"bulle_dialogue.png"));
-            imageEtoile = ImageIO.read(new File(path+"etoile.png"));
-            imageIcon = ImageIO.read(new File(path+"iconDerouler.png"));
-            imageBackgroundMenu = ImageIO.read(new File(path+"background4.jpg"));
-            imageBackgroundJoueurView = ImageIO.read(new File(path+"panneau.jpg"));
-			imageBackgroundPlateau = ImageIO.read(new File(path+"background3.jpg"));
-			imagePanneauFinDeJeu = ImageIO.read(new File(path+"end_screen.png"));
-            imagePanneauTuto=ImageIO.read(new File(path+"panneauTuto.png"));
+            images[0]= ImageIO.read(new File(path+"bulle_dialogue.png"));
+            images[1] = ImageIO.read(new File(path+"etoile.png"));
+            images[2] = ImageIO.read(new File(path+"iconDerouler.png"));
+            images[3] = ImageIO.read(new File(path+"background4.jpg"));
+            images[4] = ImageIO.read(new File(path+"panneau.jpg"));
+            images[5] = ImageIO.read(new File(path+"background3.jpg"));
+            images[6] = ImageIO.read(new File(path+"end_screen.png"));
+            images[7]= ImageIO.read(new File(path+"bgmap.png"));
+            images[8]= ImageIO.read(new File(path+"icone.png"));
+            images[9]=ImageIO.read(new File(path+"panneauTuto.png"));
 			for (int i = 0;i<3;i++){
 				String s=path+"Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
@@ -103,13 +98,13 @@ public class BanqueImage {
             System.exit(1);
 		}
         
-        imageEtoile = imageEtoile.getScaledInstance(100,100,Image.SCALE_FAST);
-        imagePanneauFinDeJeu = imagePanneauFinDeJeu.getScaledInstance(400,300,Image.SCALE_FAST);
-        imageBulleDialogue = imageBulleDialogue.getScaledInstance(300,200,Image.SCALE_FAST);
-        imagePanneauTuto=imagePanneauTuto.getScaledInstance(300,200,Image.SCALE_FAST);
-        int icWidth = BanqueImage.imageIcon.getWidth(null)/3;
-		int icHeight = BanqueImage.imageIcon.getHeight(null)/3;
-		BanqueImage.imageIcon = BanqueImage.scaleImage(icWidth, icHeight, BanqueImage.imageIcon);
+        images[1] = images[1].getScaledInstance(100,100,Image.SCALE_FAST);
+        images[6] = images[6].getScaledInstance(400,300,Image.SCALE_FAST);
+        images[0] = images[0].getScaledInstance(300,200,Image.SCALE_FAST);
+        images[9] = images[9].getScaledInstance(300,200,Image.SCALE_FAST);
+        int icWidth = BanqueImage.images[2].getWidth(null)/3-5;
+		int icHeight = BanqueImage.images[2].getHeight(null)/3-10;
+		BanqueImage.images[2] = BanqueImage.scaleImage(icWidth, icHeight, BanqueImage.images[2]);
         scaleFleches();
         scalePets();
     }

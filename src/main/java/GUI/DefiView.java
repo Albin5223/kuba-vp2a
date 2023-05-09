@@ -40,22 +40,18 @@ public class DefiView extends JPanel{
       
         int n = GestionnaireNiveaux.getTaille(id);
         Model m = null;
-        try {
-                fenetre.setVisible(false);
-                m = new Model(n,ModeJeu.DEFI);
-                View v = new View(n,fenetre);
-                Controleur ctrl = new Controleur(m,v.getTaille_case());
-                m.addObserveur(v);
-                m.noticeObserveurs(m);
-                v.addCtrl(ctrl);
-                
-                GestionnaireNiveaux.addModel(m);
-    
-        } catch (CloneNotSupportedException e1) {
-            System.out.println("Erreur dans le lancement du model dans Defi");
-            System.exit(1);
-        }
         
+        fenetre.setVisible(false);
+        m = new Model(n,ModeJeu.DEFI);
+        View v = new View(n,fenetre);
+        Controleur ctrl = new Controleur(m,v.getTaille_case());
+        m.addObserveur(v);
+        m.noticeObserveurs(m);
+        v.addCtrl(ctrl);
+        
+        GestionnaireNiveaux.addModel(m);
+    
+       
         GestionnaireNiveaux.lancer(id);
   
       }

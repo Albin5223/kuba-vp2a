@@ -27,6 +27,7 @@ public class View extends JFrame implements Observeur<Data>{
 	JoueurView jv2;
 	JoueurView[] joueurs; 
 	boolean isViber;
+	boolean isTurnIA;
 	
 	OptionView optView;
 	PanneauFinDeJeu panneauFinDeJeu;
@@ -49,20 +50,22 @@ public class View extends JFrame implements Observeur<Data>{
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
+		this.setIconImage(BanqueImage.images[8]);
 
  		n = nb;
+		isTurnIA = false;
 
 		longueur = 4*n -1;
         taille_case = ((this.getHeight()-100)/longueur)*7/8;
 
 		BanqueImage.scaleMarble(taille_case);
 		
-		BanqueImage.imageBackgroundPlateau = BanqueImage.scaleImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,BanqueImage.imageBackgroundPlateau);
+		BanqueImage.images[5] = BanqueImage.scaleImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,BanqueImage.images[5]);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				g.drawImage(BanqueImage.imageBackgroundPlateau,0,0,null);
+				g.drawImage(BanqueImage.images[5],0,0,null);
 				
 			}
 		};
@@ -97,8 +100,6 @@ public class View extends JFrame implements Observeur<Data>{
 		jv2.setBounds(10,plateau.getY()+longueur*taille_case/2,taille_Jv,longueur*taille_case/3);
 		jv2.initialisePaneMarbleCaptured();
 
-		
-
 		optView = new OptionView(this,launcher);
 		optView.setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-300,50, 300,200);
 		optView.deployerPanneau(false);
@@ -106,7 +107,7 @@ public class View extends JFrame implements Observeur<Data>{
 		optView.getReplayLabel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-				if(!isOver && !isReloading){
+				if(!isOver && !isReloading && !isTurnIA){
 					isReloading = true;
 					Timer vibe = new Timer();
 					vibe.schedule(new TimerTask() {
@@ -135,7 +136,7 @@ public class View extends JFrame implements Observeur<Data>{
 			@Override
 			public void mouseExited(MouseEvent e){
 				View.this.setCursor(Cursor.getDefaultCursor());
-				optView.getReplayLabel().setForeground(Color.GRAY);
+				optView.getReplayLabel().setForeground(new Color(173, 103, 53));
 			}
         });
 
@@ -183,7 +184,6 @@ public class View extends JFrame implements Observeur<Data>{
 						View.this.requestFocus();
 						PanneauEnregistrement.openSave = false;
 						afficherPopUp(null,"Sauvegarde réussie");
-
 					});
 
 					pe.getAnnulerButton().addActionListener( event->{
@@ -243,7 +243,7 @@ public class View extends JFrame implements Observeur<Data>{
 				else{
 					bougerPlateau(Direction.SOUTH);
 				}
-				i=!i;
+				i = !i;
 				if(time == 0){
 					isViber = false;
 					cancel();
@@ -375,6 +375,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 	@Override
 	public void update(Data obj) {
+		isTurnIA = obj.tourIA();
 		if(obj.getVainqueur()!=null){
 
 			animationVictoire();
@@ -400,14 +401,14 @@ public class View extends JFrame implements Observeur<Data>{
 					joueurSuivant(obj);
 				}
 				if(obj.tourIA()){
-					IAturn();
+					IAturn(obj);
 				}
 				this.repaint();
 			}
 		}
 	}
 
-	public void IAturn(){
+	public void IAturn(Data obj){
 		Timer affiche = new Timer();
 		affiche.schedule(new TimerTask() {
 			int time = 5;
@@ -415,13 +416,15 @@ public class View extends JFrame implements Observeur<Data>{
     		public void run() {
 				if(time == 0){
 					cancel();
+					if (obj.tourIA()) {
+						Controleur.nClicks ++;
+					}
 					plateau.getMouseListeners()[0].mouseReleased(null);
 				}
 				time--;
     		}
 		},0, 150);
 		affiche.purge();
-
 	}
 
 	public void animationVictoire(){

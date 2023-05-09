@@ -25,7 +25,7 @@ public class PanneauFinDeJeu extends JPanel{
 
     @Override
     public void paintComponent(Graphics g){
-        g.drawImage(BanqueImage.imagePanneauFinDeJeu, 0, 0, null);
+        g.drawImage(BanqueImage.images[6], 0, 0, null);
     }
 
 

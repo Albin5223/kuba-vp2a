@@ -25,6 +25,7 @@ public class JoueurView extends JPanel{
         nbMarble = new int[2];
         this.setLayout(null);
         titre = new JLabel("");
+        titre.setOpaque(true);
         barre = new JPanel();
         mettreBarre();
         couleur = c;
@@ -33,7 +34,9 @@ public class JoueurView extends JPanel{
             case WHITE : titre.setText("Joueur BLANC");break;
             default : titre.setText("Erreur");break;
         }
-        titre.setForeground(Color.GREEN);
+        titre.setHorizontalAlignment(SwingConstants.CENTER);
+        titre.setForeground(new Color(187, 2, 2, 228));
+        titre.setBackground(new Color(239, 159, 52, 170));
        
         
         this.add(barre);
@@ -42,7 +45,7 @@ public class JoueurView extends JPanel{
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(BanqueImage.imageBackgroundJoueurView,0,0,null);
+        g.drawImage(BanqueImage.images[4],0,0,null);
         this.repaint();
         
     }
@@ -50,7 +53,7 @@ public class JoueurView extends JPanel{
     public void initialisePaneMarbleCaptured(){
         titre.setBounds(this.getWidth()/3, 10, 100, 20);
         this.add(titre);
-        BanqueImage.imageBackgroundJoueurView = BanqueImage.scaleImage(getWidth(), getHeight(),BanqueImage.imageBackgroundJoueurView);
+        BanqueImage.images[4] = BanqueImage.scaleImage(getWidth(), getHeight(),BanqueImage.images[4]);
     
         for(int i = 0;i<2;i++){
             int j =i;
@@ -109,12 +112,13 @@ public class JoueurView extends JPanel{
     }    
 
     public void mettreBarre(){
+        barre.setOpaque(true);
         barre.setBounds(0,0,20,this.getHeight());
         barre.setBackground(Color.RED);
     }
 
     public void enleverBarre(){
-        barre.setBackground(Color.lightGray);
+        barre.setOpaque(false);
     }
 
     public void resetData(){

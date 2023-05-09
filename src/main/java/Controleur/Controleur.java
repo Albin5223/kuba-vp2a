@@ -6,7 +6,7 @@ import Model.*;
 
 public class Controleur extends MouseAdapter{
 
-	private boolean isTurnIA;
+	public static int nClicks;
     Model model;
     int positionDepartX = -1;
     int positionDepartY = -1;
@@ -15,11 +15,12 @@ public class Controleur extends MouseAdapter{
     int positionArriveY = -1;
     
     int SIZE;
+	long lastTimeClicked;
+	String currentThreadName;
 
     public Controleur(Model m,int n){
         this.model = m;
         SIZE = n;
-		isTurnIA = false;
     }
 
     public void setModel(Model m){
@@ -37,8 +38,7 @@ public class Controleur extends MouseAdapter{
         }
     	return dir;
     }
-    
-    
+
     private static Direction determineDirection(Position depart, Position arrive){
 		if(depart.getJ()==arrive.getJ() && depart.getI() == arrive.getI()){
 			return Direction.INVALID;
@@ -64,39 +64,37 @@ public class Controleur extends MouseAdapter{
     
     @Override
     public void mouseReleased(MouseEvent e) {
-    	Position p1 = new Position(positionDepartX,positionDepartY);
-		Position p2 = new Position(positionArriveX,positionArriveY);
-		
-		if (isTurnIA) {
+		if (nClicks > 1) {
+			resetPosition();
 			return;
 		}
-		
+
 		if(model.tourIA()){
-			isTurnIA = true;
 			Move m = model.determineBestMove();
 			model.push(m.pos, m.dir);
-			isTurnIA = false;
 		}
 		else{
+			Position p1 = new Position(positionDepartX,positionDepartY);
+			Position p2 = new Position(positionArriveX,positionArriveY);
 			move(p1,p2);
-			isTurnIA = false;
 		}
     	resetPosition();
+		nClicks = 0;
     }
-		
-
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-			
+		if (model.tourIA()) {
+			nClicks ++;
+		}
 		positionDepartX = e.getX()/SIZE;
 		positionDepartY = e.getY()/SIZE;
 		
 		positionArriveX = positionDepartX;
-		positionArriveY = positionDepartY;	
+		positionArriveY = positionDepartY;
 	}
 
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		
