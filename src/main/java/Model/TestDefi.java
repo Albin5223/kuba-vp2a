@@ -9,11 +9,8 @@ public class TestDefi {
 
 		
 		Model m = null;
-		try {
-			m = new Model(3,ModeJeu.EDITION);
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		m = new Model(3,ModeJeu.EDITION);
+		
 		View v = new View(3,null);
 		ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
 

@@ -26,6 +26,7 @@ public class BanqueImage {
     public static Image imageBackgroundMenu;
     public static Image imageIcon;
     public static Image imageEtoile;
+    public static Image imageLogo;
 
     public static Image[] fleches;
     public static Image[] flechesHover;
@@ -70,6 +71,7 @@ public class BanqueImage {
         banqueMarbleImages = new Image[3];
         banquePowerImages = new Image[3];
         try {
+            imageLogo = ImageIO.read(new File(path+"icone.png"));
             imageBulleDialogue = ImageIO.read(new File(path+"bulle_dialogue.png"));
             imageEtoile = ImageIO.read(new File(path+"etoile.png"));
             imageIcon = ImageIO.read(new File(path+"iconDerouler.png"));

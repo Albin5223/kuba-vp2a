@@ -18,7 +18,7 @@ public class Model implements Observe<Data>,Data{
     ModeJeu modeJ;
   
 
-    public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
+    public Model(int n,ModeJeu mode){
         GestionnaireNiveaux.addModel(this);
         modeJ = mode;
         observeurs= new LinkedList<>();
@@ -91,13 +91,9 @@ public class Model implements Observe<Data>,Data{
 
     public Move determineBestMove(){
         Move move = null;
-        try {
-            move = NoeudIA.determineBestMove(plat, 5);
-        } catch (CloneNotSupportedException e) {
-
-            e.printStackTrace();
-        }
-
+        
+        move = NoeudIA.determineBestMove(plat, 5);
+        
         return move;
     }
 

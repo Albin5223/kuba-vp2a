@@ -21,7 +21,8 @@ public class Window extends JFrame {
         this.setSize(1020,600);
         this.setVisible(true);
         this.setResizable(false);
-        this.setIconImage(getIconImage());
+        this.setIconImage(BanqueImage.imageLogo);
+        this.setLocationRelativeTo(null);
 
         
         Image iconImage = BanqueImage.imageBackgroundMenu.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_FAST);
