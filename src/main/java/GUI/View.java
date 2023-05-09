@@ -50,7 +50,7 @@ public class View extends JFrame implements Observeur<Data>{
     	this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
-		this.setIconImage(BanqueImage.imageLogo);
+		this.setIconImage(BanqueImage.images[8]);
 
  		n = nb;
 		isTurnIA = false;
