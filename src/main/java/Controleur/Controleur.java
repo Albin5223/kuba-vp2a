@@ -15,8 +15,7 @@ public class Controleur extends MouseAdapter{
     int positionArriveY = -1;
     
     int SIZE;
-	long lastTimeClicked;
-	String currentThreadName;
+
 
     public Controleur(Model m,int n){
         this.model = m;
@@ -39,7 +38,7 @@ public class Controleur extends MouseAdapter{
     	return dir;
     }
 
-    private static Direction determineDirection(Position depart, Position arrive){
+    static Direction determineDirection(Position depart, Position arrive){
 		if(depart.getJ()==arrive.getJ() && depart.getI() == arrive.getI()){
 			return Direction.INVALID;
 		}
@@ -97,7 +96,6 @@ public class Controleur extends MouseAdapter{
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
 		if (positionDepartX != -1 && positionDepartY != -1) {
 			if (positionDepartX != e.getX()/SIZE || positionDepartY != e.getY()/SIZE) {
 				positionArriveX = e.getX()/SIZE;

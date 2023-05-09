@@ -157,6 +157,7 @@ public class View extends JFrame implements Observeur<Data>{
 
 	public void addCtrlEditeur (ControleurEditeur ctrl){
 		plateau.addMouseListener(ctrl);
+		plateau.addMouseMotionListener(ctrl);
 
 		this.addKeyListener(new KeyListener() {
 			boolean controlPressed;
@@ -168,6 +169,10 @@ public class View extends JFrame implements Observeur<Data>{
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 					controlPressed = true;
+					
+				}
+				if(e.getKeyCode() == KeyEvent.VK_R && controlPressed && !PanneauEnregistrement.openSave){
+					ControleurEditeur.SolutionMod = true;
 				}
 				if (e.getKeyCode() == KeyEvent.VK_S && controlPressed && !PanneauEnregistrement.openSave){
 					View.this.plateau.setVisible(false);
@@ -179,11 +184,12 @@ public class View extends JFrame implements Observeur<Data>{
 
 					pe.getEnregistrerButton().addActionListener( event->{
 						View.this.remove(pe);
-						GestionnaireNiveaux.ajouteDefi(pe.getNom());
+						GestionnaireNiveaux.ajouteDefi(pe.getNom(),ControleurEditeur.solutions);
 						View.this.plateau.setVisible(true);
 						View.this.requestFocus();
 						PanneauEnregistrement.openSave = false;
 						afficherPopUp(null,"Sauvegarde réussie");
+						ControleurEditeur.SolutionMod = false;
 					});
 
 					pe.getAnnulerButton().addActionListener( event->{

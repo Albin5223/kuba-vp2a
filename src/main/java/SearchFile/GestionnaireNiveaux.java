@@ -65,7 +65,7 @@ public class GestionnaireNiveaux {
       return true;
     }
 
-    public static void ajouteDefi(String name){
+    public static void ajouteDefi(String name,String solution){
       String plateau = model.getPlateau().toString();
       int taille = model.getN();
       int numero = tabDefi.size()+1;
@@ -75,7 +75,7 @@ public class GestionnaireNiveaux {
 
       Defi nouveau = new Defi(name,taille,plateau);
       String nouvelleLigne = nouveau.getLine();
-
+      nouvelleLigne+=solution;
       tabDefi.add(nouveau);
       lignes++;
 
