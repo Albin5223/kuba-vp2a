@@ -52,7 +52,7 @@ public class AnimationVicory extends JPanel {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(BanqueImage.imageEtoile,0,0,null);
+        g.drawImage(BanqueImage.images[1],0,0,null);
         
     }
 

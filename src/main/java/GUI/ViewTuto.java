@@ -16,7 +16,7 @@ public class ViewTuto extends View{
         PanneauDialogueTuto pm;
         try {
             pm = new PanneauDialogueTuto(BanqueImage.fichierTuto,this);
-            pm.setBounds(this.plateau.getX()+plateau.getWidth()+30,this.joueurs[0].getY(), 300, 200);
+            pm.setBounds(this.plateau.getX()+plateau.getWidth()+10,this.joueurs[1].getY(), 300, 180);
 
             pm.initialise();
 

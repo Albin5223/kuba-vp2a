@@ -57,12 +57,12 @@ public class View extends JFrame implements Observeur<Data>{
 
 		BanqueImage.scaleMarble(taille_case);
 		
-		BanqueImage.imageBackgroundPlateau = BanqueImage.scaleImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,BanqueImage.imageBackgroundPlateau);
+		BanqueImage.images[5] = BanqueImage.scaleImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,BanqueImage.images[5]);
 
 		conteneur = new JPanel(){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				g.drawImage(BanqueImage.imageBackgroundPlateau,0,0,null);
+				g.drawImage(BanqueImage.images[5],0,0,null);
 				
 			}
 		};
@@ -135,7 +135,7 @@ public class View extends JFrame implements Observeur<Data>{
 			@Override
 			public void mouseExited(MouseEvent e){
 				View.this.setCursor(Cursor.getDefaultCursor());
-				optView.getReplayLabel().setForeground(Color.GRAY);
+				optView.getReplayLabel().setForeground(new Color(173, 103, 53));
 			}
         });
 

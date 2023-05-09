@@ -1,14 +1,14 @@
 package GUI;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.*;
 
 import SearchFile.LecteurFichier;
 
@@ -19,7 +19,7 @@ public class PanneauDialogueTuto extends JPanel{
     String message;
     LecteurFichier lecfic;
     JLabel Jmessage;
-    JTextArea textArea;
+    JTextPane textArea;
     View view;
     
 
@@ -28,16 +28,25 @@ public class PanneauDialogueTuto extends JPanel{
         lecfic = new LecteurFichier(f);
         Jmessage = new JLabel("*Cliquez ici pour continuer*");
         Jmessage.setFont(new Font("Impact",Font.PLAIN,10));
-        textArea = new JTextArea("Bonjour la famille");
+        textArea = new JTextPane();
         textArea.setEditable(false);
-        textArea.setLineWrap(true);
+        //textArea.setLineWrap(true);
         textArea.setOpaque(false);
+
+
+        StyledDocument doc = textArea.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        textArea.setDocument(doc);
+
         this.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 textArea.setText(nextMessage());
-                PanneauDialogueTuto.this.repaint();
+                StyledDocument doc = textArea.getStyledDocument();
+                doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
             }
 
             @Override
@@ -64,10 +73,28 @@ public class PanneauDialogueTuto extends JPanel{
     
 
     public void initialise(){
-        textArea.setBounds(0,0,this.getWidth(),this.getHeight() - 50);
-        this.add(textArea,CENTER_ALIGNMENT);
-
-        this.add(Jmessage);
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints c=new GridBagConstraints();
+        textArea.setBorder(BorderFactory.createEmptyBorder());
+        c.fill=GridBagConstraints.VERTICAL;
+        c.gridx=0;
+        c.gridy=0;
+        c.weighty=0.4;
+        this.add(new JLabel(" "),c);
+        c.gridx=0;
+        c.gridy=1;
+        c.weighty=0.6;
+        this.add(textArea,c);
+        c.fill=GridBagConstraints.VERTICAL;
+        c.gridx=0;
+        c.gridy=2;
+        c.weighty=0.4;
+        this.add(Jmessage,c);
+        c.fill=GridBagConstraints.VERTICAL;
+        c.gridx=0;
+        c.gridy=3;
+        c.weighty=0.4;
+        this.add(new JLabel(" "),c);
     }
 
     public String nextMessage(){
