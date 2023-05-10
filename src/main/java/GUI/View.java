@@ -16,7 +16,7 @@ public class View extends JFrame implements Observeur<Data>{
     
 	int longueur;
 	int n;
-	private boolean isOver;
+	boolean isOver;
 	private boolean isReloading;
 	int taille_case;
 	JPanel plateau;
@@ -366,9 +366,7 @@ public class View extends JFrame implements Observeur<Data>{
     		public void run() {
 				if(time == 0){
 					cancel();
-					if (obj.tourIA()) {
-						Controleur.nClicks ++;
-					}
+					
 					plateau.getMouseListeners()[0].mouseReleased(null);
 				}
 				time--;

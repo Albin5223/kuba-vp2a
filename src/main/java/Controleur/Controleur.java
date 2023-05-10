@@ -1,12 +1,14 @@
 package Controleur;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Model.*;
 
 public class Controleur extends MouseAdapter{
 
-	public static int nClicks;
+	public static boolean isTurnIA;
     Model model;
     int positionDepartX = -1;
     int positionDepartY = -1;
@@ -61,31 +63,40 @@ public class Controleur extends MouseAdapter{
 		return retour;
     }
     
-    @Override
-    public void mouseReleased(MouseEvent e) {
-		if (nClicks > 1) {
-			resetPosition();
-			return;
-		}
+    
+	@Override
+    public synchronized void mouseReleased(MouseEvent e) {
+        if (isTurnIA) {
+            resetPosition();
+            return;
+        }
 
-		if(model.tourIA()){
-			Move m = model.determineBestMove();
-			model.push(m.pos, m.dir);
-		}
-		else{
-			Position p1 = new Position(positionDepartX,positionDepartY);
-			Position p2 = new Position(positionArriveX,positionArriveY);
-			move(p1,p2);
-		}
-    	resetPosition();
-		nClicks = 0;
+        if(model.tourIA()){
+            Move m = model.determineBestMove();
+            model.push(m.pos, m.dir);
+            isTurnIA = true;
+            Timer wait = new Timer();
+            wait.schedule(new TimerTask() {
+                int time = 1;
+                public void run() {
+                    if (time == 0) {
+                        Controleur.isTurnIA = false;
+                        return;
+                    }
+                    time--;
+                }
+            },0,750);
+        }
+        else{
+            Position p1 = new Position(positionDepartX,positionDepartY);
+            Position p2 = new Position(positionArriveX,positionArriveY);
+            move(p1,p2);
+        }
+        resetPosition();
     }
-
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (model.tourIA()) {
-			nClicks ++;
-		}
+		
 		positionDepartX = e.getX()/SIZE;
 		positionDepartY = e.getY()/SIZE;
 		

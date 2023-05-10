@@ -3,6 +3,8 @@ package Model;
 
 import java.util.LinkedList;
 
+import javax.xml.stream.events.StartElement;
+
 import SearchFile.GestionnaireNiveaux;
 
 
@@ -103,7 +105,8 @@ public class Model implements Observe<Data>,Data{
         try{
             action = GestionnaireNiveaux.getNextMove();
             if (p.i != action.pos.i || p.j != action.pos.j || d != action.dir){
-                return State.WRONGDIRECTION;
+                state = State.WRONGDIRECTION;
+                return state;
             }
             else{
                 state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
@@ -111,7 +114,7 @@ public class Model implements Observe<Data>,Data{
 
                 
                 if(!GestionnaireNiveaux.hasNextMove()){
-                    System.out.println("Gagne");
+                    
                     partieFinie=true;
                     noticeObserveurs(this);
                     return state;
@@ -120,7 +123,6 @@ public class Model implements Observe<Data>,Data{
             }
         }
         catch(Exception e){
-            System.out.println("LALA");
             partieFinie=true;
         }
 
@@ -137,7 +139,7 @@ public class Model implements Observe<Data>,Data{
 
         if(modeJ == ModeJeu.EDITION){
             noticeObserveurs(this);
-            return State.SUCCESS;
+            return state;
         }
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){

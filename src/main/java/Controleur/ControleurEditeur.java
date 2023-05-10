@@ -35,22 +35,25 @@ public class ControleurEditeur extends MouseAdapter{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Position p = new Position(e.getY()/SIZE,e.getX()/SIZE);
-        model.changeCouleur(p);
+        if(!SolutionMod){
+            Position p = new Position(e.getY()/SIZE,e.getX()/SIZE);
+            model.changeCouleur(p);
+        }  
     }
 
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public synchronized void mouseReleased(MouseEvent e) {
         if(SolutionMod){
             Position p1 = new Position(positionDepartX,positionDepartY);
 		    Position p2 = new Position(positionArriveX,positionArriveY);
             Direction direction = Controleur.determineDirection(p1,p2);
             
-
-            Move m = new Move(p1, direction);
-            solutions+=";"+m.toString();
-            model.push(new Position(p1.getJ(), p1.getI()),direction);
+            State retour = model.push(new Position(p1.getJ(), p1.getI()),direction);
+            if(retour == State.PUSHOPPMARBLE || retour == State.PUSHREDMARBLE){
+                Move m = new Move(p1, direction);
+                solutions+=";"+m.toString();
+            }
         }
 		
     }

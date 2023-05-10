@@ -47,6 +47,8 @@ public class ViewEdition extends View{
 					
 				}
 				if (e.getKeyCode() == KeyEvent.VK_S && controlPressed && !PanneauEnregistrement.openSave && ControleurEditeur.SolutionMod){
+					
+					isOver = true;
 					ViewEdition.this.plateau.setVisible(false);
 					PanneauEnregistrement pe = new PanneauEnregistrement(ViewEdition.this);
 					pe.setBounds(ViewEdition.this.getWidth()/2-150, ViewEdition.this.getHeight()/2-100, 300, 200);
@@ -55,6 +57,7 @@ public class ViewEdition extends View{
 					ViewEdition.this.repaint();
 
 					pe.getEnregistrerButton().addActionListener( event->{
+						isOver = false;
 						ViewEdition.this.remove(pe);
 						GestionnaireNiveaux.ajouteDefi(pe.getNom(),ControleurEditeur.solutions);
 						ViewEdition.this.plateau.setVisible(true);
