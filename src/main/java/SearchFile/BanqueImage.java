@@ -63,7 +63,7 @@ public class BanqueImage {
         flechesHover = new Image[2];
         banqueMarbleImages = new Image[3];
         banquePowerImages = new Image[3];
-        images=new Image[10];
+        images=new Image[12];
         try {
             images[0]= ImageIO.read(new File(path+"bulle_dialogue.png"));
             images[1] = ImageIO.read(new File(path+"etoile.png"));
@@ -75,6 +75,9 @@ public class BanqueImage {
             images[7]= ImageIO.read(new File(path+"bgmap.png"));
             images[8]= ImageIO.read(new File(path+"icone.png"));
             images[9]=ImageIO.read(new File(path+"panneauTuto.png"));
+            images[10]=ImageIO.read(new File(path+"panneauDefi.png"));
+            images[11]=ImageIO.read(new File(path+"cratebg.png"));
+
 			for (int i = 0;i<3;i++){
 				String s=path+"Balle"+i+".png";
 				Image marble = ImageIO.read(new File(s));
@@ -98,10 +101,11 @@ public class BanqueImage {
             System.exit(1);
 		}
         
-        images[1] = images[1].getScaledInstance(100,100,Image.SCALE_FAST);
-        images[6] = images[6].getScaledInstance(400,300,Image.SCALE_FAST);
-        images[0] = images[0].getScaledInstance(300,200,Image.SCALE_FAST);
-        images[9] = images[9].getScaledInstance(300,200,Image.SCALE_FAST);
+        images[1] = images[1].getScaledInstance(100,100,Image.SCALE_SMOOTH);
+        images[6] = images[6].getScaledInstance(400,300,Image.SCALE_SMOOTH);
+        images[0] = images[0].getScaledInstance(300,200,Image.SCALE_SMOOTH);
+        images[9] = images[9].getScaledInstance(300,200,Image.SCALE_SMOOTH);
+        images[11]= images[11].getScaledInstance(200,100,Image.SCALE_SMOOTH);
         int icWidth = BanqueImage.images[2].getWidth(null)/3-5;
 		int icHeight = BanqueImage.images[2].getHeight(null)/3-10;
 		BanqueImage.images[2] = BanqueImage.scaleImage(icWidth, icHeight, BanqueImage.images[2]);

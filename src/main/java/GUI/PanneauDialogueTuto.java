@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -10,14 +11,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 
-import SearchFile.BanqueImage;
-import SearchFile.LecteurFichier;
+import SearchFile.*;
 
 
 
 public class PanneauDialogueTuto extends JPanel{
 
-    String message;
+
     LecteurFichier lecfic;
     JLabel Jmessage;
     JTextPane textArea;
@@ -30,6 +30,7 @@ public class PanneauDialogueTuto extends JPanel{
         lecfic = new LecteurFichier(f);
         Jmessage = new JLabel("*Cliquez ici pour continuer*");
         Jmessage.setFont(new Font("Impact",Font.PLAIN,10));
+        Jmessage.setForeground(new Color(238, 179, 97));
         textArea = new JTextPane();
 
         textArea.setForeground(new Color(238, 179, 97));
@@ -41,10 +42,10 @@ public class PanneauDialogueTuto extends JPanel{
         StyledDocument doc = textArea.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        textArea.setFont(new Font("Impact",Font.PLAIN,15));
         textArea.setDocument(doc);
 
-        this.addMouseListener(new MouseListener() {
-
+        this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 textArea.setText(nextMessage());
@@ -52,26 +53,11 @@ public class PanneauDialogueTuto extends JPanel{
                 doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            
-            
         });
+    }
+
+    public void paintComponent(Graphics g){
+        g.drawImage(BanqueImage.images[9],0,0,null);
     }
 
     
@@ -83,7 +69,7 @@ public class PanneauDialogueTuto extends JPanel{
         c.fill=GridBagConstraints.VERTICAL;
         c.gridx=0;
         c.gridy=0;
-        c.weighty=0.4;
+        c.weighty=0.8;
         this.add(new JLabel(" "),c);
         c.gridx=0;
         c.gridy=1;
@@ -92,13 +78,8 @@ public class PanneauDialogueTuto extends JPanel{
         c.fill=GridBagConstraints.VERTICAL;
         c.gridx=0;
         c.gridy=2;
-        c.weighty=0.4;
+        c.weighty=0.1;
         this.add(Jmessage,c);
-        c.fill=GridBagConstraints.VERTICAL;
-        c.gridx=0;
-        c.gridy=3;
-        c.weighty=0.4;
-        this.add(new JLabel(" "),c);
     }
 
     public String nextMessage(){
@@ -132,11 +113,12 @@ public class PanneauDialogueTuto extends JPanel{
         
     }
     public void requestVisibility(String element){
-        switch(element){
-            case "plateau" : view.plateau.setVisible(true);break;
-            case "joueur-0" : view.joueurs[0].setVisible(true);break;
-            case "joueur-1" : view.joueurs[1].setVisible(true);break;
-            default : break;
+        switch (element) {
+            case "plateau" -> view.plateau.setVisible(true);
+            case "joueur-0" -> view.joueurs[0].setVisible(true);
+            case "joueur-1" -> view.joueurs[1].setVisible(true);
+            default -> {
+            }
         }
     }
     

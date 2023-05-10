@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-import Model.ModeJeu;
+import Model.*;
 
 public class Interrupteur extends JPanel {
 
@@ -30,6 +30,8 @@ public class Interrupteur extends JPanel {
         precedent = new JLabel(""+prev.toString(), SwingConstants.CENTER);
         precedent.setOpaque(false);
         precedent.setFont(new Font("Impact",Font.PLAIN,20));
+        precedent.setForeground(new Color(50,200,255,150));
+
 
         c.fill=GridBagConstraints.HORIZONTAL;
         c.gridy=0;
@@ -41,6 +43,7 @@ public class Interrupteur extends JPanel {
         nom = new JLabel(""+mode.toString(),SwingConstants.CENTER);
         nom.setOpaque(false);
         nom.setFont(new Font("Impact",Font.PLAIN,35));
+        nom.setForeground(new Color(50,200,255));
         c.fill=GridBagConstraints.HORIZONTAL;
         c.gridy=0;
         c.gridx=1;
@@ -50,6 +53,7 @@ public class Interrupteur extends JPanel {
         suivant = new JLabel(""+next.toString(),SwingConstants.CENTER);
         suivant.setOpaque(false);
         suivant.setFont(new Font("Impact",Font.PLAIN,20));
+        suivant.setForeground(new Color(50,200,255,150));
         c.fill=GridBagConstraints.HORIZONTAL;
         c.gridy=0;
         c.gridx=2;
