@@ -366,9 +366,6 @@ public class View extends JFrame implements Observeur<Data>{
     		public void run() {
 				if(time == 0){
 					cancel();
-					if (obj.tourIA()) {
-						Controleur.nClicks ++;
-					}
 					plateau.getMouseListeners()[0].mouseReleased(null);
 				}
 				time--;
