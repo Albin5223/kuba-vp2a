@@ -63,7 +63,8 @@ public class Controleur extends MouseAdapter{
 		return retour;
     }
     
-    @Override
+    
+	@Override
     public synchronized void mouseReleased(MouseEvent e) {
         if (isTurnIA) {
             resetPosition();
@@ -93,9 +94,9 @@ public class Controleur extends MouseAdapter{
         }
         resetPosition();
     }
-
 	@Override
 	public void mousePressed(MouseEvent e) {
+		
 		positionDepartX = e.getX()/SIZE;
 		positionDepartY = e.getY()/SIZE;
 		
