@@ -19,7 +19,7 @@ public class Model implements Observe<Data>,Data{
   
 
     public Model(int n,ModeJeu mode){
-        GestionnaireNiveaux.addModel(this);
+        
         modeJ = mode;
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
@@ -97,24 +97,48 @@ public class Model implements Observe<Data>,Data{
         return move;
     }
 
-    public State push(Position p,Direction d){
-        if(modeJ == ModeJeu.DEFI ){
-            Move action = GestionnaireNiveaux.getNextMove();
-            System.out.println(p.i  );
-            System.out.println(action.pos.i );
-            System.out.println(p.j);
-            System.out.println(action.pos.j );
-            System.out.println(d );
-            System.out.println(action.dir);
+    public State pushDefi(Position p,Direction d){
+        
+        Move action;
+        try{
+            action = GestionnaireNiveaux.getNextMove();
             if (p.i != action.pos.i || p.j != action.pos.j || d != action.dir){
-                System.out.println("pas bon");
                 return State.WRONGDIRECTION;
             }
             else{
+                state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
                 GestionnaireNiveaux.moveReussi();
+
+                
+                if(!GestionnaireNiveaux.hasNextMove()){
+                    System.out.println("Gagne");
+                    partieFinie=true;
+                    noticeObserveurs(this);
+                    return state;
+                }
+                
             }
         }
+        catch(Exception e){
+            System.out.println("LALA");
+            partieFinie=true;
+        }
+
+        noticeObserveurs(this);
+        return state;
+    }
+
+    public State push(Position p,Direction d){
+        if(modeJ == ModeJeu.DEFI ){
+            return pushDefi(p,d);
+            
+        }
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+
+        if(modeJ == ModeJeu.EDITION){
+            noticeObserveurs(this);
+            return State.SUCCESS;
+        }
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
                 joueurSuivant();
@@ -172,11 +196,24 @@ public class Model implements Observe<Data>,Data{
 
     @Override
     public Joueur getVainqueur() {
+        if(modeJ == ModeJeu.EDITION){
+            return null;
+        }
+        if(modeJ == ModeJeu.DEFI){
+            if(partieFinie){
+                return joueurs[0];
+            }
+            else{
+                return null;
+            }
+            
+        }
         return plat.isOver(joueurs[0],joueurs[1]);
     }
 
     @Override
     public void reset(){
+
         joueurCurrent = 0;
         partieFinie=false;
         plat.resetAll();
@@ -184,6 +221,7 @@ public class Model implements Observe<Data>,Data{
         switch(modeJ){
             case EDITION :plat.creerPlatVide(); break;
             case FUN : plat.initialiseBilleWithSpecialMarble(); break;
+            case DEFI : GestionnaireNiveaux.lancer(GestionnaireNiveaux.numSelected);break;
             default : break;
         }
         for (int i = 0;i<2;i++){

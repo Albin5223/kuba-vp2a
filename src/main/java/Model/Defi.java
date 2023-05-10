@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Defi{
@@ -27,12 +28,27 @@ public class Defi{
 		line = n+";"+taille+";"+plateau;
 	}
 
+	public void setLigne(String l){
+		line = l;
+	}
+
 
 	public void affiche(){
 		System.out.println(name+" "+taille+" "+plateau);
 	}
 
-	public Move nextMove(int nbMove){
+	public boolean hasNextMove(int nbMove){
+		Scanner scan1 = new Scanner(this.line);
+		scan1.useDelimiter(";");
+		for (int i = 0; i < 3+nbMove; i++){
+			scan1.next();
+		}
+		boolean b = scan1.hasNext();
+		scan1.close();
+		return b;
+	}
+
+	public Move nextMove(int nbMove) throws NoSuchElementException{
 		Move result = new Move(null, null);
 		Scanner scan1 = new Scanner(this.line);
 		scan1.useDelimiter(";");
@@ -40,19 +56,18 @@ public class Defi{
 		for (int i = 0; i < 3+nbMove; i++){
 			scan1.next();
 		}
-		nextMove+=scan1.next();
+		nextMove=scan1.next();
 		scan1.close();
 
 		Scanner scan2 = new Scanner(nextMove);
-		scan2.useDelimiter(",");
+		scan2.useDelimiter("/");
 
 		String position = scan2.next();
-		position = position.substring(1);
 		int j = Integer.parseInt(position);
 
 		position = scan2.next();
-		position = position.substring(0,position.length()-1);
 		int i = Integer.parseInt(position);
+
 		result.pos = new Position(i, j);
 
 		String direction = scan2.next();

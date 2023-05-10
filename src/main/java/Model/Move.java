@@ -10,7 +10,7 @@ public class Move {
     }
 
     public String toString(){
-        return pos.toString()+","+dir.toString();
+        return pos.toString()+"/"+dir.toString();
     }
 }
 

@@ -2,8 +2,6 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
@@ -155,62 +153,7 @@ public class View extends JFrame implements Observeur<Data>{
 		plateau.addMouseListener(ctrl);
 	}
 
-	public void addCtrlEditeur (ControleurEditeur ctrl){
-		plateau.addMouseListener(ctrl);
-		plateau.addMouseMotionListener(ctrl);
-
-		this.addKeyListener(new KeyListener() {
-			boolean controlPressed;
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-					controlPressed = true;
-					
-				}
-				if(e.getKeyCode() == KeyEvent.VK_R && controlPressed && !PanneauEnregistrement.openSave){
-					ControleurEditeur.SolutionMod = true;
-					GestionnaireNiveaux.savePlateau();
-				}
-				if (e.getKeyCode() == KeyEvent.VK_S && controlPressed && !PanneauEnregistrement.openSave){
-					View.this.plateau.setVisible(false);
-					PanneauEnregistrement pe = new PanneauEnregistrement(View.this);
-					pe.setBounds(View.this.getWidth()/2-150, View.this.getHeight()/2-100, 300, 200);
-					pe.initialise();
-					View.this.add(pe);
-					View.this.repaint();
-
-					pe.getEnregistrerButton().addActionListener( event->{
-						View.this.remove(pe);
-						GestionnaireNiveaux.ajouteDefi(pe.getNom(),ControleurEditeur.solutions);
-						View.this.plateau.setVisible(true);
-						View.this.requestFocus();
-						PanneauEnregistrement.openSave = false;
-						afficherPopUp(null,"Sauvegarde réussie");
-						ControleurEditeur.SolutionMod = false;
-					});
-
-					pe.getAnnulerButton().addActionListener( event->{
-						PanneauEnregistrement.openSave = false;
-						View.this.remove(pe);
-						View.this.plateau.setVisible(true);
-						View.this.requestFocus();
-					});
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-					controlPressed = false;
-				}
-			}
-			
-		});
-	}
+	
 
 	public void updatePlateau(Graphics g,Data obj){
 		for (int i = 0;i<longueur;i++){
@@ -384,7 +327,7 @@ public class View extends JFrame implements Observeur<Data>{
 	public void update(Data obj) {
 		isTurnIA = obj.tourIA();
 		if(obj.getVainqueur()!=null){
-
+			System.out.println("Partie finie");
 			animationVictoire();
 
 			isOver=true;

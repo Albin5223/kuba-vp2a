@@ -13,7 +13,6 @@ public class PanneauEnregistrement extends JPanel{
     static boolean openSave;
     
     JButton enregistrer;
-    JButton annuler;
     JLabel titre;
     JTextField nom;
     JFrame fenetre;
@@ -24,7 +23,6 @@ public class PanneauEnregistrement extends JPanel{
         nom = new JTextField();
         titre = new JLabel("Choisissez un nom");
         enregistrer = new JButton("Enregistrer");
-        annuler = new JButton("Annuler");
     }
 
     public void initialise(){
@@ -34,11 +32,9 @@ public class PanneauEnregistrement extends JPanel{
         nom.setBounds(50, 60, 200, 45);
         this.add(nom);
 
-        enregistrer.setBounds(180,130,100,30);
+        enregistrer.setBounds(140,130,100,30);
         this.add(enregistrer);
 
-        annuler.setBounds(30,130,100,30);
-        this.add(annuler);
         this.add(titre);
 
         this.repaint();
@@ -48,9 +44,6 @@ public class PanneauEnregistrement extends JPanel{
         return enregistrer;
     }
 
-    public JButton getAnnulerButton(){
-        return annuler;
-    }
 
     public String getNom(){
         return nom.getText();

@@ -29,6 +29,10 @@ public class ControleurEditeur extends MouseAdapter{
         model = m;
     }
 
+    public static void resetSolution(){
+        solutions="";
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         Position p = new Position(e.getY()/SIZE,e.getX()/SIZE);
@@ -47,8 +51,6 @@ public class ControleurEditeur extends MouseAdapter{
             Move m = new Move(p1, direction);
             solutions+=";"+m.toString();
             model.push(new Position(p1.getJ(), p1.getI()),direction);
-
-            System.out.println(solutions);
         }
 		
     }

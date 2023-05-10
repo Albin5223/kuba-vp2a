@@ -8,12 +8,14 @@ import Model.Marble;
 import Model.Model;
 import Model.Move;
 import Model.Plateau;
+
+
 public class GestionnaireNiveaux {
 
     static Model model;
     static File file;
     static int lignes;
-    static int numSelected;
+    public static int numSelected;
     static int numCoup;
     static String savedPlat;
 
@@ -23,7 +25,7 @@ public class GestionnaireNiveaux {
         tabDefi = new ArrayList<>();
         file = BanqueImage.fichierDefi;
         numSelected = -1;
-        numCoup = -1;
+        numCoup = 0;
 
         try{
           initialiseDefi();
@@ -85,11 +87,9 @@ public class GestionnaireNiveaux {
       Defi nouveau = new Defi(name,taille,savedPlat);
       String nouvelleLigne = nouveau.getLine();
       nouvelleLigne+=solution;
+      nouveau.setLigne(nouvelleLigne);
       tabDefi.add(nouveau);
       lignes++;
-
-
-      
       
       try {
         FileWriter fw = new FileWriter(file, true);
@@ -124,6 +124,10 @@ public class GestionnaireNiveaux {
 
     public static Move getNextMove(){
       return tabDefi.get(numSelected).nextMove(numCoup);
+    }
+
+    public static boolean hasNextMove(){
+      return tabDefi.get(numSelected).hasNextMove(numCoup);
     }
 
     public static void moveReussi(){
