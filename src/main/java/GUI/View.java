@@ -327,7 +327,6 @@ public class View extends JFrame implements Observeur<Data>{
 	public void update(Data obj) {
 		isTurnIA = obj.tourIA();
 		if(obj.getVainqueur()!=null){
-			System.out.println("Partie finie");
 			animationVictoire();
 
 			isOver=true;

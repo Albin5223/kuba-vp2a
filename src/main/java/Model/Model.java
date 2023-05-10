@@ -3,8 +3,6 @@ package Model;
 
 import java.util.LinkedList;
 
-import javax.xml.stream.events.StartElement;
-
 import SearchFile.GestionnaireNiveaux;
 
 

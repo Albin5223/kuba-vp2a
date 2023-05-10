@@ -36,14 +36,4 @@ public class Window extends JFrame {
         this.add(pd);
         pd.anime();
     }
-    
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(
-			new Runnable() {
-				public void run() {
-					new Window();
-				}
-			}
-		);
-    }
 }

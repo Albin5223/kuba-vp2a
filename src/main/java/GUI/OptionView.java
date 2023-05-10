@@ -104,9 +104,6 @@ public class OptionView extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Dimension arcs = new Dimension(15,15);
-		int width = getWidth();
-		int height = getHeight();
 		Graphics2D graphics = (Graphics2D) g;
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphics.drawImage(BanqueImage.images[7],0,0,null);
