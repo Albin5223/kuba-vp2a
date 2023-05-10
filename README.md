@@ -1,4 +1,4 @@
-Projet Kuba groupe VP2A
+#Projet Kuba groupe VP2A
 
 PARIS Albin 22114221
 ESPANET Nicolas 22100628
@@ -8,5 +8,5 @@ DEBESSEL Éric 22100525
 
 Le depot correspond au code du projet
 
-Excuter notre projet :
-    - java -jar kuba-vp2a.jar
+##Excuter notre projet :
+     ¤java -jar kuba-vp2a.jar
