@@ -28,6 +28,7 @@ public class Plateau implements Cloneable{
 		this.j2 = j2;
 		this.j1.initTabBilles(n, j1.getColor());
 		this.j2.initTabBilles(n, j2.getColor());
+		
 	}
 
 
@@ -41,6 +42,10 @@ public class Plateau implements Cloneable{
 	public void setBoard(Marble[][] tab){
 		this.board = tab;
 	}
+	public void setBoard(String s){
+		this.board = stringToList(s);
+	}
+
 
 	public int getLongueur() {
 		return this.longueur;
@@ -336,7 +341,7 @@ public class Plateau implements Cloneable{
 	}
 	/*
 	 * 
-	 * @return toString1 convertit le plateau en une chaine de caractère reduite
+	 * @return toString convertit le plateau en une chaine de caractère reduite
 	 */
 	public String toString(){
 		String res = "";

@@ -3,6 +3,9 @@ package Model;
 
 import java.util.LinkedList;
 
+import SearchFile.GestionnaireNiveaux;
+
+
 
 public class Model implements Observe<Data>,Data{
     Plateau plat;
@@ -13,8 +16,10 @@ public class Model implements Observe<Data>,Data{
     State state;
     LinkedList<Observeur<Data>> observeurs;
     ModeJeu modeJ;
+  
 
-    public Model(int n,ModeJeu mode) throws CloneNotSupportedException{
+    public Model(int n,ModeJeu mode){
+        
         modeJ = mode;
         observeurs= new LinkedList<>();
         joueurs = new Joueur[2];
@@ -23,7 +28,6 @@ public class Model implements Observe<Data>,Data{
         plat =new Plateau(n,j1,j2); 
         plat.initialiseBille(); 
         switch(mode){
-            case DEFI : plat = new Defi(n,j1,j2);break;
             case EDITION :plat.creerPlatVide(); break;
             case FUN : plat.initialiseBilleWithSpecialMarble();
             default : break;
@@ -35,10 +39,17 @@ public class Model implements Observe<Data>,Data{
         this.n = n;
     }
 
+
+
     public void initialiseBille(){
         plat.initialiseBille();
     }
+    
+    public void setBoard(Marble [][] newBoard){
+        plat.setBoard(newBoard);
+    }
 
+    
 
     public int getN(){
         return n;
@@ -61,6 +72,9 @@ public class Model implements Observe<Data>,Data{
     }
 
     public void joueurSuivant() {
+        if(modeJ == ModeJeu.TUTO){
+            return;
+        }
         joueurCurrent ++;
         if (joueurCurrent>=2){
             joueurCurrent = 0;
@@ -77,33 +91,54 @@ public class Model implements Observe<Data>,Data{
 
     public Move determineBestMove(){
         Move move = null;
-        try {
-            move = NoeudIA.determineBestMove(plat, 5);
-        } catch (CloneNotSupportedException e) {
-
-            e.printStackTrace();
-        }
-
+        
+        move = NoeudIA.determineBestMove(plat, 5);
+        
         return move;
     }
 
-    public State push(Position p,Direction d){
-        /* 
-        if (isIa() && joueurCurrent == 1) {
-            Move move;
-            try {
-                move = NoeudIA.determineBestMove(plat, 5);
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                return null;
+    public State pushDefi(Position p,Direction d){
+        
+        Move action;
+        try{
+            action = GestionnaireNiveaux.getNextMove();
+            if (p.i != action.pos.i || p.j != action.pos.j || d != action.dir){
+                return State.WRONGDIRECTION;
             }
-            state = plat.push(move.pos,move.dir,joueurs[1],joueurs[0]);
+            else{
+                state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+                GestionnaireNiveaux.moveReussi();
+
+                
+                if(!GestionnaireNiveaux.hasNextMove()){
+                    System.out.println("Gagne");
+                    partieFinie=true;
+                    noticeObserveurs(this);
+                    return state;
+                }
+                
+            }
         }
-        else {
-            state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+        catch(Exception e){
+            System.out.println("LALA");
+            partieFinie=true;
         }
-        */
+
+        noticeObserveurs(this);
+        return state;
+    }
+
+    public State push(Position p,Direction d){
+        if(modeJ == ModeJeu.DEFI ){
+            return pushDefi(p,d);
+            
+        }
         state = plat.push(p, d, getCurrentPlayer(), getOtherPlayer());
+
+        if(modeJ == ModeJeu.EDITION){
+            noticeObserveurs(this);
+            return State.SUCCESS;
+        }
         if(plat.isOver(joueurs[0],joueurs[1])==null){
             if(State.SUCCESS == state){
                 joueurSuivant();
@@ -158,18 +193,27 @@ public class Model implements Observe<Data>,Data{
         return state;
     }
 
-    @Override
-    public Joueur getJoueur() {
-        return getCurrentPlayer();
-    }
 
     @Override
     public Joueur getVainqueur() {
+        if(modeJ == ModeJeu.EDITION){
+            return null;
+        }
+        if(modeJ == ModeJeu.DEFI){
+            if(partieFinie){
+                return joueurs[0];
+            }
+            else{
+                return null;
+            }
+            
+        }
         return plat.isOver(joueurs[0],joueurs[1]);
     }
 
     @Override
     public void reset(){
+
         joueurCurrent = 0;
         partieFinie=false;
         plat.resetAll();
@@ -177,6 +221,7 @@ public class Model implements Observe<Data>,Data{
         switch(modeJ){
             case EDITION :plat.creerPlatVide(); break;
             case FUN : plat.initialiseBilleWithSpecialMarble(); break;
+            case DEFI : GestionnaireNiveaux.lancer(GestionnaireNiveaux.numSelected);break;
             default : break;
         }
         for (int i = 0;i<2;i++){
@@ -190,4 +235,5 @@ public class Model implements Observe<Data>,Data{
         plat.changeCouleur(p);
         noticeObserveurs(this);
     }
+
 }

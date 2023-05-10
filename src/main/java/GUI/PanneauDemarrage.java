@@ -6,6 +6,7 @@ import javax.swing.*;
 import Controleur.*;
 import Model.ModeJeu;
 import Model.Model;
+import SearchFile.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -19,7 +20,7 @@ public class PanneauDemarrage extends JPanel{
     JPanel containerButton;
     JLabel[] JlabelLettres;
 
-    String[] lettres = {"C","U","B","A"};
+    String[] lettres = {"K","U","B","A"};
     JFrame fenetre;
     Menu menu;
 
@@ -55,7 +56,7 @@ public class PanneauDemarrage extends JPanel{
         containerButton.setLayout(null);
 
 
-        String[] nom = {"Play","Mode Edition","Quitter"};
+        String[] nom = {"Play","Tutoriel","Quitter"};
         button = new JLabel[3];
         for (int i = 0;i<button.length;i++){
             button[i]=new JLabel(nom[i]);
@@ -73,7 +74,7 @@ public class PanneauDemarrage extends JPanel{
         button[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                quitter();
+                goToMenu();
             }
 
             @Override
@@ -98,19 +99,18 @@ public class PanneauDemarrage extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 fenetre.setVisible(false);
                 Model m;
-                try {
-                    m = new Model(3,ModeJeu.EDITION);
-                    View v = new View(3,fenetre);
-                    ControleurEditeur ctrl= new ControleurEditeur(m,v.getTaille_case());
-
-                    m.addObserveur(v);
-                    
-                    m.noticeObserveurs(m);
-                    v.addCtrlEditeur(ctrl);
-                } catch (CloneNotSupportedException e1) {
-                    System.out.println("Probleme avec le Clone du model");
-                }
+                int n = 2;
                 
+                m = new Model(n,ModeJeu.TUTO);
+                ViewTuto vt = new ViewTuto(n,fenetre);
+                Controleur ctrl= new Controleur(m,vt.getTaille_case());
+
+                m.addObserveur(vt);
+                
+                m.noticeObserveurs(m);
+                vt.addCtrl(ctrl);
+                vt.ajouterTextPanel();
+                vt.MiseEnPlaceTuto();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -184,9 +184,9 @@ public class PanneauDemarrage extends JPanel{
     }
 
 
-    public void quitter(){
+    public void goToMenu(){
         this.removeAll();
-        
+        BanqueImage.scaleMarble(50);
         TransitionPane tp = new TransitionPane(1020,fenetre);
         this.add(tp);
         this.repaint();
@@ -202,7 +202,7 @@ public class PanneauDemarrage extends JPanel{
                 else{
                     if(tp.isFinish()){
                         cancel();
-                        PanneauDemarrage.this.remove(tp);
+                        PanneauDemarrage.this.removeAll();
                         PanneauDemarrage.this.add(menu);   
                         fenetre.revalidate();
                     } 

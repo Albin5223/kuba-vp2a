@@ -4,21 +4,17 @@ package GUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+
+import javax.swing.*;
+
+import SearchFile.BanqueImage;
 
 
 public class OptionView extends JPanel {
-	int icHeight =0;
-	int icWidth =0;
+	
 
     View view;
     JFrame launcher;
@@ -28,28 +24,24 @@ public class OptionView extends JPanel {
 	JLabel icon;
     JLabel abandonner;
     JLabel replay;
-    JLabel quitter;
-	Image iconImage;	
+    JLabel quitter;	
 
     public OptionView(View view, JFrame launcher){
         this.setLayout(null);
-		this.setOpaque(true);
+		this.setOpaque(false);
         this.view = view;
         this.launcher = launcher;
 		this.setOpaque(false);
 		
-		try {
-			iconImage = ImageIO.read(new File("ressource/iconDerouler.png"));
-			icWidth = iconImage.getWidth(this)/3;
-			icHeight = iconImage.getHeight(this)/3;
-			iconImage = iconImage.getScaledInstance(icWidth, icHeight, Image.SCALE_FAST);
+		
+		ImageIcon imic = new ImageIcon(BanqueImage.images[2]);
+		icon = new JLabel(imic);
+		
 
-			ImageIcon imic = new ImageIcon(iconImage);
-			icon = new JLabel(imic);
-		} catch (IOException e) {
-			System.out.println("Image non trouve dans OptionView");
-		}
-		icon.setBounds(0, 0, icWidth, icHeight);
+		int icWidth = BanqueImage.images[2].getWidth(null);
+		int icHeight = BanqueImage.images[2].getHeight(null);
+
+		icon.setBounds(5, 10, icWidth, icHeight);
 
 		icon.addMouseListener(new MouseAdapter() {
             @Override
@@ -62,12 +54,14 @@ public class OptionView extends JPanel {
 		container = new JPanel();
 		container.setLayout(new GridLayout(2,1));
 		container.setBounds(icWidth, 0, 300- icWidth, 200);
-		container.setBorder(new MyBorder());
+		container.setOpaque(false);
+
+		BanqueImage.images[7]=BanqueImage.images[7].getScaledInstance(300,200,Image.SCALE_SMOOTH);
 
 
-        abandonner = new JLabel("Abandonner");
-		abandonner.setFont(new Font("Impact",Font.PLAIN,30));
-		abandonner.setForeground(Color.GRAY);
+        abandonner = new JLabel("Abandonner",SwingConstants.CENTER);
+		abandonner.setFont(new Font("Dyuthi",Font.PLAIN,30));
+		abandonner.setForeground(new Color(173, 103, 53));
 		abandonner.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -84,17 +78,15 @@ public class OptionView extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent e){
 				view.setCursor(Cursor.getDefaultCursor());
-				abandonner.setForeground(Color.GRAY);
+				abandonner.setForeground(new Color(173, 103, 53));
 			}
         });
 
 		abandonner.setVisible(false);
 
-
-
-        replay = new JLabel("Rejouer");
-		replay.setFont(new Font("Impact",Font.PLAIN,30));
-		replay.setForeground(Color.GRAY);
+        replay = new JLabel("Rejouer",SwingConstants.CENTER);
+		replay.setFont(new Font("Dyuthi",Font.PLAIN,30));
+		replay.setForeground(new Color(173, 103, 53));
 
 		replay.setVisible(false);
 		container.setVisible(true);
@@ -117,13 +109,12 @@ public class OptionView extends JPanel {
 		int height = getHeight();
 		Graphics2D graphics = (Graphics2D) g;
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-
+		graphics.drawImage(BanqueImage.images[7],0,0,null);
 		//Draws the rounded opaque panel with borders.
-		graphics.setColor(getBackground());
-		graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);//paint background
-		graphics.setColor(getForeground());
-		graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);//paint border
+		//graphics.setColor(getBackground());
+		//graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);//paint background
+		//graphics.setColor(getForeground());
+		//graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);//paint border
 	}
 
 	public void visibility(boolean b){

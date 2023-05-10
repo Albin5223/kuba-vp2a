@@ -1,99 +1,109 @@
-package Model; 
+package Model;
 
-public class Defi extends Plateau {
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
-	private int numero;
-	private int prog = 0;
+public class Defi{
 
-	
+	String name;
+	int taille;
+	String plateau;
+	String line;
 
-	private Position [][] solpos = {
-								   {new Position(0,7),new Position(0,8),new Position(0,9)},
-								   {new Position(8,9), new Position(7,10)}
-								   };
-	private Direction [][] solcoups = {
-									{Direction.EAST,Direction.EAST,Direction.EAST},
-									{Direction.EAST,Direction.SOUTH}
-									};
-
-
-	private Position [][] pos =  new Position[2][3];
-	private Direction [][] coups = new Direction[2][3] ;
-	private boolean defi;
-
-	public Defi(int n,Joueur j1, Joueur j2){
-		
-		super(3,j1,j2);
-        initialiseDefi(n);
-		this.defi = true;
-		
-  
-    }
-
-
-
-    public void initialiseDefi(int x){
-		/* 
-    	board = new Colour[11][11];
-    	
-    	board[0][7] = Colour.WHITE;
-        board[0][8] = Colour.BLACK;
-        board[0][9] = Colour.BLACK;
-        board[0][10] = Colour.BLACK;*/
-
-    }
-
-	@Override
-    public State push(Position p,Direction d,Joueur j1,Joueur j2){ 
-
-    	State state = coupValide(p,d);
-
-    
-        if(state == State.SUCCESS && this.isOver(j1,j2)==null){
-			state = push_rec(p,d,null,j1,j2);
-            }
-        
-        return state;
-    }
-
-    public State coupValide (Position position, Direction direction){
-    	if(position.i == solpos[numero][prog].i && position.j == solpos[numero][prog].j && direction == solcoups[numero][prog]){
-				pos[numero][prog] = position;
-    			coups[numero][prog] = direction;
-    			prog++;
-    			return State.SUCCESS;
-    	}
-
-		if (direction == Direction.INVALID) {
-			return State.WRONGDIRECTION;
-		}
-		if (board[position.i][position.j] ==  null) {
-			return State.EMPTYTILE;
-		}
-		if ( Colour.WHITE != board[position.i][position.j].getColour()) {
-			return State.MARBLEOWNERSHIPERROR;
-		}
-		//Mauvaise gestion 
-		if (position.j+direction.dirInverse().dirY() != -1 && position.j+direction.dirInverse().dirY() != this.longueur && position.i+direction.dirInverse().dirX() != -1 && position.i+direction.dirInverse().dirX() != this.longueur) {
-			if (this.board[position.i+direction.dirInverse().dirX()][position.j+direction.dirInverse().dirY()] != null) {
-				System.out.println(position.j+direction.dirInverse().dirX());
-				System.out.println(position.i+direction.dirInverse().dirY());
-				return State.TILEBEFORENOTEMPTY;
-			}
-		}
-    
-    	return State.WRONGDIRECTION;
-    }
-
-	@Override 
-	public Joueur isOver(Joueur j1, Joueur j2) {//fonction qui teste si le jeu se termine et si tel est le cas alors il renvoie le joueur gagnant sinon il renvoie null
-		if (prog == solcoups[numero].length) {
-			return j1;
-		}
-
-		return null;
+	public Defi(String ligne){
+		line = ligne;
+		Scanner scan = new Scanner(ligne);
+		scan.useDelimiter(";");
+		name = scan.next();
+		String sub = scan.next();
+		plateau = scan.next();
+		taille = Integer.parseInt(sub);
+		scan.close();
 	}
-	
+
+	public Defi(String n, int nb, String plateau){
+		name = n;
+		taille = nb;
+		this.plateau = plateau;
+		line = n+";"+taille+";"+plateau;
+	}
+
+	public void setLigne(String l){
+		line = l;
+	}
 
 
+	public void affiche(){
+		System.out.println(name+" "+taille+" "+plateau);
+	}
+
+	public boolean hasNextMove(int nbMove){
+		Scanner scan1 = new Scanner(this.line);
+		scan1.useDelimiter(";");
+		for (int i = 0; i < 3+nbMove; i++){
+			scan1.next();
+		}
+		boolean b = scan1.hasNext();
+		scan1.close();
+		return b;
+	}
+
+	public Move nextMove(int nbMove) throws NoSuchElementException{
+		Move result = new Move(null, null);
+		Scanner scan1 = new Scanner(this.line);
+		scan1.useDelimiter(";");
+		String nextMove = "" ;
+		for (int i = 0; i < 3+nbMove; i++){
+			scan1.next();
+		}
+		nextMove=scan1.next();
+		scan1.close();
+
+		Scanner scan2 = new Scanner(nextMove);
+		scan2.useDelimiter("/");
+
+		String position = scan2.next();
+		int j = Integer.parseInt(position);
+
+		position = scan2.next();
+		int i = Integer.parseInt(position);
+
+		result.pos = new Position(i, j);
+
+		String direction = scan2.next();
+		scan2.close();
+		if(direction.equals("EAST")) {
+				result.dir = Direction.EAST;
+			}
+		if(direction.equals("SOUTH")) {
+				result.dir = Direction.SOUTH;
+			}
+		if(direction.equals("NORTH")) {
+				result.dir = Direction.NORTH;
+			}
+		if(direction.equals("WEST")) {
+				result.dir = Direction.WEST;
+			}
+		
+		return result;	
+
+	}
+
+
+	public String getName(){
+		return name;
+	}
+
+	public int getTaille(){
+		return taille;
+	}
+
+	public String getPlateau(){
+		return plateau;
+	}
+
+	public String getLine(){
+		return line;
+	}
 }
+
