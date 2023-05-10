@@ -29,4 +29,8 @@ public class Position implements Cloneable {
 		Position posCloned = new Position(this.i,this.j);
 		return posCloned;
 	}
+
+	public String toString(){
+		return i+"/"+j;
+	}
 }

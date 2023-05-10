@@ -6,18 +6,26 @@ import java.util.ArrayList;
 import Model.Defi;
 import Model.Marble;
 import Model.Model;
+import Model.Move;
 import Model.Plateau;
+
+
 public class GestionnaireNiveaux {
 
     static Model model;
     static File file;
     static int lignes;
+    public static int numSelected;
+    static int numCoup;
+    static String savedPlat;
 
     static ArrayList<Defi> tabDefi;
 
     public static void initialiser(){
         tabDefi = new ArrayList<>();
         file = BanqueImage.fichierDefi;
+        numSelected = -1;
+        numCoup = 0;
 
         try{
           initialiseDefi();
@@ -35,6 +43,10 @@ public class GestionnaireNiveaux {
 
     public static int getNbLignes(){
       return lignes;
+    }
+
+    public static void savePlateau(){
+      savedPlat = model.getPlateau().toString();
     }
 
     private static void initialiseDefi() throws FileNotFoundException{
@@ -65,22 +77,19 @@ public class GestionnaireNiveaux {
       return true;
     }
 
-    public static void ajouteDefi(String name){
-      String plateau = model.getPlateau().toString();
+    public static void ajouteDefi(String name,String solution){
       int taille = model.getN();
       int numero = tabDefi.size()+1;
       if(name.length() == 0 || !isAlphaNumeric(name)){
         name = "Defi-"+numero;
       }
 
-      Defi nouveau = new Defi(name,taille,plateau);
+      Defi nouveau = new Defi(name,taille,savedPlat);
       String nouvelleLigne = nouveau.getLine();
-
+      nouvelleLigne+=solution;
+      nouveau.setLigne(nouvelleLigne);
       tabDefi.add(nouveau);
       lignes++;
-
-
-      
       
       try {
         FileWriter fw = new FileWriter(file, true);
@@ -106,8 +115,22 @@ public class GestionnaireNiveaux {
     }
     
     public static void lancer(int niveauSelected){
+        numSelected = niveauSelected;
+        numCoup = 0 ;
         String plateau = getNiveaux(niveauSelected);
         Marble[][] nv = Plateau.stringToList(plateau);
         model.setBoard(nv);
+    }
+
+    public static Move getNextMove(){
+      return tabDefi.get(numSelected).nextMove(numCoup);
+    }
+
+    public static boolean hasNextMove(){
+      return tabDefi.get(numSelected).hasNextMove(numCoup);
+    }
+
+    public static void moveReussi(){
+      numCoup++;
     }
 }

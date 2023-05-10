@@ -136,13 +136,24 @@ public class Menu extends JPanel {
 
                         fenetre.setVisible(false);
                         m = new Model(n,selectMode.getValue());
-                        View v = new View(n,fenetre);
-                        m.addObserveur(v);
-                        m.noticeObserveurs(m);
-                        switch(selectMode.getValue()){
-                            case EDITION : ControleurEditeur ctrlEd= new ControleurEditeur(m,v.getTaille_case());v.addCtrlEditeur(ctrlEd);break;
-                            default : Controleur ctrl = new Controleur(m,v.getTaille_case());v.addCtrl(ctrl);break;
+                        if(selectMode.getValue() == ModeJeu.EDITION){
+                            ViewEdition v = new ViewEdition(n,fenetre);
+                            m.addObserveur(v);
+                            m.noticeObserveurs(m);
+                            v.initialisation();
+                            ControleurEditeur ctrlEd= new ControleurEditeur(m,v.getTaille_case());
+                            GestionnaireNiveaux.addModel(m);
+                            v.addCtrlEditeur(ctrlEd);
                         }
+                        else{
+                            View v = new View(n,fenetre);
+                            m.addObserveur(v);
+                            m.noticeObserveurs(m);
+                            Controleur ctrl = new Controleur(m,v.getTaille_case());
+                            v.addCtrl(ctrl);
+                        }
+                        
+                        
                     }
                     else{
                         ouvrirDefi();

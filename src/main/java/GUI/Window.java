@@ -22,7 +22,7 @@ public class Window extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         this.setIconImage(BanqueImage.images[8]);
-
+        this.setLocationRelativeTo(null);
         
         Image iconImage = BanqueImage.images[3].getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_FAST);
 

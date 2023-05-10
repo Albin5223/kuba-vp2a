@@ -8,6 +8,10 @@ public class Move {
         this.pos=pos;
         this.dir=dir;
     }
+
+    public String toString(){
+        return pos.toString()+"/"+dir.toString();
+    }
 }
 
 

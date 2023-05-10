@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 
 import SearchFile.*;
