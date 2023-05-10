@@ -1,11 +1,8 @@
 package GUI;
 
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import Controleur.Controleur;
 import Model.ModeJeu;
@@ -22,11 +19,19 @@ public class DefiView extends JPanel{
 
     public DefiView(int i,JFrame fenetre){
         this.setLayout(new GridLayout(3, 1));
+        this.setOpaque(false);
         this.fenetre = fenetre;
         id=i;
-        nom = new JLabel("Nom : "+GestionnaireNiveaux.getName(id));
-        taille = new JLabel("Taille : "+GestionnaireNiveaux.getTaille(id));
+        String name=String.format("%15s",GestionnaireNiveaux.getName(id));
+        nom = new JLabel("Nom : "+name, SwingConstants.CENTER);
+        nom.setForeground(new Color(255, 255, 255));
+        taille = new JLabel("Taille : "+GestionnaireNiveaux.getTaille(id),SwingConstants.CENTER);
+        taille.setForeground(new Color(255, 255, 255));
         lancer = new JButton("JOUER");
+        lancer.setForeground(Color.WHITE);
+        lancer.setFont(new Font("SansSerif",Font.BOLD,20));
+        lancer.setOpaque(false);
+        lancer.setContentAreaFilled(false);
         lancer.addActionListener(event -> {
             lancerNiveau();
         });
